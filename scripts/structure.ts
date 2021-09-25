@@ -1,61 +1,57 @@
 type Application = {
     Presentation:
         {
-            title: string;
+            title: string,
             slides:
                 [
                     slide:
                         {
-                            id: number;
-                            background: string;
+                            id: number,
+                            background: string,
                             text:
                                 [
                                     {
-                                        id: number;
-                                        font: string;
-                                        fontSize: number;
-                                        color: string;
-                                        content: string;
+                                        id: number,
+                                        font: string,
+                                        fontSize: number,
+                                        color: string,
+                                        content: string,
                                     }
                                 ];
                             image:
                                 [
                                     {
+                                        id: number,
                                         size:
                                             {
-                                                width: number;
-                                                height: number;
+                                                width: number,
+                                                height: number,
                                             };
-                                        link: string;
+                                        link: string,
                                     }
                                 ];
                             primitives:
                                 [
-                                    {
-                                        circle:
-                                            {
-                                                size: {
-                                                    width: number,
-                                                    height: number
-                                                },
-                                                center: {
-                                                    x: number,
-                                                    y: number
-                                                },
-                                                radius: number
-
-                                            },
-                                        triangle: {
+                                    circles:
+                                    [
+                                        {
+                                            id: number,
                                             size: {
                                                 width: number,
                                                 height: number
                                             },
-                                            position: {
+                                            center: {
                                                 x: number,
                                                 y: number
-                                            }
-                                        },
-                                        rectangle: {
+                                            },
+                                            radius: number
+                                        }
+                                    ],
+
+                                    triangles: 
+                                    [
+                                        {
+                                            id: number,
                                             size: {
                                                 width: number,
                                                 height: number
@@ -65,8 +61,23 @@ type Application = {
                                                 y: number
                                             }
                                         }
-                                    }]
+                                    ],
 
+                                    rectangles: 
+                                    [
+                                        {
+                                            id: number,
+                                            size: {
+                                                width: number,
+                                                height: number
+                                            },
+                                            position: {
+                                                x: number,
+                                                y: number
+                                            }
+                                        }
+                                    ]
+                                ]
                         }
                 ]
         }

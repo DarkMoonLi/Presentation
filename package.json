@@ -1,0 +1,25 @@
+{
+  "name": "presentation",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DarkMoonLi/Presentation.git"
+  },
+  "keywords": [
+    "presentation"
+  ],
+  "author": "Котики-Невротики",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DarkMoonLi/Presentation/issues"
+  },
+  "homepage": "https://github.com/DarkMoonLi/Presentation#readme",
+  "dependencies": {
+    "typescript": "^4.4.3"
+  }
+}

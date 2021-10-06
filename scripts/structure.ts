@@ -1,5 +1,6 @@
 type Application = {
-    Presentation:
+    selectedElements: [],
+    presentation:
         {
             title: string,
             slides:
@@ -84,7 +85,6 @@ type Application = {
 }
 
 const Appl: Application = null; // 
-console.log(Appl)
 
 // Application
 /**
@@ -121,7 +121,7 @@ function setTitle(presentation, newTitle) {
  * @return {slides}
  */
 function addSlide(slides) {
-    let newSlide = Appl.presentation.slides.slide
+    let newSlide = Appl.presentation.slides[0]
     newSlide.id = getId()
     return newSlide
 }
@@ -152,7 +152,7 @@ function replace(slides, prevIndex, newIndex) {
  * @return {slide} 
  */
 function addText(slide) {
-    let newText = App.presentation.slides.slide.text[0] // Получаем значения по умолчанию
+    let newText = Appl.presentation.slides[slide].text[slide] // Получаем значения по умолчанию
     slide.text.push(newText) // Добавляем в массив новый элемент
     return slide
 }
@@ -163,7 +163,7 @@ function addText(slide) {
  * @return {slide}
  */
 function addImage(slide, adress) {
-    let newImage = Appl.presentation.slides.slide.image[0]
+    let newImage = Appl.presentation.slides[slide].image[0]
     newImage.link = adress
     slide.image.push(newImage)
     return slide
@@ -176,20 +176,20 @@ function addImage(slide, adress) {
  */
 function addPrimitives(slide, primitivesType) {
     if (primitivesType === 'circle') {
-        let newPrimitive = Appl.presentation.slides.slide.primitives[0] // Пересмотреть весь объект primitives, сделать его массивом
+        let newPrimitive = Appl.presentation.slides[slide].primitives[0] // Пересмотреть весь объект primitives, сделать его массивом
                                                                            // из 3 элементов circle, triangle, rectangle. (Без фигурных скобок)
                                                                            // Он сейчас массив из одного элемента 
         slide.primitives.push(newPrimitive)
         return slide
     }
     if (primitivesType === 'triangle') {
-        let newPrimitive = Appl.presentation.slides.slide.primitives[1] //Appl.presentation.slides.slide.primitives[1]
+        let newPrimitive = Appl.presentation.slides[slide].primitives[slide] //Appl.presentation.slides.slide.primitives[1]
        
         slide.primitives.push(newPrimitive)
         return slide
     }
     if (primitivesType === 'rectangle') {
-        let newPrimitive = Appl.presentation.slides.slide.primitives[2]
+        let newPrimitive = Appl.presentation.slides[slide].primitives[slide]
       
         slide.primitives.push(newPrimitive)
         return slide

@@ -3,96 +3,87 @@ type Application = {
     presentation:
         {
             title: string,
-            slides:
-                [
-                    slide:
-                        {
-                            id: number,
-                            background: string,
-                            text:
-                                [
-                                    {
-                                        id: number,
-                                        font: string,
-                                        fontSize: number,
-                                        color: string,
-                                        content: string,
-                                    }
-                                ];
-                            image:
-                                [
-                                    {
-                                        id: number,
-                                        size:
-                                            {
-                                                width: number,
-                                                height: number,
-                                            };
-                                        link: string,
-                                    }
-                                ];
-                            primitives:
-                                [
-                                    circles:
-                                    [
-                                        {
-                                            id: number,
-                                            size: {
-                                                width: number,
-                                                height: number
-                                            },
-                                            center: {
-                                                x: number,
-                                                y: number
-                                            },
-                                            radius: number
-                                        }
-                                    ],
-
-                                    triangles: 
-                                    [
-                                        {
-                                            id: number,
-                                            size: {
-                                                width: number,
-                                                height: number
-                                            },
-                                            position: {
-                                                x: number,
-                                                y: number
-                                            }
-                                        }
-                                    ],
-
-                                    rectangles: 
-                                    [
-                                        {
-                                            id: number,
-                                            size: {
-                                                width: number,
-                                                height: number
-                                            },
-                                            position: {
-                                                x: number,
-                                                y: number
-                                            }
-                                        }
-                                    ]
-                                ]
-                        }
-                ]
+            slides: Array<Slide>
         }
 }
 
-const Appl: Application = null; // 
+type Slide =
+{
+    id: number,
+    background: string,
+    text: Array<textType>, 
+    image: Array<imageType>,
+    primitives: Array<Primitive>
+}
+
+type Primitive = {
+    id: number,
+    type: string,
+    position: 
+    {
+        x: number,
+        y: number,
+    }
+    size: 
+    {
+        x: number,
+        y: number,
+    }
+    radius: number
+}
+
+type textType = 
+{
+    id: number,
+    font: string,
+    fontSize: number,
+    color: string,
+    content: string,
+}
+
+type imageType = 
+{
+    id: number,
+    size:
+        {
+            width: number,
+            height: number,
+        };
+    link: string,
+}
 
 // Application
 /**
  * @return {Application}
  */
- function getApplication() {
-    let newApplication: Application
-    return newApplication
+function getApplication() {
+    const Appl: Application = {
+        selectedElements: [],
+        presentation:
+            {
+                title: 'Название презентации',
+                slides:
+                    [
+                        {
+                            id: 0,
+                            background: 'FFFFFF',
+                            text:
+                                [
+                                    {
+                                        id: 0,
+                                        font: '',
+                                        fontSize: 14,
+                                        color: 'FFFFFF',
+                                        content: 'Текст слайда',
+                                    }
+                                ],
+                            image: [],
+                            primitives: []
+                        }
+                    ]
+            }
+    };
+    return Appl;
 }
 
 // Presentation
@@ -100,8 +91,10 @@ const Appl: Application = null; //
  * @return {presentation}  
  */
 function newPresentation(Appl) {
-    let newPresent: Application = Appl
-    return newPresent
+    const newPresent: Application = Appl;
+    newPresent.presentation.title = 'Название презентации';
+
+    return (newPresent);
 }
 
 // Title
@@ -263,6 +256,7 @@ function changeWindowSize(elem, newWidth, newHeight) {
 function getId() {
     // Получить уникальный идентификатор,
     // найти функцию, которая делает это
+    return (Date.now())
 }
 
 // Text

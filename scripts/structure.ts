@@ -1,98 +1,89 @@
 type Application = {
-    Presentation:
+    selectedElements: Array<Application>, // Подумать над вариантами типов.
+    presentation:
         {
             title: string,
-            slides:
-                [
-                    slide:
-                        {
-                            id: number,
-                            background: string,
-                            text:
-                                [
-                                    {
-                                        id: number,
-                                        font: string,
-                                        fontSize: number,
-                                        color: string,
-                                        content: string,
-                                    }
-                                ];
-                            image:
-                                [
-                                    {
-                                        id: number,
-                                        size:
-                                            {
-                                                width: number,
-                                                height: number,
-                                            };
-                                        link: string,
-                                    }
-                                ];
-                            primitives:
-                                [
-                                    circles:
-                                    [
-                                        {
-                                            id: number,
-                                            size: {
-                                                width: number,
-                                                height: number
-                                            },
-                                            center: {
-                                                x: number,
-                                                y: number
-                                            },
-                                            radius: number
-                                        }
-                                    ],
-
-                                    triangles: 
-                                    [
-                                        {
-                                            id: number,
-                                            size: {
-                                                width: number,
-                                                height: number
-                                            },
-                                            position: {
-                                                x: number,
-                                                y: number
-                                            }
-                                        }
-                                    ],
-
-                                    rectangles: 
-                                    [
-                                        {
-                                            id: number,
-                                            size: {
-                                                width: number,
-                                                height: number
-                                            },
-                                            position: {
-                                                x: number,
-                                                y: number
-                                            }
-                                        }
-                                    ]
-                                ]
-                        }
-                ]
+            slides: Array<Slide>
         }
 }
 
-const Appl: Application = null; // 
-console.log(Appl)
+type Slide =
+{
+    id: number,
+    background: string,
+    text: Array<textType>, 
+    image: Array<imageType>,
+    primitives: Array<Primitive>
+}
+
+type Primitive = {
+    id: number,
+    type: string,
+    position: 
+    {
+        x: number,
+        y: number,
+    }
+    size: 
+    {
+        width: number,
+        heigth: number,
+    }
+    radius: number
+}
+
+type textType = 
+{
+    id: number,
+    font: string,
+    fontSize: number,
+    color: string,
+    content: string,
+}
+
+type imageType = 
+{
+    id: number,
+    size:
+        {
+            width: number,
+            height: number,
+        };
+    link: string,
+}
 
 // Application
 /**
  * @return {Application}
  */
- function getApplication() {
-    let newApplication: Application
-    return newApplication
+function getApplication() {
+    const Appl: Application = {
+        selectedElements: [],
+        presentation:
+            {
+                title: 'Название презентации',
+                slides:
+                    [
+                        {
+                            id: 0,
+                            background: 'FFFFFF',
+                            text:
+                                [
+                                    {
+                                        id: 0,
+                                        font: '',
+                                        fontSize: 14,
+                                        color: 'FFFFFF',
+                                        content: 'Текст слайда',
+                                    }
+                                ],
+                            image: [],
+                            primitives: []
+                        }
+                    ]
+            }
+    };
+    return Appl;
 }
 
 // Presentation
@@ -100,30 +91,33 @@ console.log(Appl)
  * @return {presentation}  
  */
 function newPresentation(Appl) {
-    let newPresent: Application = Appl
-    return newPresent
+    const Applic: Application = Appl;
+    Applic.presentation.title = 'Название презентации';
+
+    return (Applic);
 }
 
 // Title
 /**
- * @param {presentation} presentation 
+ * @param {Application} Appl 
  * @param {string} newTitle 
- * @return {presentation}
+ * @return {Application}
  */
-function setTitle(presentation, newTitle) {
-    presentation.title = newTitle
-    return presentation
+function setTitle(Appl, newTitle) {
+    const newApplic: Application = Appl;
+    newApplic.presentation.title = newTitle;
+    return newApplic
 }
 
 // Slides
 /**
- * @param {slides} slides
- * @return {slides}
+ * @param {Application} Appl
+ * @return {Application}
  */
-function addSlide(slides) {
-    let newSlide = Appl.presentation.slides.slide
-    newSlide.id = getId()
-    return newSlide
+function addSlide(Appl) {
+    const newApplic = Appl.presentation.slides[0];
+    newApplic.presentation.slides = getId();
+    return newApplic
 }
 
 /**
@@ -148,62 +142,56 @@ function replace(slides, prevIndex, newIndex) {
 
 // Slide
 /**
- * @param {slide} slide
- * @return {slide} 
+ * @param {Application} Appl
+ * @param {textType} newText
+ * @return {Application} 
  */
-function addText(slide) {
-    let newText = App.presentation.slides.slide.text[0] // Получаем значения по умолчанию
-    slide.text.push(newText) // Добавляем в массив новый элемент
-    return slide
+function addText(Appl, newText) {
+    const newApplic: Application = Appl // Получаем значения по умолчанию
+    newApplic.presentation.slides[0].text.push(newText) // Добавляем в массив новый элемент по индексу или как нибудь еще
+    return Appl
 }
 
 /** 
- * @param {slide} slide 
+ * @param {Application} Appl 
  * @param {string} adress
- * @return {slide}
+ * @return {Application}
  */
-function addImage(slide, adress) {
-    let newImage = Appl.presentation.slides.slide.image[0]
-    newImage.link = adress
-    slide.image.push(newImage)
-    return slide
+function addImage(Appl, adress) {
+    const newApplic: Application = Appl
+    newApplic.presentation.slides[].image[].link = adress  // добавление адреса
+    newApplic.presentation.slides[].image.push(newImage) // добавление картинки
+    return newApplic
 }
 
 /**
- * @param {slide} slide
+ * @param {Application} Appl
  * @param {string} primitivesType
- * @return {slide} 
+ * @return {Application} 
  */
-function addPrimitives(slide, primitivesType) {
-    if (primitivesType === 'circle') {
-        let newPrimitive = Appl.presentation.slides.slide.primitives[0] // Пересмотреть весь объект primitives, сделать его массивом
-                                                                           // из 3 элементов circle, triangle, rectangle. (Без фигурных скобок)
-                                                                           // Он сейчас массив из одного элемента 
-        slide.primitives.push(newPrimitive)
-        return slide
-    }
-    if (primitivesType === 'triangle') {
-        let newPrimitive = Appl.presentation.slides.slide.primitives[1] //Appl.presentation.slides.slide.primitives[1]
-       
-        slide.primitives.push(newPrimitive)
-        return slide
-    }
-    if (primitivesType === 'rectangle') {
-        let newPrimitive = Appl.presentation.slides.slide.primitives[2]
-      
-        slide.primitives.push(newPrimitive)
-        return slide
-    }
+function addPrimitives(Appl, primitivesType) {
+    const newAppl: Application = Appl;
+    const newPrimitive: Primitive = {
+                                    id: getId(), 
+                                    type: primitivesType,
+                                    position: {x: 100, y: 100},
+                                    size: {width: 100, heigth: 100},
+                                    radius: 50
+                                    };
+    
+    newAppl.presentation.slides[].primitives.push(newPrimitive);
+    return(newAppl)
 } 
 
 /**
- * @param {slide} slide
+ * @param {Application} Appl
  * @param {string} newBackground
  * @return {slide} 
  */
-function changeBackground(slide, newBackground) {
-    slide.background = newBackground
-    return slide
+function changeBackground(Appl, newBackground) {
+    const newApplic: Application = Appl;
+    newApplic.presentation.slides[].background = newBackground
+    return newApplic
 }
 
 /** 
@@ -218,17 +206,18 @@ function deleteElements(slide, selectedElem) {
 }
 
 /**
- * @param {slide} elem // Показать, что это элементы слайда, текст или картинка которую мы перемещаем
+ * @param {Application} Appl // Показать, что это элементы слайда, текст или картинка которую мы перемещаем
  * @param {number} newX
  * @param {number} newY
- * @return {slide} 
+ * @return {Application} 
  */
-function replaceElements(elem, newX, newY) {
+function replaceElements(Appl, newX, newY) {
     // Перемещение элемента по слайду
     // Возможно заставить следовать за мышью, а потом запомнить позицию, чтобы элемент перемещался вместе с мышкой
-    elem.position.x = newX
-    elem.position.y = newY
-    return elem
+    const newAppl: Application = Appl;
+    newAppl.selectedElements[].position.x = newX; // После типизации массива
+    newAppl.selectedElements[].position.y = newY;
+    return newAppl;
 }
 
 /**
@@ -244,16 +233,17 @@ function changeLayer(slide, elem, newLayer) {
 }
 
 /**
- * @param {*} elem // Элемент слайда
+ * @param {Application} Appl // Элемент слайда
  * @param {number} newWidth 
  * @param {number} newHeight
- * @return {*} // Элемент слайда
+ * @return {Application} // Элемент слайда
  */
-function changeWindowSize(elem, newWidth, newHeight) {
+function changeWindowSize(Appl, newWidth, newHeight) {
     // Подумать над именем процедуры
-    elem.width = newWidth
-    elem.height = newHeight
-    return elem
+    const newAppl: Application = Appl;
+    newAppl.selectedElements[].width = newWidth; // Релизовать после типизации массива.
+    newAppl.selectedElements[].height = newHeight;
+    return newAppl
 }
 
 // Id
@@ -263,33 +253,40 @@ function changeWindowSize(elem, newWidth, newHeight) {
 function getId() {
     // Получить уникальный идентификатор,
     // найти функцию, которая делает это
+    return (Date.now())
 }
 
 // Text
 /**
- * @param {string} Text
+ * @param {Application} Appl
  * @param {string} newFont
  * @param {number} newFontSize
- * @return {string} 
+ * @return {Application} 
  */
-function changeFont(Text, newFont = '', newFontSize = 14) {
+function changeFont(Appl, newFont = '', newFontSize = 14) {
     // Изменение шрифта, нам нужен шрифт по умолчанию
-    Text.font = newFont
-    Text.fontSize = newFontSize
-    return Text
+    const newAppl: Application = Appl;
+    newAppl.presentation.slides[].text[].font = newFont
+    newAppl.presentation.slides[].text[].fontSize = newFontSize
+    return newAppl
 }
 
 /**
- * @param {Text} Text 
+ * @param {Application} Appl 
  * @param {string} newColor 
- * @return {Text} 
+ * @return {Application} 
  */
-function changeTextColor(Text, newColor) {
-    Text.color = newColor
-    return Text
+function changeTextColor(Appl, newColor) {
+    const newAppl: Application = Appl;
+    newAppl.presentation.slides[].text[].color = newColor;
+    return newAppl
 }
 
 // Пока не придумал какие функции можно добавить им
 // Image
 
 // Primitives
+
+
+// Основная программа
+getApplication();

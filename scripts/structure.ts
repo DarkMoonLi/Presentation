@@ -146,6 +146,7 @@ function replace(slides, prevIndex, newIndex) {
  * @param {textType} newText
  * @return {Application} 
  */
+
 function addText(Appl, newText) {
     const newApplic: Application = Appl // Получаем значения по умолчанию
     newApplic.presentation.slides[0].text.push(newText) // Добавляем в массив новый элемент по индексу или как нибудь еще
@@ -157,6 +158,7 @@ function addText(Appl, newText) {
  * @param {string} adress
  * @return {Application}
  */
+
 function addImage(Appl, adress) {
     const newApplic: Application = Appl
     newApplic.presentation.slides[].image[].link = adress  // добавление адреса
@@ -169,6 +171,7 @@ function addImage(Appl, adress) {
  * @param {string} primitivesType
  * @return {Application} 
  */
+
 function addPrimitives(Appl, primitivesType) {
     const newAppl: Application = Appl;
     const newPrimitive: Primitive = {

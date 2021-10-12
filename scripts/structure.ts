@@ -16,22 +16,6 @@ type Slide =
     primitives: Array<Primitive>
 }
 
-type Primitive = {
-    id: number,
-    type: string,
-    position: 
-    {
-        x: number,
-        y: number,
-    }
-    size: 
-    {
-        x: number,
-        y: number,
-    }
-    radius: number
-}
-
 type textType = 
 {
     id: number,
@@ -50,6 +34,22 @@ type imageType =
             height: number,
         };
     link: string,
+}
+
+type Primitive = {
+    id: number,
+    type: string,
+    position: 
+    {
+        x: number,
+        y: number,
+    }
+    size: 
+    {
+        x: number,
+        y: number,
+    }
+    radius: number
 }
 
 // Application
@@ -113,7 +113,7 @@ function setTitle(presentation, newTitle) {
  * @param {slides} slides
  * @return {slides}
  */
-function addSlide(slides) {
+function addSlide(Appl) {
     let newSlide = Appl.presentation.slides[0]
     newSlide.id = getId()
     return newSlide

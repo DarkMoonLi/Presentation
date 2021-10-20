@@ -1,4 +1,5 @@
-type Application = {
+type Application = 
+{
     selectedElements: Array<Application>, // Подумать над вариантами типов.
     presentation:
         {
@@ -9,15 +10,16 @@ type Application = {
 
 type Slide =
 {
-    id: number,
+    id: string,
     background: string,
-    text: Array<textType>, 
+    text: Array<textType>, // В каком порядке будут отображаться? 
     image: Array<imageType>,
     primitives: Array<Primitive>
 }
 
-type Primitive = {
-    id: number,
+type Primitive = 
+{
+    id: string,
     type: string,
     position: 
     {
@@ -34,7 +36,7 @@ type Primitive = {
 
 type textType = 
 {
-    id: number,
+   readonly id: string,
     font: string,
     fontSize: number,
     color: string,
@@ -43,7 +45,7 @@ type textType =
 
 type imageType = 
 {
-    id: number,
+    id: string,
     size:
         {
             width: number,
@@ -65,12 +67,12 @@ function getApplication() {
                 slides:
                     [
                         {
-                            id: 0,
+                            id: getId(),
                             background: 'FFFFFF',
                             text:
                                 [
                                     {
-                                        id: 0,
+                                        id: getId(),
                                         font: '',
                                         fontSize: 14,
                                         color: 'FFFFFF',
@@ -248,12 +250,10 @@ function changeWindowSize(Appl, newWidth, newHeight) {
 
 // Id
 /**
- * @return {id}
+ * @return {string}
  */
 function getId() {
-    // Получить уникальный идентификатор,
-    // найти функцию, которая делает это
-    return (Date.now())
+    return (Date.now().toString(36) + Math.random().toString(36).substr(2))
 }
 
 // Text

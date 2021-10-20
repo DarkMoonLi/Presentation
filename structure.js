@@ -66,55 +66,63 @@ const Application = {
  * @return {Application}
  */
 function getApplication() {
-    let newApplication = Application
+    const newApplication = Application;
     return newApplication
 }
 
 // Presentation
 /**
- * @return {presentation}  
+ * @return {Application}  
  */
 function newPresentation() {
-    let newPresent = Application.presentation
+    const newPresent = Application;
     return newPresent
 }
 
 // Title
 /**
- * @param {presentation} presentation 
+ * @param {Application} Appl 
  * @param {string} newTitle 
- * @return {presentation}
+ * @return {Application}
  */
-function setTitle(presentation, newTitle) {
-    presentation.title = newTitle
-    return presentation
+function setTitle(Appl, newTitle) {
+    const newAppl = Appl;
+    newAppl.presentation.title = newTitle;
+    return newAppl;
 }
 
 // Slides
 /**
- * @param {slides} slides
+ * @param {Application} Appl
  * @return {slides}
  */
-function addSlide(slides) {
-    let newSlide = Application.presentation.slides.slide
-    newSlide.id = getId()
-    return newSlide
+function addSlide(Appl) {
+    const newAppl = Application;
+    newAppl.presentation.slides.push(id = getId(),
+                                    background = 'FFFFFF',
+                                    text.push(font = '',
+                                             fontSize = 14,
+                                             color = '000000',
+                                             content = 'Текст слайда'
+                                             ),
+                                    );
+    return newAppl
 }
 
 /**
- * @param {slides} slides
+ * @param {Application} slides
  * @param {slide} id
- * @return {slides} 
+ * @return {Application} 
  */
 function deleteSlide(slides, id) {
     // Удаление из массива по id, поискать возможности
 }
 
 /**
- * @param {slides} slides
+ * @param {Application} slides
  * @param {number} prevIndex
  * @param {number} newIndex
- * @return {slides} 
+ * @return {Application} 
  */
 function replace(slides, prevIndex, newIndex) {
     // Помещение слайда по новому индексу, и удаление
@@ -123,37 +131,37 @@ function replace(slides, prevIndex, newIndex) {
 
 // Slide
 /**
- * @param {slide} slide
- * @return {slide} 
+ * @param {Application} Appl
+ * @return {Application} 
  */
-function addText(slide) {
-    let newText = Application.presentation.slides.slide.text[0] // Получаем значения по умолчанию
-    slide.text.push(newText) // Добавляем в массив новый элемент
-    return slide
+function addText(Appl) {
+    const newAppl = Appl; // Получаем значения по умолчанию
+    newAppl.presentation.slides.slide.text.push(newText); // Добавляем в массив новый элемент
+    return newAppl
 }
 
 /** 
- * @param {slide} slide 
+ * @param {Application} Appl 
  * @param {string} adress
- * @return {slide}
+ * @return {Application}
  */
-function addImage(slide, adress) {
-    let newImage = Application.presentation.slides.slide.image[0]
-    newImage.link = adress
-    slide.image.push(newImage)
-    return slide
+function addImage(Appl, adress) {
+    let newAppl = Appl
+    link = adress
+    newAppl.presentation.slides.slide.image.push(newImage)
+    return newAppl
 }
 
 /**
- * @param {slide} slide
+ * @param {Application} slide
  * @param {string} primitivesType
- * @return {slide} 
+ * @return {Application} 
  */
 function addPrimitives(slide, primitivesType) {
     if (primitivesType === 'circle') {
         let newPrimitive = Application.presentation.slides.slide.primitives[0] // Пересмотреть весь объект primitives, сделать его массивом
-                                                                           // из 3 элементов circle, triangle, rectangle. (Без фигурных скобок)
-                                                                           // Он сейчас массив из одного элемента 
+                                                                               // из 3 элементов circle, triangle, rectangle. (Без фигурных скобок)
+                                                                               // Он сейчас массив из одного элемента 
         slide.primitives.push(newPrimitive)
         return slide
     }
@@ -172,19 +180,20 @@ function addPrimitives(slide, primitivesType) {
 } 
 
 /**
- * @param {slide} slide
+ * @param {Application} Appl
  * @param {string} newBackground
- * @return {slide} 
+ * @return {Application} 
  */
-function changeBackground(slide, newBackground) {
+function changeBackground(Appl, newBackground) {
+    const newAppl = Appl
     slide.background = newBackground
-    return slide
+    return newAppl
 }
 
 /** 
- * @param {slide} slide
+ * @param {Application} slide
  * @param {} selectedElem // Показать, что это элементы слайда
- * @return {slide} 
+ * @return {Application} 
  */
 function deleteElements(slide, selectedElem) {
     // Без конечной и правильной структуры сложновато
@@ -193,42 +202,44 @@ function deleteElements(slide, selectedElem) {
 }
 
 /**
- * @param {slide} elem // Показать, что это элементы слайда, текст или картинка которую мы перемещаем
+ * @param {Application} Appl // Показать, что это элементы слайда, текст или картинка которую мы перемещаем
  * @param {number} newX
  * @param {number} newY
- * @return {slide} 
+ * @return {Application} 
  */
-function replaceElements(elem, newX, newY) {
+function replaceElements(Appl, newX, newY) {
+    const newAppl = Appl
     // Перемещение элемента по слайду
     // Возможно заставить следовать за мышью, а потом запомнить позицию, чтобы элемент перемещался вместе с мышкой
     elem.position.x = newX
     elem.position.y = newY
-    return elem
+    return newAppl
 }
 
 /**
- * @param {slide} slide 
+ * @param {Application} Appl 
  * @param {*} elem
  * @param {layers}
- * @return {slide} 
+ * @return {Application} 
  */
-function changeLayer(slide, elem, newLayer) {
+function changeLayer(Appl, elem, newLayer) {
     // Добавить в объект слои
     // Для определения элемента возможно использовать функцию, которая следит за выбранными элементами
     // и обработать их в цикле
 }
 
 /**
- * @param {*} elem // Элемент слайда
+ * @param {Application} Appl // Элемент слайда
  * @param {number} newWidth 
  * @param {number} newHeight
- * @return {*} // Элемент слайда
+ * @return {Application} // Элемент слайда
  */
-function changeWindowSize(elem, newWidth, newHeight) {
+function changeWindowSize(Appl, newWidth, newHeight) {
+    const newAppl = Appl;
     // Подумать над именем процедуры
     elem.width = newWidth
     elem.height = newHeight
-    return elem
+    return newAppl
 }
 
 // Id
@@ -242,26 +253,28 @@ function getId() {
 
 // Text
 /**
- * @param {string} Text
+ * @param {Application} Appl
  * @param {string} newFont
  * @param {number} newFontSize
- * @return {string} 
+ * @return {Application} 
  */
-function changeFont(Text, newFont = '', newFontSize = 14) {
+function changeFont(Appl, newFont = '', newFontSize = 14) {
+    const newAppl = Appl
     // Изменение шрифта, нам нужен шрифт по умолчанию
     Text.font = newFont
     Text.fontSize = newFontSize
-    return Text
+    return newAppl
 }
 
 /**
- * @param {Text} Text 
+ * @param {Application} Appl 
  * @param {string} newColor 
- * @return {Text} 
+ * @return {Application} 
  */
-function changeTextColor(Text, newColor) {
+function changeTextColor(Appl, newColor) {
+    const newAppl = Appl
     Text.color = newColor
-    return Text
+    return newAppl
 }
 
 // Пока не придумал какие функции можно добавить им

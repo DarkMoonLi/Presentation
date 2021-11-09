@@ -1,65 +1,65 @@
 type Application = 
 {
-    selectedElements: Array<Application>, // Подумать над вариантами типов.
-    presentation:
-        {
-            title: string,
-            slides: Array<Slide>
-        }
-}
+readonly    selectedElements: Array<Application>, // Подумать над вариантами типов.
+readonly    presentation:
+            {
+readonly            title: string,
+readonly            slides: Array<Slide>
+            }
+};
 
 type Slide =
 {
-    id: string,
-    background: string,
-    text: Array<textType>, // В каком порядке будут отображаться? 
-    image: Array<imageType>,
-    primitives: Array<Primitive>
-}
+readonly    id: string,
+readonly    background: string,
+readonly    text: Array<textType>, // В каком порядке будут отображаться? 
+readonly    image: Array<imageType>,
+readonly    primitives: Array<Primitive>
+};
 
 type Primitive = 
 {
-    id: string,
-    type: string,
-    position: 
-    {
-        x: number,
-        y: number,
-    }
-    size: 
-    {
-        width: number,
-        heigth: number,
-    }
-    radius: number
-}
+readonly    id: string,
+readonly    type: string,
+readonly    position: 
+            {
+readonly        x: number,
+readonly        y: number,
+            }
+readonly    size: 
+            {
+readonly        width: number,
+readonly        heigth: number,
+            }
+readonly    radius: number
+};
 
 type textType = 
 {
    readonly id: string,
-    font: string,
-    fontSize: number,
-    color: string,
-    content: string,
-}
+   readonly font: string,
+   readonly fontSize: number,
+   readonly color: string,
+   readonly content: string,
+};
 
 type imageType = 
 {
-    id: string,
-    size:
-        {
-            width: number,
-            height: number,
-        };
-    link: string,
-}
+    readonly id: string,
+readonly    size:
+            {
+readonly            width: number,
+readonly            height: number,
+            };
+readonly    link: string,
+};
 
 // Application
 /**
  * @return {Application}
  */
 function getApplication() {
-    const Appl: Application = {
+    return ({
         selectedElements: [],
         presentation:
             {
@@ -84,8 +84,7 @@ function getApplication() {
                         }
                     ]
             }
-    };
-    return Appl;
+    });
 }
 
 // Presentation
@@ -93,10 +92,11 @@ function getApplication() {
  * @return {presentation}  
  */
 function newPresentation(Appl) {
-    const Applic: Application = Appl;
-    Applic.presentation.title = 'Название презентации';
-
-    return (Applic);
+    return ({
+            ...Appl,
+            presentation: {title: 'Название презентации',
+                           slides: Appl.presentation.slides}
+            });
 }
 
 // Title
@@ -106,9 +106,11 @@ function newPresentation(Appl) {
  * @return {Application}
  */
 function setTitle(Appl, newTitle) {
-    const newApplic: Application = Appl;
-    newApplic.presentation.title = newTitle;
-    return newApplic
+    return ({
+            ...Appl,
+            presentation: {title: newTitle,
+                          slides: Appl.presentation.slides}
+            })
 }
 
 // Slides
@@ -117,9 +119,27 @@ function setTitle(Appl, newTitle) {
  * @return {Application}
  */
 function addSlide(Appl) {
-    const newApplic = Appl.presentation.slides[0];
-    newApplic.presentation.slides = getId();
-    return newApplic
+    let defaultSlide = {
+        id: getId(),
+        background: 'FFFFFF',
+        text:
+            [
+                {
+                    id: getId(),
+                    font: '',
+                    fontSize: 14,
+                    color: 'FFFFFF',
+                    content: 'Текст слайда',
+                }
+            ],
+        image: [],
+        primitives: []
+    }
+    return ({
+            ...Appl,
+            presentation: {title: Appl.presentation.title,
+                          slides: [...Appl.presentation.slides, defaultSlide]}
+            })
 }
 
 /**
@@ -145,13 +165,23 @@ function replace(slides, prevIndex, newIndex) {
 // Slide
 /**
  * @param {Application} Appl
- * @param {textType} newText
+ * @param {Number} index
  * @return {Application} 
  */
-function addText(Appl, newText) {
-    const newApplic: Application = Appl // Получаем значения по умолчанию
-    newApplic.presentation.slides[0].text.push(newText) // Добавляем в массив новый элемент по индексу или как нибудь еще
-    return Appl
+function addText(Appl, index) {
+    let defaultText = {
+        id: getId(),
+        font: '',
+        fontSize: 14,
+        color: 'FFFFFF',
+        content: 'Текст слайда',
+    };
+    return ({
+            ...Appl,
+            presentation: {slides: [...Appl.presentation.slides,
+                                    slides[index].text = [...Appl.presentation.slides[index].text, defaultText]]
+            }
+            })
 }
 
 /** 
@@ -160,40 +190,45 @@ function addText(Appl, newText) {
  * @return {Application}
  */
 function addImage(Appl, adress) {
-    const newApplic: Application = Appl
-    newApplic.presentation.slides[].image[].link = adress  // добавление адреса
-    newApplic.presentation.slides[].image.push(newImage) // добавление картинки
-    return newApplic
+    let defaultImage = {};
+    return ({
+            ...Appl,
+            presentation: {slides: [...Appl.presentation.slides]}
+    })
 }
 
 /**
  * @param {Application} Appl
- * @param {string} primitivesType
+ * @param {String} primitivesType
+ * @param {Number} index
  * @return {Application} 
  */
-function addPrimitives(Appl, primitivesType) {
-    const newAppl: Application = Appl;
-    const newPrimitive: Primitive = {
-                                    id: getId(), 
-                                    type: primitivesType,
-                                    position: {x: 100, y: 100},
-                                    size: {width: 100, heigth: 100},
-                                    radius: 50
-                                    };
-    
-    newAppl.presentation.slides[].primitives.push(newPrimitive);
-    return(newAppl)
+function addPrimitives(Appl, primitivesType, index) {
+    if (primitivesType === 'trinagle') {
+        let newPrimitive = {}
+    };
+    if (primitivesType === 'circle') {
+        let newPrimitive = {}
+    }
+    if (primitivesType === 'rectangle') {
+        let newPrimitive = {}
+    }
+    return ({
+            ...Appl,
+            presentation: {slides: [...Appl.presentation.slides,
+                                    Appl.presentation.slides[index].primitives: [...Appl.presentation.slides[index].primirives, newPrimitive]}})
 } 
 
 /**
  * @param {Application} Appl
- * @param {string} newBackground
- * @return {slide} 
+ * @param {String} newBackground
+ * @param {Number} index
+ * @return {Application} 
  */
-function changeBackground(Appl, newBackground) {
-    const newApplic: Application = Appl;
-    newApplic.presentation.slides[].background = newBackground
-    return newApplic
+function changeBackground(Appl, newBackground, index) {
+    return ({...Appl,
+            presentation: {slides: [...Appl.presentation.slides,
+                                    Appl.presentation.slides[index].background = newBackground]}})
 }
 
 /** 
@@ -209,16 +244,17 @@ function deleteElements(slide, selectedElem) {
 
 /**
  * @param {Application} Appl // Показать, что это элементы слайда, текст или картинка которую мы перемещаем
- * @param {number} newX
- * @param {number} newY
+ * @param {Number} index
+ * @param {Number} newX
+ * @param {Number} newY
  * @return {Application} 
  */
-function replaceElements(Appl, newX, newY) {
+function replaceElements(Appl, index, newX, newY) {
     // Перемещение элемента по слайду
     // Возможно заставить следовать за мышью, а потом запомнить позицию, чтобы элемент перемещался вместе с мышкой
     const newAppl: Application = Appl;
-    newAppl.selectedElements[].position.x = newX; // После типизации массива
-    newAppl.selectedElements[].position.y = newY;
+    newAppl.selectedElements[index].position.x = newX; // После типизации массива
+    newAppl.selectedElements[index].position.y = newY;
     return newAppl;
 }
 
@@ -259,27 +295,31 @@ function getId() {
 // Text
 /**
  * @param {Application} Appl
- * @param {string} newFont
- * @param {number} newFontSize
+ * @param {Number} index1
+ * @param {Number} index2
+ * @param {String} newFont
+ * @param {Number} newFontSize
  * @return {Application} 
  */
-function changeFont(Appl, newFont = '', newFontSize = 14) {
+function changeFont(Appl, index1, index2, newFont = '', newFontSize = 14) {
     // Изменение шрифта, нам нужен шрифт по умолчанию
-    const newAppl: Application = Appl;
-    newAppl.presentation.slides[].text[].font = newFont
-    newAppl.presentation.slides[].text[].fontSize = newFontSize
-    return newAppl
+    return ({...Appl,
+            presentation: {slides: [...Appl.presentation.slides,
+                                    Appl.presentation.slides[index1].text[index2]: {font = newFont,
+                                                                                    fontSize = newFontSize}]}})
 }
 
 /**
  * @param {Application} Appl 
- * @param {string} newColor 
+ * @param {String} newColor
+ * @param {Number} index1
+ * @param {Number} index2 
  * @return {Application} 
  */
-function changeTextColor(Appl, newColor) {
-    const newAppl: Application = Appl;
-    newAppl.presentation.slides[].text[].color = newColor;
-    return newAppl
+function changeTextColor(Appl, newColor, index1, index2) {
+    return ({...Appl,
+            presentation: {slides: [...Appl.presentation.slides,
+                                    Appl.presentation.slides[index1].text[index2].color = newColor]}})
 }
 
 // Пока не придумал какие функции можно добавить им

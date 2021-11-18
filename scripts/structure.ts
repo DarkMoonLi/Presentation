@@ -339,7 +339,3 @@ function changeTextColor(Appl: Application, newColor: string, slideIndex: number
 // Image
 
 // Primitives
-
-
-// Основная программа
-getApplication();

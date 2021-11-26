@@ -1,0 +1,59 @@
+.header
+{
+  display: flex;
+  background-color: #565771;
+}
+
+.dBlock
+{
+  display: block;
+  width: 100%;
+}
+
+.logo
+{
+  display: inline-block;
+  width: 65px;
+  height: 65px;
+}
+
+.menu
+{
+  display: none;
+  border-bottom: transparent;
+  margin: -1px 0;
+  padding: 0;
+}
+
+.item
+{
+  display: block;
+  border: 1px solid #000;
+  padding: 6px 5px;
+}
+
+.titleContainer
+{
+  display: block;
+  width: 100%;
+}
+
+.titlePresentation
+{
+  display: block;
+  padding: 0;
+  border-width: 1px 0;
+  border-style: solid;
+  border-color: #000;
+  background-color: #494B68;
+  color: #fff;
+  text-align: center;
+  height: 30px;
+  width: 100%;
+}
+
+.titlePresentation::placeholder
+{
+  text-align: center;
+  color: #fff;
+}

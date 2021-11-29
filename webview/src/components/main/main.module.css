@@ -1,4 +1,4 @@
 .container {
     display: flex;
-    justify-content: flex-end;
+    background-color: #5f626c;
 }

@@ -1,4 +1,4 @@
-import styles from './dropdown.module.css';
+import styles from './item.module.css';
 
 function Item (props: any) {
   return (

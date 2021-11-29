@@ -17,15 +17,5 @@
   border: 0;
   background-color: #565771;
   padding: 9px 10px;
-}
-
-.navbarItem
-{
-  border-bottom: 1px solid #000;
-  list-style-type: none;
-}
-
-.navbarItemTitle
-{
-  padding-left: 10px;
+  cursor: pointer;
 }

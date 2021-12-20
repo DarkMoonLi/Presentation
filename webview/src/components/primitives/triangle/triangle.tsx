@@ -1,1 +1,0 @@
-import "./triangle.module.css"

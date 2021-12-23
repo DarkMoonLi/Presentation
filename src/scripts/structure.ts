@@ -288,7 +288,16 @@ function move(Appl: Application, prevIndex: number, newIndex: number): Applicati
     }
 };
 
-function addImage(Appl: Application, adress: string, id: string): Application {
+async function addImageFromFile(resolve, reject, File: Blob): Promise<String> {
+    let newFileReader = new FileReader();
+    newFileReader.onloadend = () => resolve(newFileReader.result);
+    newFileReader.onerror = () => reject(new Error('Не удалось прочитать файл'));
+    newFileReader.readAsDataURL(File); 
+    return String(newFileReader.result)
+}
+
+function addImage(Appl: Application, adress: string, id: string, file: Blob, fromFile: boolean): Application {
+    //
     let newImage: ImageType = {
         id: getId(),
         type: 'image',
@@ -300,10 +309,26 @@ function addImage(Appl: Application, adress: string, id: string): Application {
             width: 100,
             height: 100
         },
-        link: adress
+        link: ''
     };
-    let img: HTMLImageElement = new Image();
-    img.src = adress
+
+    if (fromFile) {
+        let newPromise = new Promise(function(resolve, reject) {addImageFromFile(resolve, reject, file)})
+        newPromise.then(
+            result => {
+                newImage = {
+                    ...newImage,
+                    link: String(result)
+                }
+            },
+            error => alert(error.message)
+        );
+    } else {
+        newImage = {
+            ...newImage,
+            link: adress
+        }
+    }
 
     let changeSlides: Array<Slide> = [...Appl.presentation.slides];
     for (let slide of changeSlides) {

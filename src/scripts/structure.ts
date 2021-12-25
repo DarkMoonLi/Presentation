@@ -144,7 +144,7 @@ function clearSelectedElements(Appl: Application): Application {
     }
 }
 
-function doUndo(Appl: Application): Application {
+function undo(Appl: Application): Application {
     let newUndo: Array<Presentation> = [...Appl.undo];
     if (newUndo.length !== 0) {
         let changedUndo: Array<Presentation> = [];
@@ -162,7 +162,7 @@ function doUndo(Appl: Application): Application {
     return {...Appl}
 }
 
-function doRedo(Appl: Application): Application {
+function redo(Appl: Application): Application {
     let newRedo: Array<Presentation> = [...Appl.redo];
     if (newRedo.length !== 0) {
         let changedRedo: Array<Presentation> = [];
@@ -615,6 +615,15 @@ function changeTextColor(Appl: Application, newColor: string): Application {
 };
 
 export {
+    Application,
+    Presentation,
+    Slide,
+    ImageType,
+    TextType,
+    PrimitiveType
+};
+
+export {
     getApplication,
     putSelectedElement,
     deleteSelectedElement,
@@ -635,7 +644,7 @@ export {
     changeWindowSize,
     changeFont,
     changeTextColor,
-    doUndo,
-    doRedo,
+    undo,
+    redo,
     clearRedo
 }

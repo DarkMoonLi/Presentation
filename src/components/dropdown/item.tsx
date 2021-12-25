@@ -1,9 +1,16 @@
+import { dispatch } from '../../scripts/editor';
+import { Application, Presentation } from '../../scripts/structure';
 import styles from './item.module.css';
 
-function Item (props: any) {
+type ItemTypes = {
+  title: string,
+  action: Function
+}
+
+function Item ({title, action}: ItemTypes) {
   return (
-    <li className={styles.navbarItem}>
-      <span className={styles.navbarItemTitle}>{props.title}</span>
+    <li className={styles.navbarItem} onClick={() => dispatch(action, {})}>
+      <span className={styles.navbarItemTitle}>{title}</span>
     </li>
   )}
 

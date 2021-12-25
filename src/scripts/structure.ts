@@ -1,3 +1,5 @@
+import { editor } from "./editor";
+
 type Application = {
     readonly selectedElements: Array<string>,
     readonly undo: Array<Presentation>,
@@ -217,7 +219,7 @@ function createNewPresentation(Appl: Application = defaultApp): Application {
     if (Appl === defaultApp) {
         return { ...Appl }
     } else {
-        return {
+        return Appl = {
             ...defaultApp,
             undo: [...Appl.undo, {...Appl.presentation}]
         }
@@ -614,7 +616,7 @@ function changeTextColor(Appl: Application, newColor: string): Application {
     }
 };
 
-export {
+export type {
     Application,
     Presentation,
     Slide,
@@ -646,5 +648,7 @@ export {
     changeTextColor,
     undo,
     redo,
-    clearRedo
+    clearRedo, 
+    getId,
+    getDefaultSlide
 }

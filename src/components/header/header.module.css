@@ -12,6 +12,8 @@
 
 .logo
 {
+  background-image: url(/src/image/cat.jpeg);
+  background-size: contain;
   display: inline-block;
   width: 65px;
   height: 65px;

@@ -60,6 +60,7 @@ type ImageType = {
         readonly height: number,
     };
     readonly link: string,
+    readonly content: string
 };
 
 function getId(): string {
@@ -257,6 +258,7 @@ function deleteSlide(Appl: Application): Application {
     }
 };
 
+// Исправить
 function move(Appl: Application, prevIndex: number, newIndex: number): Application {
     let newSlides: Array<Slide> = [...Appl.presentation.slides];
     let selectedSlide: Slide = { ...newSlides[prevIndex] };
@@ -288,14 +290,6 @@ function move(Appl: Application, prevIndex: number, newIndex: number): Applicati
     }
 };
 
-async function addImageFromFile(resolve, reject, File: Blob): Promise<String> {
-    let newFileReader = new FileReader();
-    newFileReader.onloadend = () => resolve(newFileReader.result);
-    newFileReader.onerror = () => reject(new Error('Не удалось прочитать файл'));
-    newFileReader.readAsDataURL(File); 
-    return String(newFileReader.result)
-}
-
 function addImage(Appl: Application, adress: string, id: string, file: Blob, fromFile: boolean): Application {
     //
     let newImage: ImageType = {
@@ -309,16 +303,32 @@ function addImage(Appl: Application, adress: string, id: string, file: Blob, fro
             width: 100,
             height: 100
         },
-        link: ''
+        link: '',
+        content: ''
     };
 
     if (fromFile) {
-        let newPromise = new Promise(function(resolve, reject) {addImageFromFile(resolve, reject, file)})
+        // Лучше попробовать так
+        let image = URL.createObjectURL(file)
+        newImage = {
+            ...newImage,
+            content: image
+        } 
+
+        // Возможно не потребуется
+        let newPromise = new Promise(function(resolve, reject) {
+            let newFileReader = new FileReader();
+            newFileReader.onloadend = () => resolve(newFileReader.result);
+            newFileReader.onerror = () => reject(new Error('Не удалось открыть файл'));
+            newFileReader.readAsDataURL(file);            
+        })
         newPromise.then(
             result => {
                 newImage = {
                     ...newImage,
-                    link: String(result)
+                    // Подумать
+                    link: String(result),
+                    content: String(result)
                 }
             },
             error => alert(error.message)
@@ -358,15 +368,14 @@ function addPrimitives(Appl: Application, primitivesType: 'circle' | 'rectangle'
         size: { width: 100, height: 100 },
     };
 
-    let changeSlides: Array<Slide> = [...Appl.presentation.slides];
-    for (let slide of changeSlides) {
+    let changeSlides: Array<Slide> = [...Appl.presentation.slides.map(function(slide) {
         if (slide.id === id) {
-            slide = {
+            return {
                 ...slide,
                 content: [...slide.content, newPrimitive]
             }
-        }
-    };
+        } else { return slide }
+    })];
 
     return {
         ...Appl,
@@ -378,7 +387,6 @@ function addPrimitives(Appl: Application, primitivesType: 'circle' | 'rectangle'
     }
 };
 
-// Проверить
 function changeBackground(Appl: Application, newBackground: string): Application {
     let changeSlides: Array<Slide> = [...Appl.presentation.slides];
     for (const id of Appl.selectedElements) {
@@ -404,27 +412,22 @@ function changeBackground(Appl: Application, newBackground: string): Application
     }
 };
 
-// Проверить
 function deleteElements(Appl: Application): Application {
     let changeSlides: Array<Slide> = [...Appl.presentation.slides];
     let selectedElements: Array<string> = [...Appl.selectedElements];
 
-    for (let slide of changeSlides) {
-        if (slide.id === selectedElements[0]) {
-            let content: Array<PrimitiveType|TextType|ImageType> = [];
-            for (const id of selectedElements) {
-                content = slide.content.filter(function(content) {
-                    return content.id === id
-                });
-            };
+    changeSlides = [...changeSlides.map(function(slide) {
+        if (selectedElements.indexOf(slide.id) !== -1) {
+            let newContent: Array<TextType|ImageType|PrimitiveType> = [...slide.content.filter(function(content) {
+                return selectedElements.indexOf(content.id) === -1
+            })];
 
-            slide = {
+            return {
                 ...slide,
-                content: [...content]
+                content: [...newContent]
             };
-        };
-        changeSlides = [...changeSlides, {...slide}]
-    };
+        } else { return slide }
+    })];
 
     return {
         ...Appl,
@@ -437,24 +440,24 @@ function deleteElements(Appl: Application): Application {
 };
 
 function moveElements(Appl: Application, newX: number, newY: number): Application {
-    let changeSlides: Array<Slide> = [...Appl.presentation.slides];
-    for (let slide of changeSlides) {
-        if (slide.id === Appl.selectedElements[0]) {
-            for (let content of slide.content) {
-                for (let id of Appl.selectedElements) {
-                    if (content.id === id) {
-                        content = {
+    let changeSlides: Array<Slide> = [...Appl.presentation.slides.map(function(slide) {
+        if (Appl.selectedElements.indexOf(slide.id) !== -1) {
+            return {
+                ...slide,
+                content: [...slide.content.map(function(content) {
+                    if (Appl.selectedElements.indexOf(content.id) !== -1) {
+                        return {
                             ...content,
                             position: {
                                 x: newX,
                                 y: newY
                             }
                         }
-                    }
-                }
-            }
-        }
-    }
+                    } else { return content }
+                })
+            ]}
+        } else { return slide }
+    })];
 
     return {
         ...Appl,
@@ -480,14 +483,10 @@ function changeLayer(Appl: Application, newLayer: number): Application {
     }
 };
 
-// Переделать под id
 function changeWindowSize(Appl: Application, newWidth: number, newHeight: number): Application {
-    // Подумать над именем процедуры
-    let changeSlides: Array<Slide> = [...Appl.presentation.slides];
-    
-    for (let slide of changeSlides) {
+    let changeSlides: Array<Slide> = [...Appl.presentation.slides.map(function(slide) {
         if (Appl.selectedElements.indexOf(slide.id) !== -1) {
-            slide = {
+            return {
                 ...slide,
                 content: [...slide.content.map(function(content) {
                     if (Appl.selectedElements.indexOf(content.id) !== -1) {
@@ -498,13 +497,11 @@ function changeWindowSize(Appl: Application, newWidth: number, newHeight: number
                                 height: newHeight
                             }
                         }
-                    } else {
-                        return content
-                    }
+                    } else { return content }
                 })]
             }
-        }
-    }
+        } else { return slide }
+    })];
 
     return {
         ...Appl,

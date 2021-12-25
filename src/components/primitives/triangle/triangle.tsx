@@ -1,6 +1,6 @@
 function Triangle(props: any) {
   return(
-    <polygon points="400,10 450,50 350, 50" fill="rgb(255, 0, 0)"/>
+    <polygon points="400,10 450,100 350, 100" fill="rgb(255, 0, 0)"/>
   )
 }
 

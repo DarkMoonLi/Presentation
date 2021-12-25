@@ -1,3 +1,4 @@
+import { editor } from "../../scripts/editor";
 import Circle from "../primitives/circle/circle";
 import Rectangle from "../primitives/rectangle/rectangle";
 import Square from "../primitives/square/square";
@@ -9,11 +10,7 @@ function Workspace(props: any) {
   return(
     <div className={styles.workspaceWrap}>
       <svg className={styles.workspace}>
-        <Rectangle />
-        <Circle />
-        <Triangle />
-        <Square />
-        <SomebodyText />
+        
       </svg>
     </div>
   )}

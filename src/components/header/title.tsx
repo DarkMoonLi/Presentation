@@ -1,19 +1,17 @@
 import styles from './title.module.css'
 import '../../scripts/structure'
-import { getApplication, newPresentation, setTitle } from '../../scripts/structure';
+import { setTitle } from '../../scripts/structure';
 import { useState } from 'react';
+import { dispatch, editor } from '../../scripts/editor';
 
 function TitlePresentation () {
 
-  const app = getApplication();
-  const [value, setValue] = useState(app.presentation.title);
+  const [value, setValue] = useState(editor.presentation.title);
 
   function handleChange(event: any) {
       setValue(event.target.value);
-      setTitle(app, value);
+      dispatch(setTitle, {value});
   }
-
-  
 
   return (
     <div className={styles.titleContainer}>

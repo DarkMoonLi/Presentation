@@ -1,26 +1,27 @@
-export type Application = {
+import { editor } from "./editor";
+
+type Application = {
     readonly selectedElements: Array<string>,
-    readonly undo: Array<Slide>,
-    readonly redo: Array<Slide>,
-    readonly presentation: {
-        readonly title: string,
-        readonly slides: Array<Slide>
-    }
+    readonly undo: Array<Presentation>,
+    readonly redo: Array<Presentation>,
+    readonly presentation: Presentation
 };
 
-export type Slide = {
+type Presentation = {
+    readonly title: string,
+    readonly type: 'presentation',
+    readonly slides: Array<Slide>
+};
+
+type Slide = {
     readonly id: string,
     readonly background: string,
-    readonly content: (TextType|PrimitiveType|ImageType)[]
-   // readonly text: Array<TextType>, 
-   // readonly image: Array<ImageType>,
-   // readonly primitives: Array<Primitive>
+    readonly content: Array<TextType|PrimitiveType|ImageType>
 };
 
 type PrimitiveType = {
     readonly id: string,
-    readonly type: string,
-    readonly prmitive: string,
+    readonly type: 'circle' | 'rectangle' | 'triangle',
     readonly position: {
         readonly x: number,
         readonly y: number,
@@ -31,9 +32,9 @@ type PrimitiveType = {
     }
 };
 
-export type TextType = {
+type TextType = {
     readonly id: string,
-    readonly type: string,
+    readonly type: 'text',
     readonly position: {
         readonly x: number,
         readonly y: number
@@ -49,9 +50,9 @@ export type TextType = {
     readonly content: string
 };
 
-export type ImageType = {
+type ImageType = {
     readonly id: string,
-    readonly type: string,
+    readonly type: 'image',
     readonly position: {
         readonly x: number,
         readonly y: number 
@@ -61,14 +62,15 @@ export type ImageType = {
         readonly height: number,
     };
     readonly link: string,
+    readonly content: string
 };
 
-export function getId(): string {
-    return (Date.now().toString(36) + Math.random().toString(36).substr(2))
-}
+function getId(): string {
+    return (Date.now().toString(36) + Math.random().toString(36).substring(7))
+};
 
-export function getDefaultText(): TextType {
-    return ({
+function getDefaultText(): TextType {
+    return {
         id: getId(),
         type: 'text',
         position: {
@@ -83,90 +85,206 @@ export function getDefaultText(): TextType {
         fontSize: 14,
         weight: 'normal',
         color: 'FFFFFF',
-        content: 'Текст слайда отображаться'
-    });
+        content: 'Текст слайда'
+    }
 };
 
-export function getDefaultSlide(): Slide {
-    return({
+function getDefaultSlideTitle(): TextType {
+    return {
+        id: getId(),
+        type: 'text',
+        position: {
+            x: 20,
+            y: 20
+        },
+        size: {
+            width: 60,
+            height: 30
+        },
+        font: '',
+        fontSize: 20,
+        weight: 'normal',
+        color: 'FFFFFF',
+        content: 'Заголовок слайда'
+    }
+};
+
+function getDefaultSlide(): Slide {
+    return {
         id: getId(),
         background: 'FFFFFF',
-        content: [{...getDefaultText()}]
-    })
+        content: [getDefaultSlideTitle(), getDefaultText()]
+    }
 };
 
-// Application
-export function getApplication(): Application {
-    return ({
+function putSelectedElement(Appl: Application, id: string): Application {
+    return {
+        ...Appl,
+        undo: [...Appl.undo, {...Appl.presentation}],
+        selectedElements: [...Appl.selectedElements, id]
+    }
+};
+
+function deleteSelectedElement(Appl: Application, id: string): Application {
+    let newSelectedElements: Array<string> = [];
+    for (const selectedElement of Appl.selectedElements) {
+        if (selectedElement !== id) {
+            newSelectedElements.push(selectedElement)
+        }
+    };
+
+    return {
+        ...Appl,
+        selectedElements: [...newSelectedElements]
+    };
+}
+
+function clearSelectedElements(Appl: Application): Application {
+    return {
+        ...Appl,
+        selectedElements: []
+    }
+}
+
+function undo(Appl: Application): Application {
+    let newUndo: Array<Presentation> = [...Appl.undo];
+    if (newUndo.length !== 0) {
+        let changedUndo: Array<Presentation> = [];
+        let newPresentation: Presentation = (newUndo[newUndo.length - 1].type === Appl.presentation.type) ? {...newUndo[newUndo.length - 1]} : {...Appl.presentation};
+        newUndo.pop();
+        changedUndo = [...newUndo];
+        
+        return {
+            ...Appl,
+            undo: [...changedUndo],
+            redo: [...Appl.redo, Appl.presentation],
+            presentation: newPresentation
+        }
+    };
+    return {...Appl}
+}
+
+function redo(Appl: Application): Application {
+    let newRedo: Array<Presentation> = [...Appl.redo];
+    if (newRedo.length !== 0) {
+        let changedRedo: Array<Presentation> = [];
+        let newUndo: Array<Presentation> = (newRedo[newRedo.length - 1].type == Appl.presentation.type) ? [...Appl.undo, {...Appl.presentation}] : [...Appl.undo];
+        let redoPresentation: Presentation = (newRedo[newRedo.length - 1].type == Appl.presentation.type) ? {...newRedo[newRedo.length - 1]} : {...Appl.presentation};
+        newRedo.pop();
+        changedRedo = [...newRedo];
+
+        return {
+            ...Appl,
+            undo: newUndo,
+            redo: changedRedo,
+            presentation: redoPresentation
+        }
+    };
+
+    return {...Appl}
+}
+
+function clearRedo(Appl: Application): Application {
+    return {
+        ...Appl,
+        redo: []
+    }
+}
+
+const defaultApp: Application = {
+    selectedElements: [],
+    undo: [],
+    redo: [],
+    presentation: {
+        title: 'Название презентации',
+        type: 'presentation',
+        slides: [getDefaultSlide()]
+    }
+}
+
+function getApplication(): Application {
+    return {
         selectedElements: [],
         undo: [],
         redo: [],
         presentation: {
             title: 'Название презентации',
+            type: 'presentation',
             slides: [getDefaultSlide()]
         }
-    })
+    }
 };
 
-// Presentation
-export function newPresentation(Appl: Application): Application {
-    return ({
+function createNewPresentation(Appl: Application = defaultApp): Application {
+    if (Appl === defaultApp) {
+        return { ...Appl }
+    } else {
+        return Appl = {
+            ...defaultApp,
+            undo: [...Appl.undo, {...Appl.presentation}]
+        }
+    }
+}
+
+function newPresentation(Appl: Application): Application {
+    return {
         ...Appl,
+        undo: [...Appl.undo, {...Appl.presentation}],
         presentation: {
             title: 'Название презентации',
+            type: 'presentation',
             slides: [getDefaultSlide()]
         }
-    });
-}
+    }
+};
 
-// Title
-export function setTitle(Appl: Application, newTitle: string): Application {
-    return ({
+function setTitle(Appl: Application, newTitle: string): Application {
+    return {
         ...Appl,
+        undo: [...Appl.undo, {...Appl.presentation}],
         presentation: {
-            title: newTitle,
-            slides: Appl.presentation.slides
+            ...Appl.presentation,
+            title: newTitle
         }
-    })
-}
+    }
+};
 
 // Продумать Undo
-export function addSlide(Appl: Application): Application {
-    return ({
+function addSlide(Appl: Application): Application {
+    return {
         ...Appl,
-        undo: [...Appl.undo, ],
+        undo: [...Appl.undo, {...Appl.presentation}],
         presentation: {
-            title: Appl.presentation.title,
+            ...Appl.presentation,
             slides: [...Appl.presentation.slides, getDefaultSlide()]
         }
-    })
-}
+    }
+};
 
 // Продумать Undo
-export function deleteSlide(Appl: Application, index: number, id: string): Application {
+function deleteSlide(Appl: Application): Application {
+    // Appl.selectedElements
     let newSlides: Array<Slide> = [];
-    let newUndo: Array<Slide> = [];
-    for (let i = 0; i < Appl.presentation.slides.length; i++) {
-        if (Appl.presentation.slides[i].id !== id) {
-            newSlides = [...newSlides, { ...Appl.presentation.slides[i] }];
-        }
-        else {
-            newUndo = [Appl.presentation.slides[i]];
-        };
-    };
-    return ({
+
+    newSlides = [...newSlides.filter(function(slide) {
+        return Appl.selectedElements.indexOf(slide.id) !== 1
+    })]
+
+    return {
         ...Appl,
-        undo: [...Appl.undo, ...newUndo],
+        undo: [...Appl.undo, {...Appl.presentation}],
         presentation: {
-            title: Appl.presentation.title,
+            ...Appl.presentation,
             slides: [...newSlides]
         }
-    });
-}
+    }
+};
 
-export function replace(Appl: Application, prevIndex: number, newIndex: number): Application {
+// Исправить
+function move(Appl: Application, prevIndex: number, newIndex: number): Application {
     let newSlides: Array<Slide> = [...Appl.presentation.slides];
     let selectedSlide: Slide = { ...newSlides[prevIndex] };
+
     if (prevIndex > newIndex) {
         for (let i = newSlides.length; i > 0; i--) {
             if ((i < prevIndex) && (i >= newIndex)) {
@@ -182,20 +300,21 @@ export function replace(Appl: Application, prevIndex: number, newIndex: number):
             };
         };
         newSlides[newIndex] = selectedSlide;
-    }
-    return ({
+    };
+
+    return {
         ...Appl,
+        undo: [...Appl.undo, {...Appl.presentation}],
         presentation: {
-            title: Appl.presentation.title,
+            ...Appl.presentation,
             slides: [...newSlides]
         }
-    })
-}
+    }
+};
 
-// Slide
-
-export function addImage(Appl: Application, adress: string, index: number): Application {
-    let defaultImage: ImageType = {
+function addImage(Appl: Application, adress: string, id: string, file: Blob, fromFile: boolean): Application {
+    //
+    let newImage: ImageType = {
         id: getId(),
         type: 'image',
         position: {
@@ -206,144 +325,217 @@ export function addImage(Appl: Application, adress: string, index: number): Appl
             width: 100,
             height: 100
         },
-        link: adress
+        link: '',
+        content: ''
     };
+
+    if (fromFile) {
+        // Лучше попробовать так
+        let image = URL.createObjectURL(file)
+        newImage = {
+            ...newImage,
+            content: image
+        } 
+
+        // Возможно не потребуется
+        let newPromise = new Promise(function(resolve, reject) {
+            let newFileReader = new FileReader();
+            newFileReader.onloadend = () => resolve(newFileReader.result);
+            newFileReader.onerror = () => reject(new Error('Не удалось открыть файл'));
+            newFileReader.readAsDataURL(file);            
+        })
+        newPromise.then(
+            result => {
+                newImage = {
+                    ...newImage,
+                    // Подумать
+                    link: String(result),
+                    content: String(result)
+                }
+            },
+            error => alert(error.message)
+        );
+    } else {
+        newImage = {
+            ...newImage,
+            link: adress
+        }
+    }
 
     let changeSlides: Array<Slide> = [...Appl.presentation.slides];
-    changeSlides[index] = {
-        ...changeSlides[index],
-        content: [...changeSlides[index].content, defaultImage]
-    };
+    for (let slide of changeSlides) {
+        if (slide.id === id) {
+            slide= {
+                ...slide,
+                content: [...slide.content, newImage]
+            }
+        }
+    }
 
-    return ({
+    return {
         ...Appl,
-        undo: [...Appl.undo, Appl.presentation.slides[index]],
+        undo: [...Appl.undo, {...Appl.presentation}],
         presentation: {
-            title: Appl.presentation.title,
+            ...Appl.presentation,
             slides: [...changeSlides]
         }
-    })
-}
+    }
+};
 
-export function addPrimitives(Appl: Application, primitivesType: string, index: number): Application {
+function addPrimitives(Appl: Application, primitivesType: 'circle' | 'rectangle' | 'triangle', id: string): Application {
     let newPrimitive: PrimitiveType = {
         id: getId(),
-        type: 'primitive',
-        prmitive: primitivesType,
+        type: primitivesType,
         position: { x: 100, y: 100 },
         size: { width: 100, height: 100 },
     };
 
-    let changeSlides: Array<Slide> = [...Appl.presentation.slides];
-    changeSlides[index] = {
-        ...changeSlides[index],
-        content: [...changeSlides[index].content, newPrimitive]
-    };
+    let changeSlides: Array<Slide> = [...Appl.presentation.slides.map(function(slide) {
+        if (slide.id === id) {
+            return {
+                ...slide,
+                content: [...slide.content, newPrimitive]
+            }
+        } else { return slide }
+    })];
 
-    return ({
+    return {
         ...Appl,
-        undo: [...Appl.undo, Appl.presentation.slides[index]],
-        presentation: {
-            title: Appl.presentation.title,
-            slides: changeSlides
-        }
-    });
-}
-
-export function changeBackground(Appl: Application, newBackground: string, index: number): Application {
-    let changeSlides: Array<Slide> = [...Appl.presentation.slides];
-    changeSlides[index] = {
-        ...changeSlides[index],
-        background: newBackground
-    };
-
-    return ({
-        ...Appl,
-        presentation: {
-            title: Appl.presentation.title,
-            slides: [...changeSlides]
-        }
-    });
-}
-
-export function deleteElements(Appl: Application, selectedElem: Array<Application>): Application {
-    // Без конечной и правильной структуры сложновато
-    // Для определения элемента возможно использовать функцию, которая следит за выбранными элементами
-    // и обработать их в цикле
-    return ({
-        ...Appl,
+        undo: [...Appl.undo, {...Appl.presentation}],
         presentation: {
             ...Appl.presentation,
-            slides: []
+            slides: changeSlides
         }
-    });
+    }
 };
 
-export function replaceElements(Appl: Application, index: number, id: string, newX: number, newY: number): Application {
-    // Перемещение элемента по слайду
-    // Возможно заставить следовать за мышью, а потом запомнить позицию, чтобы элемент перемещался вместе с мышкой
+function changeBackground(Appl: Application, newBackground: string): Application {
     let changeSlides: Array<Slide> = [...Appl.presentation.slides];
-    for (let i=0; changeSlides[index].content.length; i++) {
-        if (changeSlides[index].content[i].id === id) {
-            changeSlides[index].content[i] = {
-                ...changeSlides[index].content[i],
-                position: {
-                    x: newX,
-                    y: newY
-                } 
+    for (const id of Appl.selectedElements) {
+        changeSlides = [...changeSlides.map(function(slide) {
+            if (slide.id === id) {
+                return {
+                    ...slide,
+                    background: newBackground
+                }
+            } else {
+                return slide
             }
-        }
-    };
+        })]
+    }
 
-    return ({
+    return {
         ...Appl,
+        undo: [...Appl.undo, {...Appl.presentation}],
         presentation: {
-            title: Appl.presentation.title,
+            ...Appl.presentation,
             slides: [...changeSlides]
         }
-    });
+    }
 };
 
-export function changeLayer(Appl: Application, selectedElements: Array<Application>, newLayer: number): Application {
+function deleteElements(Appl: Application): Application {
+    let changeSlides: Array<Slide> = [...Appl.presentation.slides];
+    let selectedElements: Array<string> = [...Appl.selectedElements];
+
+    changeSlides = [...changeSlides.map(function(slide) {
+        if (selectedElements.indexOf(slide.id) !== -1) {
+            let newContent: Array<TextType|ImageType|PrimitiveType> = [...slide.content.filter(function(content) {
+                return selectedElements.indexOf(content.id) === -1
+            })];
+
+            return {
+                ...slide,
+                content: [...newContent]
+            };
+        } else { return slide }
+    })];
+
+    return {
+        ...Appl,
+        undo: [...Appl.undo, {...Appl.presentation}],
+        presentation: {
+            ...Appl.presentation,
+            slides: [...changeSlides]
+        }
+    }
+};
+
+function moveElements(Appl: Application, newX: number, newY: number): Application {
+    let changeSlides: Array<Slide> = [...Appl.presentation.slides.map(function(slide) {
+        if (Appl.selectedElements.indexOf(slide.id) !== -1) {
+            return {
+                ...slide,
+                content: [...slide.content.map(function(content) {
+                    if (Appl.selectedElements.indexOf(content.id) !== -1) {
+                        return {
+                            ...content,
+                            position: {
+                                x: newX,
+                                y: newY
+                            }
+                        }
+                    } else { return content }
+                })
+            ]}
+        } else { return slide }
+    })];
+
+    return {
+        ...Appl,
+        undo: [...Appl.undo, {...Appl.presentation}],
+        presentation: {
+            ...Appl.presentation,
+            slides: [...changeSlides]
+        }
+    }
+};
+
+function changeLayer(Appl: Application, newLayer: number): Application {
     // Добавить в объект слои
     // Для определения элемента возможно использовать функцию, которая следит за выбранными элементами
     // и обработать их в цикле
-    return ({
+    return {
         ...Appl,
+        undo: [...Appl.undo, {...Appl.presentation}],
         presentation: {
             ...Appl.presentation,
             slides: []
         }
-    })
+    }
 };
 
-export function changeWindowSize(Appl: Application, index: number, id: string, newWidth: number, newHeight: number): Application {
-    // Подумать над именем процедуры
-    let changeSlides: Array<Slide> = [...Appl.presentation.slides];
-    for (let i=0; changeSlides[index].content.length; i++) {
-        if (changeSlides[index].content[i].id === id) {
-            changeSlides[index].content[i] = {
-                ...changeSlides[index].content[i],
-                size: {
-                    width: newWidth,
-                    height: newHeight
-                } 
+function changeWindowSize(Appl: Application, newWidth: number, newHeight: number): Application {
+    let changeSlides: Array<Slide> = [...Appl.presentation.slides.map(function(slide) {
+        if (Appl.selectedElements.indexOf(slide.id) !== -1) {
+            return {
+                ...slide,
+                content: [...slide.content.map(function(content) {
+                    if (Appl.selectedElements.indexOf(content.id) !== -1) {
+                        return {
+                            ...content,
+                            size: {
+                                width: newWidth,
+                                height: newHeight
+                            }
+                        }
+                    } else { return content }
+                })]
             }
-        }
-    };
+        } else { return slide }
+    })];
 
-    return ({
+    return {
         ...Appl,
+        undo: [...Appl.undo, {...Appl.presentation}],
         presentation: {
-            title: Appl.presentation.title,
+            ...Appl.presentation,
             slides: [...changeSlides]
         }
-    });
+    }
 };
 
-// Text
-
-export function addText(Appl: Application, index: number): Application {
+function addText(Appl: Application, index: number): Application {
 
     let changeSlides: Array<Slide> = [...Appl.presentation.slides];
     changeSlides[index] = {
@@ -351,58 +543,112 @@ export function addText(Appl: Application, index: number): Application {
         content: [...changeSlides[index].content, getDefaultText()]
     };
 
-    return ({
+    return {
         ...Appl,
+        undo: [...Appl.undo, {...Appl.presentation}],
         presentation: {
-            title: Appl.presentation.title,
+            ...Appl.presentation,
             slides: [...changeSlides]
         }
-    });
+    }
 };
 
-export function changeFont(Appl: Application, slideIndex: number, textIndex: number, id: string, newFont: string = '', newFontSize: number = 14): Application {
+function changeFont(Appl: Application, newFont: string = '', newFontSize: number = 14): Application {
     // Изменение шрифта, нам нужен шрифт по умолчанию
     let changeSlides: Array<Slide> = [...Appl.presentation.slides];
-    for (let i=0; changeSlides[slideIndex].content.length; i++) {
-        if (changeSlides[slideIndex].content[i].id === id) {
-            changeSlides[slideIndex].content[i] = {
-                ...changeSlides[slideIndex].content[i],
-                font: newFont,
-                fontSize: newFontSize
+    
+    for (let slide of changeSlides) {
+        if (Appl.selectedElements.indexOf(slide.id) !== -1) {
+            slide = {
+                ...slide,
+                content: [...slide.content.map(function(content) {
+                    if ((Appl.selectedElements.indexOf(content.id) !== -1) && (content.type === 'text')) {
+                        return {
+                            ...content,
+                            font: newFont,
+                            fontSize: newFontSize
+                        }
+                    } else {
+                        return content
+                    }
+                })]
             }
         }
-    };
+    }
 
-    return ({
+    return {
         ...Appl,
         presentation: {
-            title: Appl.presentation.title,
+            ...Appl.presentation,
             slides: [...changeSlides]
         }
-    });
+    }
 };
 
-export function changeTextColor(Appl: Application, newColor: string, slideIndex: number, textIndex: number, id: string): Application {
+function changeTextColor(Appl: Application, newColor: string): Application {
     let changeSlides: Array<Slide> = [...Appl.presentation.slides];
-    for (let i=0; changeSlides[slideIndex].content.length; i++) {
-        if (changeSlides[slideIndex].content[i].id === id) {
-            changeSlides[slideIndex].content[i] = {
-                ...changeSlides[slideIndex].content[i],
-                color: newColor 
+    
+    for (let slide of changeSlides) {
+        if (Appl.selectedElements.indexOf(slide.id) !== -1) {
+            slide = {
+                ...slide,
+                content: [...slide.content.map(function(content) {
+                    if ((Appl.selectedElements.indexOf(content.id) !== -1) && (content.type === 'text')) {
+                        return {
+                            ...content,
+                            color: newColor
+                        }
+                    } else {
+                        return content
+                    }
+                })]
             }
         }
-    };
+    }
 
-    return ({
+    return {
         ...Appl,
+        undo: [...Appl.undo, {...Appl.presentation}],
         presentation: {
-            title: Appl.presentation.title,
+            ...Appl.presentation,
             slides: [...changeSlides]
         }
-    });
+    }
 };
 
-// Пока не придумал какие функции можно добавить им
-// Image
+export type {
+    Application,
+    Presentation,
+    Slide,
+    ImageType,
+    TextType,
+    PrimitiveType
+};
 
-// Primitives
+export {
+    getApplication,
+    putSelectedElement,
+    deleteSelectedElement,
+    clearSelectedElements,
+    newPresentation,
+    createNewPresentation,
+    setTitle,
+    addSlide,
+    deleteSlide,
+    move,
+    addImage,
+    addPrimitives,
+    addText,
+    changeBackground,
+    deleteElements,
+    moveElements,
+    changeLayer,
+    changeWindowSize,
+    changeFont,
+    changeTextColor,
+    undo,
+    redo,
+    clearRedo, 
+    getId,
+    getDefaultSlide
+}

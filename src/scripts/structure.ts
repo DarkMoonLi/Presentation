@@ -115,19 +115,6 @@ function getDefaultSlide(): Slide {
     }
 };
 
-function getApplication(): Application {
-    return {
-        selectedElements: [],
-        undo: [],
-        redo: [],
-        presentation: {
-            title: 'Название презентации',
-            type: 'presentation',
-            slides: [getDefaultSlide()]
-        }
-    }
-};
-
 function putSelectedElement(Appl: Application, id: string): Application {
     return {
         ...Appl,
@@ -182,9 +169,7 @@ function doRedo(Appl: Application): Application {
         let newUndo: Array<Presentation> = (newRedo[newRedo.length - 1].type == Appl.presentation.type) ? [...Appl.undo, {...Appl.presentation}] : [...Appl.undo];
         let redoPresentation: Presentation = (newRedo[newRedo.length - 1].type == Appl.presentation.type) ? {...newRedo[newRedo.length - 1]} : {...Appl.presentation};
         newRedo.pop();
-        for (let i = 0; newUndo.length - 2; i++) {
-            changedRedo = [...changedRedo, {...newRedo[i]}]
-        }
+        changedRedo = [...newRedo];
 
         return {
             ...Appl,
@@ -201,6 +186,41 @@ function clearRedo(Appl: Application): Application {
     return {
         ...Appl,
         redo: []
+    }
+}
+
+const defaultApp: Application = {
+    selectedElements: [],
+    undo: [],
+    redo: [],
+    presentation: {
+        title: 'Название презентации',
+        type: 'presentation',
+        slides: [getDefaultSlide()]
+    }
+}
+
+function getApplication(): Application {
+    return {
+        selectedElements: [],
+        undo: [],
+        redo: [],
+        presentation: {
+            title: 'Название презентации',
+            type: 'presentation',
+            slides: [getDefaultSlide()]
+        }
+    }
+};
+
+function createNewPresentation(Appl: Application = defaultApp): Application {
+    if (Appl === defaultApp) {
+        return { ...Appl }
+    } else {
+        return {
+            ...defaultApp,
+            undo: [...Appl.undo, {...Appl.presentation}]
+        }
     }
 }
 
@@ -600,6 +620,7 @@ export {
     deleteSelectedElement,
     clearSelectedElements,
     newPresentation,
+    createNewPresentation,
     setTitle,
     addSlide,
     deleteSlide,

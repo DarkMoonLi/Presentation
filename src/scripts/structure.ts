@@ -215,29 +215,6 @@ function getApplication(): Application {
     }
 };
 
-function createNewPresentation(Appl: Application = defaultApp): Application {
-    if (Appl === defaultApp) {
-        return { ...Appl }
-    } else {
-        return Appl = {
-            ...defaultApp,
-            undo: [...Appl.undo, {...Appl.presentation}]
-        }
-    }
-}
-
-function newPresentation(Appl: Application): Application {
-    return {
-        ...Appl,
-        undo: [...Appl.undo, {...Appl.presentation}],
-        presentation: {
-            title: 'Название презентации',
-            type: 'presentation',
-            slides: [getDefaultSlide()]
-        }
-    }
-};
-
 function setTitle(Appl: Application, newTitle: string): Application {
     return {
         ...Appl,
@@ -616,7 +593,30 @@ function changeTextColor(Appl: Application, newColor: string): Application {
     }
 };
 
-export type {
+function savePresentation(Appl: Application, fileName: string) {
+    let a = document.createElement("a");
+    let file = new Blob([JSON.stringify(Appl.presentation)], {type: "application/json"});
+    a.href = URL.createObjectURL(file);
+    a.download = fileName;
+    a.click();
+}
+
+function openPresentation(Appl: Application, file: string) {
+    let rawFile = new XMLHttpRequest();
+    rawFile.overrideMimeType("aaplication/json");
+    rawFile.open("GET", file, true);
+    rawFile.onreadystatechange = function() {
+        if (rawFile.readyState === 4 && rawFile.status === 200) {
+            let data = JSON.parse(rawFile.responseText);
+            return {
+                ...Appl,
+                presentation: data
+            }
+        } else { return {...Appl} }
+    }
+}
+
+export {
     Application,
     Presentation,
     Slide,
@@ -630,8 +630,6 @@ export {
     putSelectedElement,
     deleteSelectedElement,
     clearSelectedElements,
-    newPresentation,
-    createNewPresentation,
     setTitle,
     addSlide,
     deleteSlide,
@@ -648,7 +646,7 @@ export {
     changeTextColor,
     undo,
     redo,
-    clearRedo, 
-    getId,
-    getDefaultSlide
+    clearRedo,
+    savePresentation,
+    openPresentation
 }

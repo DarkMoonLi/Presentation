@@ -1,0 +1,21 @@
+.navbar
+{
+  display: inline-block;
+  position: relative;
+}
+
+.navbarNav
+{
+  position: absolute;
+  top: 18px;
+  padding: 0;
+  background-color: #565771;
+}
+
+.navbarBottom
+{
+  border: 0;
+  background-color: #565771;
+  padding: 9px 10px;
+  cursor: pointer;
+}

@@ -1,0 +1,111 @@
+.menu
+{
+  display: flex;
+  align-items: center;
+  height: 28px;
+}
+
+.iconAdd
+{
+  background-image: url(/src/image/icon/plus.png);
+  background-size: contain;
+  border: 1px solid #000;
+  width: 25px;
+  height: 25px;
+  margin: 0 2px;
+}
+
+.iconAdd:hover
+{
+  cursor: pointer;
+}
+
+.iconUndo
+{
+  background-image: url(/src/image/icon/undo.png);
+  background-size: contain;
+  border: 1px solid #000;
+  width: 25px;
+  height: 25px;
+  margin: 0 2px;
+}
+
+.iconUndo:hover
+{
+  cursor: pointer;
+}
+
+.iconRedo
+{
+  background-image: url(/src/image/icon/redo.png);
+  background-size: contain;
+  border: 1px solid #000;
+  width: 25px;
+  height: 25px;
+  margin: 0 2px;
+}
+
+.iconRedo:hover
+{
+  cursor: pointer;
+}
+
+.iconSelect
+{
+  background-image: url(/src/image/icon/select.png);
+  background-size: contain;
+  border: 1px solid #000;
+  width: 25px;
+  height: 25px;
+  margin: 0 2px;
+}
+
+.iconSelect:hover
+{
+  cursor: pointer;
+}
+
+.iconText
+{
+  background-image: url(/src/image/icon/text.png);
+  background-size: contain;
+  border: 1px solid #000;
+  width: 25px;
+  height: 25px;
+  margin: 0 2px;
+}
+
+.iconText:hover
+{
+  cursor: pointer;
+}
+
+.iconImage
+{
+  background-image: url(/src/image/icon/image.png);
+  background-size: contain;
+  border: 1px solid #000;
+  width: 25px;
+  height: 25px;
+  margin: 0 2px; 
+}
+
+.iconImage:hover
+{
+  cursor: pointer;
+}
+
+.iconPrimitive
+{
+  background-image: url(/src/image/icon/primitive.png);
+  background-size: cover;
+  border: 1px solid #000;
+  width: 25px;
+  height: 25px;
+  margin: 0 2px;
+}
+
+.iconPrimitive:hover
+{
+  cursor: pointer;
+}

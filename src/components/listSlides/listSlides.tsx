@@ -5,7 +5,7 @@ import styles from "./listSlides.module.css"
 
 function ListSlides() {
 
-  const listSlides = Object.values(editor.presentation.slides)
+  const listSlides = Object.values(editor.presentation.slides);
 
   return(
     <div>

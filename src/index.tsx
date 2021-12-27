@@ -4,7 +4,7 @@ import './index.module.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { addEditorChangeHandler, dispatch, getEditor } from './scripts/editor';
-import { getApplication/*, newPresentation*/ } from './scripts/structure';
+import { getApplication, createNewPresentation } from './scripts/structure';
 
 dispatch(getApplication, {});
 

@@ -1,8 +1,8 @@
 import { Slide, TextType } from "../../../scripts/structure"
 
-function SomebodyText() {
+function SomebodyText(text: TextType) {
   return(
-    <text x="350" y="700">It is work?</text>
+    <p >It is work?</p>
   )
 }
 

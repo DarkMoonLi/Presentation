@@ -620,21 +620,15 @@ function openPresentation(Appl: Application, file: string) {
     }
 }
 
-//export {
-//    Application,
-//    Presentation,
-//    Slide,
-//    ImageType,
-//    TextType,
-//    PrimitiveType
-//};
-
 export {
     getApplication,
     createNewPresentation,
     putSelectedElement,
     deleteSelectedElement,
     clearSelectedElements,
+    getDefaultSlide,
+    getDefaultText,
+    getId,
     setTitle,
     addSlide,
     deleteSlide,

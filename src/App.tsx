@@ -6,7 +6,7 @@ function App(editor: any) {
   return (
     <div>
       <Header />
-      <Main {...getDefaultSlide()}/>
+      <Main />
     </div>
   );
 }

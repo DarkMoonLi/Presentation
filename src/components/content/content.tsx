@@ -9,11 +9,11 @@ export default function getContent(slide: Slide) {
     if (content.type === 'text') {
         return SomebodyText(content)
     } else if (content.type === 'circle') {
-        return Circle
+        return Circle(content)
     } else if (content.type === 'triangle') {
-        return Triangle
+        return Triangle(content)
     } else if (content.type === 'rectangle') {
-        return Rectangle
+        return Rectangle(content)
     } else if (content.type === 'image') {
         return
     }

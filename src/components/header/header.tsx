@@ -4,6 +4,8 @@ import Item from "../dropdown/item";
 import styles from './header.module.css'
 import Menu from "./menu";
 import TitlePresentation from "./title";
+import { dispatch } from "../../scripts/editor";
+import {editor} from "../../scripts/editor"
 
 function Header() {
     return (
@@ -22,9 +24,18 @@ function Header() {
                     <Item title="Редактировать" action = {createNewPresentation}/>
                 </Dropdown>
                 <Dropdown title="Insert">
-                    <Item title="Текст" action = {addText}/>
-                    <Item title="Изображение" action = {addImage}/>
-                    <Item title="Примитив" action = {addPrimitives}/>
+                    <Item title="Текст" action = {() => dispatch(addText, editor)}/>
+                    <Item title="Изображение" action = {() => dispatch(addImage, editor)}/>
+                    {/*<Dropdown title="Примитив"> 
+                        <Item title="Треугольник" action = {() => {
+                            let primitive = 'triangle';
+                            dispatch(addPrimitives, primitive)
+                        }}/>*/}
+                        <Item title="Круг" action={() => {
+                            let primitive = 'circle';
+                            dispatch(addPrimitives, primitive)
+                        }}/>
+                    {/*</Dropdown>*/}
                 </Dropdown>
                 </div>
                 <Menu />

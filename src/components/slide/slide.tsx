@@ -1,10 +1,8 @@
 import styles from './slide.module.css'
 import '../../scripts/structure'
-import { getId, putSelectedElement, clearSelectedElements, Slide } from "../../scripts/structure";
-import SomebodyText from '../primitives/text/text';
+import { putSelectedElement, clearSelectedElements, Slide } from "../../scripts/structure";
 import { dispatch, editor } from '../../scripts/editor';
 import Workspace from '../workspace/workspace';
-import { DOMElement } from 'react';
 import getContent from '../content/content';
 
 type MiniSlide = {
@@ -13,18 +11,17 @@ type MiniSlide = {
 }
 
 export default function SlideView({slide, index}: MiniSlide) {
-    const id = slide.id
     return (
-        <li className={styles.slideContainer} key={slide.id}>
+        <li id={slide.id} className={styles.slideContainer} key={slide.id}>
             <span className={styles.numberSlide}>{index}</span>
-            <div className={styles.slide} onClick={(id) => {
-                dispatch(clearSelectedElements, {});
-                dispatch(putSelectedElement, {id});
-                <Workspace {...slide}/>
+            <svg id={slide.id} className={styles.slide} onClick={() => {
+                let slideId = slide.id
+                dispatch(clearSelectedElements, editor);
+                dispatch(putSelectedElement, slideId);
             }}>
             
-            {getContent(slide)}
+                {getContent(slide)}
                 
-            </div>
+            </svg>
         </li>
 )}

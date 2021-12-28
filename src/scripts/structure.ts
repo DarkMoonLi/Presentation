@@ -1,5 +1,3 @@
-import { editor } from "./editor";
-
 export type Application = {
     readonly selectedElements: Array<string>,
     readonly undo: Array<Presentation>,
@@ -25,11 +23,12 @@ export type PrimitiveType = {
     readonly position: {
         readonly x: number,
         readonly y: number,
-    }
+    },
     readonly size: {
         readonly width: number,
         readonly height: number,
-    }
+    },
+    readonly color: string
 };
 
 export type TextType = {
@@ -74,8 +73,8 @@ function getDefaultText(): TextType {
         id: getId(),
         type: 'text',
         position: {
-            x: 50,
-            y: 50
+            x: 100,
+            y: 150
         },
         size: {
             width: 100,
@@ -363,16 +362,17 @@ function addImage(Appl: Application, adress: string, id: string, file: Blob, fro
     }
 };
 
-function addPrimitives(Appl: Application, primitivesType: 'circle' | 'rectangle' | 'triangle', id: string): Application {
+function addPrimitives(Appl: Application, primitivesType: 'circle' | 'rectangle' | 'triangle'): Application {
     let newPrimitive: PrimitiveType = {
         id: getId(),
         type: primitivesType,
         position: { x: 100, y: 100 },
         size: { width: 100, height: 100 },
+        color: '#FF0000'
     };
 
     let changeSlides: Array<Slide> = [...Appl.presentation.slides.map(function(slide) {
-        if (slide.id === id) {
+        if (Appl.selectedElements.indexOf(slide.id) !== -1) {
             return {
                 ...slide,
                 content: [...slide.content, newPrimitive]
@@ -516,13 +516,19 @@ function changeWindowSize(Appl: Application, newWidth: number, newHeight: number
     }
 };
 
-function addText(Appl: Application, index: number): Application {
+function addText(Appl: Application): Application {
 
     let changeSlides: Array<Slide> = [...Appl.presentation.slides];
-    changeSlides[index] = {
-        ...changeSlides[index],
-        content: [...changeSlides[index].content, getDefaultText()]
-    };
+    changeSlides = [...changeSlides.map(function(slide) {
+        if (Appl.selectedElements.includes(slide.id)) {
+            return {
+                ...slide,
+                content: [...slide.content, getDefaultText()]
+            }
+        } else {
+            return slide
+        }
+    })]
 
     return {
         ...Appl,
@@ -566,7 +572,7 @@ function changeFont(Appl: Application, newFont: string = '', newFontSize: number
     }
 };
 
-function changeTextColor(Appl: Application, newColor: string): Application {
+function changeColor(Appl: Application, newColor: string): Application {
     let changeSlides: Array<Slide> = [...Appl.presentation.slides];
     
     for (let slide of changeSlides) {
@@ -574,7 +580,7 @@ function changeTextColor(Appl: Application, newColor: string): Application {
             slide = {
                 ...slide,
                 content: [...slide.content.map(function(content) {
-                    if ((Appl.selectedElements.indexOf(content.id) !== -1) && (content.type === 'text')) {
+                    if ((Appl.selectedElements.indexOf(content.id) !== -1) && (content.type !== 'image')) {
                         return {
                             ...content,
                             color: newColor
@@ -642,7 +648,7 @@ export {
     changeLayer,
     changeWindowSize,
     changeFont,
-    changeTextColor,
+    changeColor,
     undo,
     redo,
     clearRedo,

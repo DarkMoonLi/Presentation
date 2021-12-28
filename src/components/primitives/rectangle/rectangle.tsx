@@ -1,10 +1,15 @@
-function Rectangle(props: any) {
+import { PrimitiveType } from "../../../scripts/structure"
+
+function Rectangle(rectangle: PrimitiveType) {
   return(
-    <rect x="20" 
-          y="50" 
-          width="200" 
-          height="100" 
-          fill="rgb(255, 0, 0)"/>
+    <rect 
+      id={rectangle.id} 
+      x={rectangle.position.x} 
+      y={rectangle.position.y} 
+      width={rectangle.size.width} 
+      height={rectangle.size.height} 
+      fill={rectangle.color}
+    />
   )
 }
 

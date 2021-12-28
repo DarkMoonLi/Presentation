@@ -9,13 +9,12 @@ import { getApplication, createNewPresentation } from './scripts/structure';
 dispatch(getApplication, {});
 
 function render() {
-  return(
   ReactDOM.render(
     <React.StrictMode>
       <App editor = {getEditor()} />
     </React.StrictMode>,
     document.getElementById('root')
-  ));
+  );
 }
 
 addEditorChangeHandler(render);

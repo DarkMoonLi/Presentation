@@ -1,6 +1,14 @@
-function Circle(){
+import { PrimitiveType } from "../../../scripts/structure"
+
+function Circle(circle: PrimitiveType){
   return(
-    <circle cx="550" cy="100" r="40" fill="rgb(255, 0, 0)"/>
+    <circle 
+      id={circle.id} 
+      cx={circle.position.x} 
+      cy={circle.position.y} 
+      r={circle.size.width/2} 
+      fill={circle.color}
+    />
   )}
 
 export default Circle

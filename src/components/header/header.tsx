@@ -24,7 +24,7 @@ function Header() {
                     <Item title="Редактировать" action = {createNewPresentation}/>
                 </Dropdown>
                 <Dropdown title="Insert">
-                    <Item title="Текст" action = {() => dispatch(addText, editor)}/>
+                    <Item title="Текст" action = {() => dispatch(addText, {})}/>
                     <Item title="Изображение" action = {() => dispatch(addImage, editor)}/>
                     {/*<Dropdown title="Примитив"> 
                         <Item title="Треугольник" action = {() => {

@@ -12,16 +12,16 @@ type MiniSlide = {
 
 export default function SlideView({slide, index}: MiniSlide) {
     return (
-        <li id={slide.id} className={styles.slideContainer} key={slide.id}>
+        <li key={slide.id} className={styles.slideContainer}>
             <span className={styles.numberSlide}>{index}</span>
-            <svg id={slide.id} className={styles.slide} onClick={() => {
+            <div id={slide.id} className={styles.slide} onClick={() => {
                 let slideId = slide.id
-                dispatch(clearSelectedElements, editor);
+                dispatch(clearSelectedElements, {});
                 dispatch(putSelectedElement, slideId);
             }}>
             
                 {getContent(slide)}
                 
-            </svg>
+            </div>
         </li>
 )}

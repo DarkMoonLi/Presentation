@@ -1,4 +1,5 @@
-import { PrimitiveType } from "../../../scripts/structure";
+import { PrimitiveType, putSelectedElement } from "../../../scripts/structure";
+import { dispatch } from "../../../scripts/editor";
 
 function Triangle(triangle: PrimitiveType) {
   let x1 = triangle.position.x;
@@ -12,7 +13,8 @@ function Triangle(triangle: PrimitiveType) {
     <polygon 
       id={triangle.id} 
       points= {str} 
-      fill={triangle.color}/>
+      fill={triangle.color}
+      onClick={() => dispatch(putSelectedElement, triangle.id)}/>
   )
 }
 

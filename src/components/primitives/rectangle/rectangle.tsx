@@ -1,4 +1,5 @@
-import { PrimitiveType } from "../../../scripts/structure"
+import { PrimitiveType, putSelectedElement } from "../../../scripts/structure"
+import { dispatch } from "../../../scripts/editor"
 
 function Rectangle(rectangle: PrimitiveType) {
   return(
@@ -9,6 +10,7 @@ function Rectangle(rectangle: PrimitiveType) {
       width={rectangle.size.width} 
       height={rectangle.size.height} 
       fill={rectangle.color}
+      onClick={() => dispatch(putSelectedElement, rectangle.id)}
     />
   )
 }

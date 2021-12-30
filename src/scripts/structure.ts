@@ -77,7 +77,7 @@ function getDefaultText(): TextType {
             y: 150
         },
         size: {
-            width: 100,
+            width: 200,
             height: 100
         },
         font: '',
@@ -97,8 +97,8 @@ function getDefaultSlideTitle(): TextType {
             y: 20
         },
         size: {
-            width: 60,
-            height: 30
+            width: 200,
+            height: 60
         },
         font: '',
         fontSize: 20,
@@ -292,8 +292,7 @@ function move(Appl: Application, prevIndex: number, newIndex: number): Applicati
     }
 };
 
-function addImage(Appl: Application, adress: string, id: string, file: Blob, fromFile: boolean): Application {
-    //
+function addImageFromFile(Appl: Application, file: Blob): Application {
     let newImage: ImageType = {
         id: getId(),
         type: 'image',
@@ -309,48 +308,60 @@ function addImage(Appl: Application, adress: string, id: string, file: Blob, fro
         content: ''
     };
 
-    if (fromFile) {
-        // Лучше попробовать так
-        let image = URL.createObjectURL(file)
-        newImage = {
-            ...newImage,
-            content: image
-        } 
-
-        // Возможно не потребуется
-        let newPromise = new Promise(function(resolve, reject) {
-            let newFileReader = new FileReader();
-            newFileReader.onloadend = () => resolve(newFileReader.result);
-            newFileReader.onerror = () => reject(new Error('Не удалось открыть файл'));
-            newFileReader.readAsDataURL(file);            
-        })
-        newPromise.then(
-            result => {
-                newImage = {
-                    ...newImage,
-                    // Подумать
-                    link: String(result),
-                    content: String(result)
-                }
-            },
-            error => alert(error.message)
-        );
-    } else {
-        newImage = {
-            ...newImage,
-            link: adress
-        }
+    console.log(file);
+    let image = URL.createObjectURL(file);
+    newImage = {
+        ...newImage,
+        content: image
     }
 
-    let changeSlides: Array<Slide> = [...Appl.presentation.slides];
-    for (let slide of changeSlides) {
-        if (slide.id === id) {
-            slide= {
+    let changeSlides: Array<Slide> = [...Appl.presentation.slides.map(function(slide) {
+        if (Appl.selectedElements.includes(slide.id)) {
+            return {
                 ...slide,
                 content: [...slide.content, newImage]
             }
         }
+        return {...slide}
+    })]
+    
+    console.log(changeSlides)
+    return {
+        ...Appl,
+        undo: [...Appl.undo, {...Appl.presentation}],
+        presentation: {
+            ...Appl.presentation,
+            slides: [...changeSlides]
+        }
     }
+};
+
+function addImage(Appl: Application, adress: string): Application {
+    let newImage: ImageType = {
+        id: getId(),
+        type: 'image',
+        position: {
+            x: 100,
+            y: 100
+        },
+        size: {
+            width: 100,
+            height: 100
+        },
+        link: adress,
+        content: ''
+    };
+
+    let changeSlides: Array<Slide> = [...Appl.presentation.slides];
+    changeSlides = changeSlides.map(function(slide) {
+        if (Appl.selectedElements.includes(slide.id)) {
+            return {
+                ...slide,
+                content: [...slide.content, newImage]
+            }
+        }
+        return {...slide}
+    });
 
     return {
         ...Appl,
@@ -540,6 +551,37 @@ function addText(Appl: Application): Application {
     }
 };
 
+function changeTextContent(Appl: Application, newText: string): Application {
+    let changeSlides: Array<Slide> = [...Appl.presentation.slides];
+    changeSlides = [...changeSlides.map(function(slide) {
+        if (Appl.selectedElements.includes(slide.id)) {
+            return {
+                ...slide,
+                content: [...slide.content.map(function(content) {
+                    if ((Appl.selectedElements.includes(content.id)) && (content.type === 'text')) {
+                        return {
+                            ...content,
+                            content: newText
+                        } 
+                    }
+                    return {...content}
+                })]
+            }
+        };
+        return {
+            ...slide
+        };
+    })];
+    
+    return {
+        ...Appl,
+        presentation: {
+            ...Appl.presentation,
+            slides: [...changeSlides]
+        }
+    }
+}
+
 function changeFont(Appl: Application, newFont: string = '', newFontSize: number = 14): Application {
     // Изменение шрифта, нам нужен шрифт по умолчанию
     let changeSlides: Array<Slide> = [...Appl.presentation.slides];
@@ -640,8 +682,10 @@ export {
     deleteSlide,
     move,
     addImage,
+    addImageFromFile,
     addPrimitives,
     addText,
+    changeTextContent,
     changeBackground,
     deleteElements,
     moveElements,

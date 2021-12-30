@@ -14,11 +14,11 @@ function Workspace() {
     if (editor.selectedElements.includes(slide.id)) {
       return(
         <div className={styles.workspaceWrap} style={{color: slide.background}}>
-          <svg className={styles.workspace}>
-              {console.log(slide)}
+          <div className={styles.workspace}>
+              
               {getContent(slide)}
   
-          </svg>
+          </div>
         </div>
       )
     }

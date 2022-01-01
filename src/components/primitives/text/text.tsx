@@ -1,8 +1,10 @@
-import { changeTextContent, putSelectedElement, Slide, TextType } from "../../../scripts/structure"
+import { changeTextContent, clearSelectedElementsOnSlide, deleteSelectedElement, putSelectedElement, Slide, TextType } from "../../../scripts/structure"
 import { dispatch, editor } from "../../../scripts/editor"
 import { useState, Component, useRef } from "react";
+import Workspace from "../../workspace/workspace";
 
 function SomebodyText(text: TextType) {
+
   let border = '';
 
   if (editor.selectedElements.includes(text.id)) {
@@ -31,13 +33,21 @@ function SomebodyText(text: TextType) {
   if (editor.selectedElements.includes(text.id)) {
     return (
       <textarea
+        id={text.id}
         style={textStyle}
         color={text.color}
+        wrap="soft"
+        value={text.content}
+        onClick={(event) => {
+          if (!event.ctrlKey) {
+            dispatch(clearSelectedElementsOnSlide, {});
+            dispatch(putSelectedElement, text.id);
+          } else {dispatch(deleteSelectedElement, text.id)}
+        }}
         onChange={(event) => {
           let newText = event.target.value;
-          console.log(newText);
-          dispatch(changeTextContent, newText)}
-        }
+          dispatch(changeTextContent, newText)
+        }}
       >
         {text.content}
       </textarea>
@@ -49,7 +59,9 @@ function SomebodyText(text: TextType) {
       id={text.id} 
       style={textStyle}
       onClick={(event) => {
-        //handleChange(event)
+        if (!event.ctrlKey) {
+          dispatch(clearSelectedElementsOnSlide, {})
+        }
         dispatch(putSelectedElement, text.id);
       }}
     >

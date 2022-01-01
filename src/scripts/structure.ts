@@ -119,7 +119,6 @@ function getDefaultSlide(): Slide {
 function putSelectedElement(Appl: Application, id: string): Application {
     return {
         ...Appl,
-        undo: [...Appl.undo, {...Appl.presentation}],
         selectedElements: [...Appl.selectedElements, id]
     }
 };
@@ -142,6 +141,20 @@ function clearSelectedElements(Appl: Application): Application {
     return {
         ...Appl,
         selectedElements: []
+    }
+}
+
+function clearSelectedElementsOnSlide(Appl: Application): Application {
+    let newSelectedElements: Array<string> = [];
+    for (let slide of Appl.presentation.slides) {
+        if (Appl.selectedElements.includes(slide.id)) {
+            newSelectedElements.push(slide.id)
+        }
+    };
+    
+    return {
+        ...Appl,
+        selectedElements: [...newSelectedElements]
     }
 }
 
@@ -674,6 +687,7 @@ export {
     putSelectedElement,
     deleteSelectedElement,
     clearSelectedElements,
+    clearSelectedElementsOnSlide,
     getDefaultSlide,
     getDefaultText,
     getId,

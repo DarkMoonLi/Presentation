@@ -1,4 +1,4 @@
-import { PrimitiveType, putSelectedElement, moveElements } from "../../../scripts/structure"
+import { PrimitiveType, putSelectedElement, moveElements, clearSelectedElementsOnSlide, deleteSelectedElement } from "../../../scripts/structure"
 import { dispatch } from "../../../scripts/editor"
 import { editor } from "../../../scripts/editor"
 
@@ -16,8 +16,11 @@ function Circle(circle: PrimitiveType){
         r={circle.size.width} 
         fill={circle.color}
         style={{border: border}}
-        onClick={() => {
-          dispatch(putSelectedElement, circle.id)
+        onClick={(event) => {
+          if (!event.ctrlKey) {
+            dispatch(clearSelectedElementsOnSlide, {});
+            dispatch(putSelectedElement, circle.id);
+          } else {dispatch(deleteSelectedElement, circle.id)}
         }}
       />
     </svg>

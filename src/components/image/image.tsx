@@ -2,7 +2,6 @@ import { dispatch } from "../../scripts/editor";
 import { clearSelectedElementsOnSlide, deleteSelectedElement, ImageType, putSelectedElement } from "../../scripts/structure";
 
 export default function SomeImage(image: ImageType) {
-    console.log(image.content);
     return(
        <svg>
             <image 

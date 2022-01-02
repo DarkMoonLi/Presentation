@@ -20,7 +20,7 @@ export default function SlideView({slide, index}: MiniSlide) {
                 id={slide.id} 
                 className={styles.slide} 
                 onClick={(event) => {
-                    let slideId = slide.id
+                    let slideId = slide.id;
                     if (!event.ctrlKey) {
                         dispatch(clearSelectedElements, {});
                     }

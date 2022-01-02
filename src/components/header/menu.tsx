@@ -1,6 +1,6 @@
 import { createRef } from 'react';
 import { dispatch, editor, getEditor } from '../../scripts/editor';
-import { addSlide, addText, addImageFromFile, Application, redo, undo, getDefaultSlide, getId } from '../../scripts/structure';
+import { addSlide, addText, addImageFromFile, deleteSlide, redo, undo, getDefaultSlide, getId } from '../../scripts/structure';
 import styles from './menu.module.css'
 
 function Menu () {
@@ -8,6 +8,7 @@ function Menu () {
   return (
     <div className={styles.menu}>
       <button className={styles.iconAdd} onClick={() => dispatch(addSlide, getDefaultSlide)}></button>
+      <button className={styles.iconDelete} onClick={() => dispatch(deleteSlide, {})}></button>
       <button className={styles.iconUndo} onClick={() => dispatch(undo, {})}></button>
       <button className={styles.iconRedo} onClick={() => dispatch(redo, {})}></button>
       <button className={styles.iconSelect}></button>
@@ -18,6 +19,11 @@ function Menu () {
           if (files !== null) {
             dispatch(addImageFromFile, files[0])
           }
+        }}></input>
+      </form>
+      <form>
+        <input ref={createRef} type="file" className={styles.iconSave} onChange={(event) => {
+          console.log(event);
         }}></input>
       </form>
       <button className={styles.iconPrimitive}></button>

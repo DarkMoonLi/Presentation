@@ -254,15 +254,15 @@ function addSlide(Appl: Application): Application {
     }
 };
 
-// Продумать Undo
 function deleteSlide(Appl: Application): Application {
-    // Appl.selectedElements
     let newSlides: Array<Slide> = [];
 
-    newSlides = [...newSlides.filter(function(slide) {
-        return Appl.selectedElements.indexOf(slide.id) !== 1
+    newSlides = [...Appl.presentation.slides.filter(function(slide) {
+        return (Appl.selectedElements.includes(slide.id))
     })]
 
+    console.log(Appl.presentation.slides);
+    console.log(newSlides);
     return {
         ...Appl,
         undo: [...Appl.undo, {...Appl.presentation}],

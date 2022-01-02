@@ -8,7 +8,7 @@ function Workspace() {
     if (editor.selectedElements.includes(slide.id)) {
       return(
         <div className={styles.workspaceWrap} style={{color: slide.background}}>
-          <div className={styles.workspace} onClick={(event => console.log(event))}>
+          <div className={styles.workspace}>
               
               {getContent(slide)}
   

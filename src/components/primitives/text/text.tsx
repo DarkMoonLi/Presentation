@@ -1,17 +1,13 @@
-import { changeTextContent, clearRedo, clearSelectedElementsOnSlide, deleteSelectedElement, moveElements, putSelectedElement, TextType } from "../../../scripts/structure"
+import { changeTextContent, clearRedo, clearSelectedElementsOnSlide, deleteSelectedElement, putSelectedElement, TextType } from "../../../scripts/structure"
 import { dispatch, editor } from "../../../scripts/editor"
 import { useRef, useState, useEffect } from "react";
 import { useDragAndDrop } from "../../DragAndDrop/dragAndDrop";
+import { moveElements } from "../../../store/actionCreators/moveElements";
+import store from "../../../store/store";
 
 function SomebodyText(text: TextType) {
 
   const ref = useRef<HTMLDivElement>(null);
-
-  const pos = useDragAndDrop(ref, text.position);
-
-  useEffect(() => {
-    if (pos !== text.position) dispatch(moveElements, pos)
-  });
 
   let border = '';
 
@@ -38,8 +34,31 @@ function SomebodyText(text: TextType) {
         style={{
           ...textStyle,
           border: ''
-        }
-      }>
+        }}
+        onMouseDown={(event) => {
+          let startX = event.pageX;
+          let startY = event.pageY;
+
+          function onMove() {
+            const deltaX = event.pageX - startX; 
+            const deltaY = event.pageY - startY;
+       
+            const newPos = {
+              x: text.position.x + deltaX,
+              y: text.position.y + deltaY
+            };
+            store.dispatch(moveElements(newPos))
+          };
+
+          function stopMove() {
+            document.removeEventListener("mousemove", onMove);
+            document.removeEventListener("mouseup", stopMove);        
+          };
+
+          document.addEventListener("mousemove", onMove);
+          document.addEventListener("mouseup", stopMove);
+        }}
+      >
         <textarea
           id={text.id}
           style={textStyle}

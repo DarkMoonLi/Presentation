@@ -3,16 +3,24 @@ import ReactDOM from 'react-dom';
 import './index.module.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { addEditorChangeHandler, dispatch, getEditor } from './scripts/editor';
-import { getApplication, createNewPresentation } from './scripts/structure';
+import { addEditorChangeHandler, dispatch } from './scripts/editor';
+import { getApplication } from './scripts/structure';
+import store from './store/store';
+import Main from './components/main/main'
+import { Provider } from 'react-redux';
+import Header from './components/header/header';
 
 dispatch(getApplication, {});
 
 function render() {
   ReactDOM.render(
-    <React.StrictMode>
+    <Provider store={store}>
+      <Header />
+      <Main />
+    </Provider>,
+    /*<React.StrictMode>
       <App editor = {getEditor()} />
-    </React.StrictMode>,
+    </React.StrictMode>,*/
     document.getElementById('root')
   );
 }

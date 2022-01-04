@@ -180,8 +180,8 @@ function redo(Appl: Application): Application {
     let newRedo: Array<Presentation> = [...Appl.redo];
     if (newRedo.length !== 0) {
         let changedRedo: Array<Presentation> = [];
-        let newUndo: Array<Presentation> = (newRedo[newRedo.length - 1].type == Appl.presentation.type) ? [...Appl.undo, {...Appl.presentation}] : [...Appl.undo];
-        let redoPresentation: Presentation = (newRedo[newRedo.length - 1].type == Appl.presentation.type) ? {...newRedo[newRedo.length - 1]} : {...Appl.presentation};
+        let newUndo: Array<Presentation> = (newRedo[newRedo.length - 1].type === Appl.presentation.type) ? [...Appl.undo, {...Appl.presentation}] : [...Appl.undo];
+        let redoPresentation: Presentation = (newRedo[newRedo.length - 1].type === Appl.presentation.type) ? {...newRedo[newRedo.length - 1]} : {...Appl.presentation};
         newRedo.pop();
         changedRedo = [...newRedo];
 

@@ -1,8 +1,9 @@
 import styles from './slide.module.css'
-import '../../scripts/structure'
-import { putSelectedElement, clearSelectedElements, Slide } from "../../scripts/structure";
+import { Slide } from "../../scripts/structure";
 import { dispatch, editor } from '../../scripts/editor';
 import getContent from '../content/content';
+import store from '../../store/store';
+import { putSelectedElement, clearSelectedElement } from '../../store/actionCreators/selectedElement';
 
 type MiniSlide = {
     slide: Slide,
@@ -22,9 +23,9 @@ export default function SlideView({slide, index}: MiniSlide) {
                 onClick={(event) => {
                     let slideId = slide.id;
                     if (!event.ctrlKey) {
-                        dispatch(clearSelectedElements, {});
+                        store.dispatch(clearSelectedElement());
                     }
-                    dispatch(putSelectedElement, slideId);
+                    store.dispatch(putSelectedElement(slideId))
                 }}
             >
             

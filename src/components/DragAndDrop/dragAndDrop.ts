@@ -33,6 +33,7 @@ export function useDragAndDrop(elementRef: React.MutableRefObject<any>, startPos
             x: startPosition.x + deltaX,
             y: startPosition.y + deltaY
         }
+        console.log('Oops');
         setPosition(newPos)
     }
 

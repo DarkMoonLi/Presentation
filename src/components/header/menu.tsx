@@ -1,7 +1,9 @@
 import { createRef } from 'react';
-import { dispatch, editor, getEditor } from '../../scripts/editor';
-import { addSlide, addText, addImageFromFile, deleteSlide, redo, undo, getDefaultSlide, getId } from '../../scripts/structure';
 import { downloadFile, uploadFile } from '../../store/actionCreators/downloadFile';
+import { reDo } from '../../store/actionCreators/redo';
+import { addNewImage, addNewText } from '../../store/actionCreators/slideElementActionCreators';
+import { deleteSlide, newSlide } from '../../store/actionCreators/slidesActions';
+import { unDo } from '../../store/actionCreators/undoActionCreators';
 import store from '../../store/store';
 import styles from './menu.module.css'
 
@@ -9,17 +11,17 @@ function Menu () {
   
   return (
     <div className={styles.menu}>
-      <button className={styles.iconAdd} onClick={() => dispatch(addSlide, getDefaultSlide)}></button>
-      <button className={styles.iconDelete} onClick={() => dispatch(deleteSlide, {})}></button>
-      <button className={styles.iconUndo} onClick={() => dispatch(undo, {})}></button>
-      <button className={styles.iconRedo} onClick={() => dispatch(redo, {})}></button>
+      <button className={styles.iconAdd} onClick={() => store.dispatch(newSlide())}></button>
+      <button className={styles.iconDelete} onClick={() => store.dispatch(deleteSlide())}></button>
+      <button className={styles.iconUndo} onClick={() => store.dispatch(unDo())}></button>
+      <button className={styles.iconRedo} onClick={() => store.dispatch(reDo())}></button>
       <button className={styles.iconSelect}></button>
-      <button className={styles.iconText} onClick={() => dispatch(addText, getId)}></button>
+      <button className={styles.iconText} onClick={() => store.dispatch(addNewText())}></button>
       <form method='post'>
         <input ref={createRef} type="file" className={styles.iconImage} onChange={(event) => {
           let files = event.target.files;
           if (files !== null) {
-            dispatch(addImageFromFile, files[0])
+            store.dispatch(addNewImage(files[0]))
           }
         }}></input>
       </form>

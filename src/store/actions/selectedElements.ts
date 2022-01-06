@@ -1,2 +1,4 @@
-export const put = 'putSelectedElements';
-export const clear = 'clearSelectedElements';
+export const putElem = 'putSelectedElements';
+export const clearAllElems = 'clearSelectedElements';
+export const clearSlideElems = 'clearSelectedElementsOnSlide';
+export const deleteElem = 'deleteSelectedElement';

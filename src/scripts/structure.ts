@@ -321,7 +321,6 @@ function addImageFromFile(Appl: Application, file: Blob): Application {
         content: ''
     };
 
-    console.log(file);
     let image = URL.createObjectURL(file);
     newImage = {
         ...newImage,
@@ -658,27 +657,32 @@ function changeColor(Appl: Application, newColor: string): Application {
     }
 };
 
-function savePresentation(Appl: Application, fileName: string) {
+function savePresentation(Appl: Application, fileName: string): Application {
     let a = document.createElement("a");
     let file = new Blob([JSON.stringify(Appl.presentation)], {type: "application/json"});
     a.href = URL.createObjectURL(file);
     a.download = fileName;
     a.click();
+    return Appl
 }
 
-function openPresentation(Appl: Application, file: string) {
+function openPresentation(Appl: Application, file: string): Application {
     let rawFile = new XMLHttpRequest();
-    rawFile.overrideMimeType("aaplication/json");
+    rawFile.overrideMimeType("aplication/json");
+    console.log(file);
     rawFile.open("GET", file, true);
+    console.log(rawFile);
     rawFile.onreadystatechange = function() {
         if (rawFile.readyState === 4 && rawFile.status === 200) {
             let data = JSON.parse(rawFile.responseText);
+            console.log(data);
             return {
                 ...Appl,
                 presentation: data
             }
-        } else { return {...Appl} }
+        }
     }
+    return Appl
 }
 
 export {

@@ -1,6 +1,5 @@
 import styles from './slide.module.css'
 import { Slide } from "../../scripts/structure";
-import { dispatch, editor } from '../../scripts/editor';
 import getContent from '../content/content';
 import store from '../../store/store';
 import { putSelectedElement, clearSelectedElement } from '../../store/actionCreators/selectedElement';
@@ -11,8 +10,8 @@ type MiniSlide = {
 }
 
 export default function SlideView({slide, index}: MiniSlide) {
-    if (editor.selectedElements.length === 0) {
-        editor.selectedElements.push(slide.id)
+    if (store.getState().selectedElements.length === 0) {
+        store.dispatch(putSelectedElement(slide.id));
     }
     return (
         <li key={slide.id} className={styles.slideContainer}>

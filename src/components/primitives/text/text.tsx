@@ -1,9 +1,12 @@
-import { changeTextContent, clearRedo, clearSelectedElementsOnSlide, deleteSelectedElement, putSelectedElement, TextType } from "../../../scripts/structure"
+import { TextType } from "../../../scripts/structure";
 import { dispatch, editor } from "../../../scripts/editor"
 import { useRef, useState, useEffect } from "react";
 import { useDragAndDrop } from "../../DragAndDrop/dragAndDrop";
 import { moveElements } from "../../../store/actionCreators/moveElements";
 import store from "../../../store/store";
+import { putSelectedElement, clearSelectedElementsOnSlide, deleteSelectedElement } from "../../../store/actionCreators/selectedElement";
+import { clearAllRedo } from '../../../store/actionCreators/redo';
+import { changeTextValue } from '../../../store/actionCreators/text';
 
 function SomebodyText(text: TextType) {
 
@@ -11,7 +14,8 @@ function SomebodyText(text: TextType) {
 
   let border = '';
 
-  if (editor.selectedElements.includes(text.id)) {
+  const state = store.getState();
+  if (state.selectedElements.includes(text.id)) {
     border = '3px solid #000';
   }
 
@@ -27,7 +31,7 @@ function SomebodyText(text: TextType) {
     border: border
   };
 
-  if (editor.selectedElements.includes(text.id)) {
+  if (state.selectedElements.includes(text.id)) {
     return (
       <div
         ref={ref}
@@ -67,19 +71,19 @@ function SomebodyText(text: TextType) {
           value={text.content}
           onClick={(event) => {
             if (!event.ctrlKey) {
-              dispatch(clearSelectedElementsOnSlide, {});
-              dispatch(putSelectedElement, text.id);
-            } else {dispatch(deleteSelectedElement, text.id)};
+              store.dispatch(clearSelectedElementsOnSlide);
+              store.dispatch(putSelectedElement(text.id));
+            } else {store.dispatch(deleteSelectedElement(text.id))};
           }}
           onChange={(event) => {
             if (editor.redo.length !== 0) {
-              dispatch(clearRedo, {});
+              store.dispatch(clearAllRedo);
             }
             let newText = event.target.value;
-            dispatch(changeTextContent, newText)
+            store.dispatch(changeTextValue(newText))
           }}
           onBlur={(event) => {
-            dispatch(deleteSelectedElement, text.id)
+            store.dispatch(deleteSelectedElement(text.id))
           }}
         >
           {text.content}
@@ -94,9 +98,10 @@ function SomebodyText(text: TextType) {
       style={textStyle}
       onClick={(event) => {
         if (!event.ctrlKey) {
-          dispatch(clearSelectedElementsOnSlide, {})
+          store.dispatch(clearSelectedElementsOnSlide)
         }
-        dispatch(putSelectedElement, text.id);
+        const textId = text.id
+        store.dispatch(putSelectedElement(textId));
       }}
     >
       {text.content}

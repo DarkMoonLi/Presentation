@@ -4,9 +4,6 @@ import Triangle from "../primitives/triangle/triangle";
 import Circle from "../primitives/circle/circle";
 import Rectangle from "../primitives/rectangle/rectangle";
 import SomeImage from "../image/image"
-import { useEffect, useRef } from "react";
-import { useDragAndDrop } from "../DragAndDrop/dragAndDrop";
-import { dispatch } from "../../scripts/editor";
 
 export default function getContent(slide: Slide) {
 

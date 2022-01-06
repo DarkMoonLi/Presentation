@@ -1,14 +1,27 @@
-import { put, clear } from "../actions/selectedElements"
+import { putElem, clearAllElems, clearSlideElems, deleteElem } from "../actions/selectedElements"
 
 export function putSelectedElement(value: string) {
     return {
-        type: put,
+        type: putElem,
         selectedElement: value
     }
 };
 
 export function clearSelectedElement() {
     return {
-        type: clear
+        type: clearAllElems
+    }
+}
+
+export function clearSelectedElementsOnSlide() {
+    return {
+        type: clearSlideElems
+    }
+}
+
+export function deleteSelectedElement(value: string) {
+    return {
+        type: deleteElem,
+        value: value
     }
 }

@@ -1,6 +1,5 @@
 import Header from './components/header/header'
 import Main from './components/main/main';
-import { Application, getDefaultSlide } from './scripts/structure';
 
 function App() {
   return (

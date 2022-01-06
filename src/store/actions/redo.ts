@@ -1,1 +1,2 @@
-export const clearRedo = 'clearRedo';
+export const clearRedoAction = 'clearRedo';
+export const redoAction = 'redo'

@@ -1,21 +1,39 @@
-import { Application, clearSelectedElements, clearSelectedElementsOnSlide, moveElements, putSelectedElement, setTitle, deleteSelectedElement, changeTextContent, savePresentation, openPresentation } from "../../scripts/structure";
+import { Application, clearSelectedElements, clearSelectedElementsOnSlide, moveElements, putSelectedElement, setTitle, deleteSelectedElement, changeTextContent, savePresentation, openPresentation, addSlide, loadPresentation, deleteSlide, redo, clearRedo, undo, addText, addImageFromFile } from "../../scripts/structure";
 import { putElem, clearAllElems, clearSlideElems, deleteElem } from "../actions/selectedElements"
 import { move } from "../actions/moveElements"
 import { changePresentationTitle } from "../actions/title";
 import { changeText } from "../actions/text";
 import { download, upload } from "../actions/download";
+import { addNewSlide, delSlide } from "../actions/slides";
+import { NewPresentation } from "../actions/presentationActions";
+import { clearRedoAction, redoAction } from "../actions/redo";
+import { undoAction } from "../actions/undoActions";
+import { newImage, newText } from "../actions/slideElementActions";
 
 function reducer(state: Application = {} as Application, action: any) {
     switch(action.type) {
-        case putElem: return putSelectedElement(state, action.selectedElements)
+        // Работа с выбраными элементами
+        case putElem: return putSelectedElement(state, action.selectedElement)
         case clearAllElems: return clearSelectedElements(state)
         case clearSlideElems: return clearSelectedElementsOnSlide(state)
         case deleteElem: return deleteSelectedElement(state, action.value)
+        // Работа с элементами на слайде
         case move: return moveElements(state, action.newPos.x, action.newPos.y)
         case changeText: return changeTextContent(state, action.value);
+        case newText: return addText(state);
+        case newImage: return addImageFromFile(state, action.value);
+        // Работа с презентацией
         case changePresentationTitle: return setTitle(state, action.value);
         case download: return savePresentation(state, action.value);
-        case upload: return openPresentation(state, action.value)
+        case upload: return loadPresentation(state, action.value);
+        case NewPresentation: return openPresentation(state, action.value)
+        // Работа со слайдами
+        case addNewSlide: return addSlide(state);
+        case delSlide: return deleteSlide(state);
+        // undo и redo
+        case redoAction: return redo(state);
+        case clearRedoAction: return clearRedo(state);
+        case undoAction: return undo(state);
         default: return state
     }
 }

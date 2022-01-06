@@ -1,11 +1,11 @@
-import { editor } from "../../scripts/editor";
-import { Slide } from "../../scripts/structure";
 import SlideView from "../slide/slide";
 import styles from "./listSlides.module.css"
+import store from "../../store/store";
 
 function ListSlides() {
 
-  const listSlides = Object.values(editor.presentation.slides);
+  const listSlides = store.getState().presentation.slides;
+  console.log(listSlides);
 
   return(
     <div>

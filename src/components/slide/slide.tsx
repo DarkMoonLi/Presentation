@@ -10,9 +10,6 @@ type MiniSlide = {
 }
 
 export default function SlideView({slide, index}: MiniSlide) {
-    if (store.getState().selectedElements.length === 0) {
-        store.dispatch(putSelectedElement(slide.id));
-    }
     return (
         <li key={slide.id} className={styles.slideContainer}>
             <span className={styles.numberSlide}>{index}</span>

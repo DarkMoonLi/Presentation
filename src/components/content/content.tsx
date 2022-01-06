@@ -1,4 +1,4 @@
-import { moveElements, Slide } from "../../scripts/structure"
+import { Slide } from "../../scripts/structure"
 import SomebodyText from "../primitives/text/text";
 import Triangle from "../primitives/triangle/triangle";
 import Circle from "../primitives/circle/circle";

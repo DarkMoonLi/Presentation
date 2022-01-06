@@ -1,3 +1,6 @@
+import store from "../store/store";
+import { openNewPresentation } from "../store/actionCreators/presentationActionCreators";
+
 export type Application = {
     readonly selectedElements: Array<string>,
     readonly undo: Array<Presentation>,
@@ -666,23 +669,18 @@ function savePresentation(Appl: Application, fileName: string): Application {
     return Appl
 }
 
-function openPresentation(Appl: Application, file: string): Application {
-    let rawFile = new XMLHttpRequest();
-    rawFile.overrideMimeType("aplication/json");
-    console.log(file);
-    rawFile.open("GET", file, true);
-    console.log(rawFile);
-    rawFile.onreadystatechange = function() {
-        if (rawFile.readyState === 4 && rawFile.status === 200) {
-            let data = JSON.parse(rawFile.responseText);
-            console.log(data);
-            return {
-                ...Appl,
-                presentation: data
-            }
-        }
+function loadPresentation(Appl: Application, file: string) {
+    fetch(file)
+    .then(response => response.json())
+    .then(json => store.dispatch(openNewPresentation(json)))
+    return(Appl)
+}
+
+function openPresentation(Appl: Application, newPresentation: Presentation): Application {
+    return {
+        ...Appl,
+        presentation: newPresentation
     }
-    return Appl
 }
 
 export {
@@ -715,5 +713,6 @@ export {
     redo,
     clearRedo,
     savePresentation,
-    openPresentation
+    openPresentation,
+    loadPresentation
 }

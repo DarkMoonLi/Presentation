@@ -328,11 +328,9 @@ function deleteSlide(Appl: Application): Application {
     let newSlides: Array<Slide> = [];
 
     newSlides = [...Appl.presentation.slides.filter(function(slide) {
-        return (Appl.selectedElements.includes(slide.id))
+        return (!Appl.selectedElements.includes(slide.id))
     })]
 
-    console.log(Appl.presentation.slides);
-    console.log(newSlides);
     return {
         ...Appl,
         undo: [...Appl.undo, {...Appl.presentation}],

@@ -1,5 +1,4 @@
 import styles from './title.module.css'
-import '../../scripts/structure'
 import store from '../../store/store';
 import { changeTitle } from '../../store/actionCreators/title';
 

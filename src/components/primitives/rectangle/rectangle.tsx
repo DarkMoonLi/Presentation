@@ -1,5 +1,6 @@
-import { clearSelectedElementsOnSlide, deleteSelectedElement, PrimitiveType, putSelectedElement } from "../../../scripts/structure"
-import { dispatch } from "../../../scripts/editor"
+import { PrimitiveType } from "../../../scripts/structure";
+import { clearSelectedElementsOnSlide, deleteSelectedElement, putSelectedElement } from "../../../store/actionCreators/selectedElement";
+import store from "../../../store/store";
 
 function Rectangle(rectangle: PrimitiveType) {
   return(
@@ -13,9 +14,9 @@ function Rectangle(rectangle: PrimitiveType) {
         fill={rectangle.color}
         onClick={(event) => {
           if (!event.ctrlKey) {
-            dispatch(clearSelectedElementsOnSlide, {});
-            dispatch(putSelectedElement, rectangle.id)
-          } else {dispatch(deleteSelectedElement, rectangle.id)}
+            store.dispatch(clearSelectedElementsOnSlide());
+            store.dispatch(putSelectedElement(rectangle.id));
+          } else {store.dispatch(deleteSelectedElement(rectangle.id))}
         }}
       />
     </svg>

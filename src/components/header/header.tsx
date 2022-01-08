@@ -1,13 +1,13 @@
-import {addImage, addPrimitives, addText, getApplication} from "../../scripts/structure";
 import Dropdown from "../dropdown/dropdown";
 import Item from "../dropdown/item";
 import styles from './header.module.css'
 import Menu from "./menu";
 import TitlePresentation from "./title";
-import { dispatch } from "../../scripts/editor";
-import {editor} from "../../scripts/editor"
 import store from "../../store/store";
 import { startViewingMode } from "../../store/actionCreators/viewing";
+import { downloadFile } from "../../store/actionCreators/downloadFile";
+import { addNewText, addNewPrimitive, addNewImageFromFile } from "../../store/actionCreators/slideElementActionCreators";
+import { getApplication } from "../../scripts/structure"
 
 function Header() {
     return (
@@ -18,7 +18,7 @@ function Header() {
                 <div className={styles.containerDropdown}>
                 <Dropdown title="File" >
                     <Item title="Создать" action = {getApplication} />
-                    <Item title="Сохранить" action = {getApplication}/>
+                    <Item title="Сохранить" action = {downloadFile(store.getState().presentation.title)}/>
                     <Item title="Открыть" action = {getApplication}/>
                     <Item title="Экспортировать" action = {getApplication}/>
                 </Dropdown>
@@ -27,18 +27,11 @@ function Header() {
                     <Item title="Режим просмотра" action = {startViewingMode()}/>
                 </Dropdown>
                 <Dropdown title="Insert">
-                    <Item title="Текст" action = {() => dispatch(addText, {})}/>
-                    <Item title="Изображение" action = {() => dispatch(addImage, editor)}/>
-                    {/*<Dropdown title="Примитив"> 
-                        <Item title="Треугольник" action = {() => {
-                            let primitive = 'triangle';
-                            dispatch(addPrimitives, primitive)
-                        }}/>*/}
-                        <Item title="Круг" action={() => {
-                            let primitive = 'circle';
-                            dispatch(addPrimitives, primitive)
-                        }}/>
-                    {/*</Dropdown>*/}
+                    <Item title="Текст" action = {addNewText()}/>
+                    <Item title="Изображение" action = {addNewImageFromFile()}/>
+                    <Item title="Круг" action={addNewPrimitive('circle')}/>
+                    <Item title="Треугольник" action={addNewPrimitive('triangle')}/>
+                    <Item title="Прямоугольник" action={addNewPrimitive('rectangle')}/>
                 </Dropdown>
                 </div>
                 <Menu />

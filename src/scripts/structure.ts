@@ -1,5 +1,6 @@
 import store from "../store/store";
 import { openNewPresentation } from "../store/actionCreators/presentationActionCreators";
+import { addNewImage } from "../store/actionCreators/slideElementActionCreators";
 
 export type Application = {
     readonly selectedElements: Array<string>,
@@ -357,47 +358,21 @@ function move(Appl: Application, prevIndex: number, newIndex: number): Applicati
     }
 };
 
-function addImageFromFile(Appl: Application, file: Blob): Application {
-    let newImage: ImageType = {
-        id: getId(),
-        type: 'image',
-        position: {
-            x: 100,
-            y: 100
-        },
-        size: {
-            width: 100,
-            height: 100
-        },
-        link: '',
-        content: ''
-    };
-
-    let image = URL.createObjectURL(file);
-    newImage = {
-        ...newImage,
-        content: image
-    }
-
-    let changeSlides: Array<Slide> = [...Appl.presentation.slides.map(function(slide) {
-        if (Appl.selectedElements.includes(slide.id)) {
-            return {
-                ...slide,
-                content: [...slide.content, newImage]
-            }
+function addImageFromFile(Appl: Application): Application {
+    const inp = document.createElement("input");
+    inp.type = 'file';
+    inp.click();
+    inp.addEventListener('change', () => {
+        let files = inp.files;
+        if (files != null) {
+            let file = files[0];
+            let image = URL.createObjectURL(file);
+            return store.dispatch(addNewImage(image));
         }
-        return {...slide}
-    })]
-    
-    console.log(changeSlides)
-    return {
-        ...Appl,
-        undo: [...Appl.undo, {...Appl.presentation}],
-        presentation: {
-            ...Appl.presentation,
-            slides: [...changeSlides]
-        }
-    }
+    });
+    inp.remove();
+    console.log('first');
+    return Appl    
 };
 
 function addImage(Appl: Application, adress: string): Application {
@@ -412,8 +387,8 @@ function addImage(Appl: Application, adress: string): Application {
             width: 100,
             height: 100
         },
-        link: adress,
-        content: ''
+        link: '',
+        content: adress
     };
 
     let changeSlides: Array<Slide> = [...Appl.presentation.slides];

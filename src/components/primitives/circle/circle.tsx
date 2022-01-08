@@ -1,10 +1,10 @@
-import { PrimitiveType, putSelectedElement, moveElements, clearSelectedElementsOnSlide, deleteSelectedElement } from "../../../scripts/structure"
-import { dispatch } from "../../../scripts/editor"
-import { editor } from "../../../scripts/editor"
+import { PrimitiveType } from "../../../scripts/structure"
+import { clearSelectedElementsOnSlide, deleteSelectedElement, putSelectedElement } from "../../../store/actionCreators/selectedElement";
+import store from "../../../store/store";
 
 function Circle(circle: PrimitiveType){
   let border = '';
-  if (editor.selectedElements.includes(circle.id)) {
+  if (store.getState().selectedElements.includes(circle.id)) {
     border = '3px solid #000';
   }
   return(
@@ -18,9 +18,9 @@ function Circle(circle: PrimitiveType){
         style={{border: border}}
         onClick={(event) => {
           if (!event.ctrlKey) {
-            dispatch(clearSelectedElementsOnSlide, {});
-            dispatch(putSelectedElement, circle.id);
-          } else {dispatch(deleteSelectedElement, circle.id)}
+            store.dispatch(clearSelectedElementsOnSlide());
+            store.dispatch(putSelectedElement(circle.id));
+          } else {store.dispatch(deleteSelectedElement(circle.id))}
         }}
       />
     </svg>

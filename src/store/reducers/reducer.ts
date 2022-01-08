@@ -1,4 +1,4 @@
-import { Application, clearSelectedElements, clearSelectedElementsOnSlide, moveElements, putSelectedElement, setTitle, deleteSelectedElement, changeTextContent, savePresentation, openPresentation, addSlide, loadPresentation, deleteSlide, redo, clearRedo, undo, addText, addImageFromFile, startViewing, stopViewing, viewingNextSlide, viewingPrevSlide } from "../../scripts/structure";
+import { Application, clearSelectedElements, clearSelectedElementsOnSlide, moveElements, putSelectedElement, setTitle, deleteSelectedElement, changeTextContent, savePresentation, openPresentation, addSlide, loadPresentation, deleteSlide, redo, clearRedo, undo, addText, addImageFromFile, startViewing, stopViewing, viewingNextSlide, viewingPrevSlide, addImage, addPrimitives } from "../../scripts/structure";
 import { putElem, clearAllElems, clearSlideElems, deleteElem } from "../actions/selectedElements"
 import { move } from "../actions/moveElements"
 import { changePresentationTitle } from "../actions/title";
@@ -8,7 +8,7 @@ import { addNewSlide, delSlide } from "../actions/slides";
 import { NewPresentation } from "../actions/presentationActions";
 import { clearRedoAction, redoAction } from "../actions/redo";
 import { undoAction } from "../actions/undoActions";
-import { newImage, newText } from "../actions/slideElementActions";
+import { newImage, newImageFromFile, newPrimitive, newText } from "../actions/slideElementActions";
 import { nextSlide, offViewingMode, onViewingMode, prevSlide } from "../actions/viewing";
 
 function reducer(state: Application = {} as Application, action: any) {
@@ -22,7 +22,9 @@ function reducer(state: Application = {} as Application, action: any) {
         case move: return moveElements(state, action.newPos.x, action.newPos.y)
         case changeText: return changeTextContent(state, action.value);
         case newText: return addText(state);
-        case newImage: return addImageFromFile(state, action.value);
+        case newImageFromFile: return addImageFromFile(state);
+        case newImage: return addImage(state, action.value);
+        case newPrimitive: return addPrimitives(state, action.value);
         // Работа с презентацией
         case changePresentationTitle: return setTitle(state, action.value);
         case download: return savePresentation(state, action.value);

@@ -1,7 +1,7 @@
 import { createRef } from 'react';
 import { downloadFile, uploadFile } from '../../store/actionCreators/downloadFile';
 import { reDo } from '../../store/actionCreators/redo';
-import { addNewImage, addNewText } from '../../store/actionCreators/slideElementActionCreators';
+import { addNewImageFromFile, addNewText } from '../../store/actionCreators/slideElementActionCreators';
 import { deleteSlide, newSlide } from '../../store/actionCreators/slidesActions';
 import { unDo } from '../../store/actionCreators/undoActionCreators';
 import store from '../../store/store';
@@ -17,14 +17,7 @@ function Menu () {
       <button className={styles.iconRedo} onClick={() => store.dispatch(reDo())}></button>
       <button className={styles.iconSelect}></button>
       <button className={styles.iconText} onClick={() => store.dispatch(addNewText())}></button>
-      <form method='post'>
-        <input ref={createRef} type="file" className={styles.iconImage} onChange={(event) => {
-          let files = event.target.files;
-          if (files !== null) {
-            store.dispatch(addNewImage(files[0]))
-          }
-        }}></input>
-      </form>
+      <button onClick={() => store.dispatch(addNewImageFromFile())}>{"Загрузить изображение"}</button>
       <button onClick={() => store.dispatch(downloadFile(store.getState().presentation.title))}>{"Сохранить презентацию"}</button>
       <form method='post'>
         <input ref={createRef} type="file" className={styles.iconImage} onChange={(event) => {

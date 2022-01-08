@@ -17,11 +17,10 @@ export default function SlideView({slide, index}: MiniSlide) {
                 id={slide.id} 
                 className={styles.slide} 
                 onClick={(event) => {
-                    let slideId = slide.id;
                     if (!event.ctrlKey) {
                         store.dispatch(clearSelectedElement());
                     }
-                    store.dispatch(putSelectedElement(slideId))
+                    store.dispatch(putSelectedElement(slide.id))
                 }}
             >
             

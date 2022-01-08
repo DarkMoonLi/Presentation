@@ -1,5 +1,4 @@
 import { TextType } from "../../../scripts/structure";
-import { dispatch, editor } from "../../../scripts/editor"
 import { useRef, useState, useEffect } from "react";
 import { useDragAndDrop } from "../../DragAndDrop/dragAndDrop";
 import { moveElements } from "../../../store/actionCreators/moveElements";
@@ -10,7 +9,7 @@ import { changeTextValue } from '../../../store/actionCreators/text';
 
 function SomebodyText(text: TextType) {
 
-  const ref = useRef<HTMLDivElement>(null);
+  //const ref = useRef<HTMLDivElement>(null);
 
   let border = '';
 
@@ -31,10 +30,12 @@ function SomebodyText(text: TextType) {
     border: border
   };
 
+  console.log(state);
+
   if (state.selectedElements.includes(text.id)) {
     return (
       <div
-        ref={ref}
+        //ref={ref}
         style={{
           ...textStyle,
           border: ''
@@ -71,13 +72,13 @@ function SomebodyText(text: TextType) {
           value={text.content}
           onClick={(event) => {
             if (!event.ctrlKey) {
-              store.dispatch(clearSelectedElementsOnSlide);
+              store.dispatch(clearSelectedElementsOnSlide());
               store.dispatch(putSelectedElement(text.id));
             } else {store.dispatch(deleteSelectedElement(text.id))};
           }}
           onChange={(event) => {
-            if (editor.redo.length !== 0) {
-              store.dispatch(clearAllRedo);
+            if (state.redo.length !== 0) {
+              store.dispatch(clearAllRedo());
             }
             let newText = event.target.value;
             store.dispatch(changeTextValue(newText))
@@ -85,9 +86,7 @@ function SomebodyText(text: TextType) {
           onBlur={(event) => {
             store.dispatch(deleteSelectedElement(text.id))
           }}
-        >
-          {text.content}
-        </textarea>
+        />
       </div>
     )
   }
@@ -98,7 +97,7 @@ function SomebodyText(text: TextType) {
       style={textStyle}
       onClick={(event) => {
         if (!event.ctrlKey) {
-          store.dispatch(clearSelectedElementsOnSlide)
+          store.dispatch(clearSelectedElementsOnSlide())
         }
         const textId = text.id
         store.dispatch(putSelectedElement(textId));

@@ -1,5 +1,6 @@
-import { clearSelectedElementsOnSlide, deleteSelectedElement, PrimitiveType, putSelectedElement } from "../../../scripts/structure";
-import { dispatch } from "../../../scripts/editor";
+import { PrimitiveType } from "../../../scripts/structure";
+import { clearSelectedElementsOnSlide, deleteSelectedElement, putSelectedElement } from "../../../store/actionCreators/selectedElement";
+import store from "../../../store/store";
 
 function Triangle(triangle: PrimitiveType) {
   let x1 = triangle.position.x;
@@ -17,9 +18,9 @@ function Triangle(triangle: PrimitiveType) {
         fill={triangle.color}
         onClick={(event) => {
           if (!event.ctrlKey) {
-            dispatch(clearSelectedElementsOnSlide, {});
-            dispatch(putSelectedElement, triangle.id);
-          } else {dispatch(deleteSelectedElement, triangle.id)}
+            store.dispatch(clearSelectedElementsOnSlide());
+            store.dispatch(putSelectedElement(triangle.id));
+          } else {store.dispatch(deleteSelectedElement(triangle.id))}
         }}
       />
     </svg>

@@ -1,5 +1,6 @@
-import { dispatch } from "../../scripts/editor";
-import { clearSelectedElementsOnSlide, deleteSelectedElement, ImageType, putSelectedElement } from "../../scripts/structure";
+import { ImageType } from "../../scripts/structure";
+import { clearSelectedElementsOnSlide, deleteSelectedElement, putSelectedElement } from "../../store/actionCreators/selectedElement";
+import store from "../../store/store";
 
 export default function SomeImage(image: ImageType) {
     return(
@@ -12,9 +13,9 @@ export default function SomeImage(image: ImageType) {
                 width={image.size.width}
                 onClick={(event) => {
                     if (!event.ctrlKey) {
-                        dispatch(clearSelectedElementsOnSlide, {});
-                        dispatch(putSelectedElement, image.id)
-                    } else {dispatch(deleteSelectedElement, image.id)}
+                        store.dispatch(clearSelectedElementsOnSlide());
+                        store.dispatch(putSelectedElement(image.id))
+                    } else {store.dispatch(deleteSelectedElement(image.id))}
                 }}
             />
         </svg>

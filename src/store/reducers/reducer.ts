@@ -1,4 +1,4 @@
-import { Application, clearSelectedElements, clearSelectedElementsOnSlide, moveElements, putSelectedElement, setTitle, deleteSelectedElement, changeTextContent, savePresentation, openPresentation, addSlide, loadPresentation, deleteSlide, redo, clearRedo, undo, addText, addImageFromFile } from "../../scripts/structure";
+import { Application, clearSelectedElements, clearSelectedElementsOnSlide, moveElements, putSelectedElement, setTitle, deleteSelectedElement, changeTextContent, savePresentation, openPresentation, addSlide, loadPresentation, deleteSlide, redo, clearRedo, undo, addText, addImageFromFile, startViewing, stopViewing, viewingNextSlide, viewingPrevSlide } from "../../scripts/structure";
 import { putElem, clearAllElems, clearSlideElems, deleteElem } from "../actions/selectedElements"
 import { move } from "../actions/moveElements"
 import { changePresentationTitle } from "../actions/title";
@@ -9,6 +9,7 @@ import { NewPresentation } from "../actions/presentationActions";
 import { clearRedoAction, redoAction } from "../actions/redo";
 import { undoAction } from "../actions/undoActions";
 import { newImage, newText } from "../actions/slideElementActions";
+import { nextSlide, offViewingMode, onViewingMode, prevSlide } from "../actions/viewing";
 
 function reducer(state: Application = {} as Application, action: any) {
     switch(action.type) {
@@ -34,6 +35,11 @@ function reducer(state: Application = {} as Application, action: any) {
         case redoAction: return redo(state);
         case clearRedoAction: return clearRedo(state);
         case undoAction: return undo(state);
+        // viewing
+        case onViewingMode: return startViewing(state);
+        case offViewingMode: return stopViewing(state);
+        case nextSlide: return viewingNextSlide(state);
+        case prevSlide: return viewingPrevSlide(state); 
         default: return state
     }
 }

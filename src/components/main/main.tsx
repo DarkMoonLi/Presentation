@@ -2,10 +2,10 @@ import styles from "./main.module.css"
 import ListSlides from "../listSlides/listSlides";
 import Workspace from "../workspace/workspace";
 
-function Main(store: any)
+function Main()
 { 
   return(
-    <main  className={styles.container}>
+    <main className={styles.container} >
         <ListSlides />
         <Workspace />
     </main>

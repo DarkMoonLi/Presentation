@@ -5,7 +5,13 @@ export type Application = {
     readonly selectedElements: Array<string>,
     readonly undo: Array<Presentation>,
     readonly redo: Array<Presentation>,
-    readonly presentation: Presentation
+    readonly presentation: Presentation,
+    readonly viewing: Viewing
+};
+
+export type Viewing = {
+    readonly on: boolean,
+    readonly currentSlide: Slide
 };
 
 export type Presentation = {
@@ -206,33 +212,76 @@ function clearRedo(Appl: Application): Application {
     }
 }
 
-const defaultApp: Application = {
-    selectedElements: [],
-    undo: [],
-    redo: [],
-    presentation: {
-        title: 'Название презентации',
-        type: 'presentation',
-        slides: [getDefaultSlide()]
+function startViewing(Appl: Application): Application {
+    return {
+        ...Appl,
+        viewing: {
+            ...Appl.viewing,
+            on: true
+        }
     }
 }
 
-function getApplication(): Application {
+function viewingNextSlide(Appl: Application): Application {
+    let index = Appl.presentation.slides.indexOf(Appl.viewing.currentSlide);
+    index = index + 1;
+    console.log(index);
+    if (index < Appl.presentation.slides.length) {
+        return {
+            ...Appl,
+            viewing: {
+                ...Appl.viewing,
+                currentSlide: Appl.presentation.slides[index]
+            }
+        }
+    }
+
+    return Appl
+}
+
+function viewingPrevSlide(Appl: Application): Application {
+    let index = Appl.presentation.slides.indexOf(Appl.viewing.currentSlide);
+    index = index - 1;
+    console.log(index);
+    if (index > -1) {
+        return {
+            ...Appl,
+            viewing: {
+                ...Appl.viewing,
+                currentSlide: Appl.presentation.slides[index]
+            }
+        }
+    }
+    return Appl
+}
+
+function stopViewing(Appl: Application): Application {
     return {
-        selectedElements: [],
+        ...Appl,
+        viewing: {
+            ...Appl.viewing,
+            on: false
+        }
+    }    
+}
+
+function getApplication(): Application {
+    let slide = getDefaultSlide();
+    return {
+        selectedElements: [slide.id],
         undo: [],
         redo: [],
         presentation: {
             title: 'Название презентации',
             type: 'presentation',
-            slides: [getDefaultSlide()]
+            slides: [slide]
+        },
+        viewing: {
+            on: false,
+            currentSlide: slide
         }
     }
 };
-
-function createNewPresentation(): Application {
-    return {...defaultApp}
-}
 
 function setTitle(Appl: Application, newTitle: string): Application {
     return {
@@ -685,7 +734,6 @@ function openPresentation(Appl: Application, newPresentation: Presentation): App
 
 export {
     getApplication,
-    createNewPresentation,
     putSelectedElement,
     deleteSelectedElement,
     clearSelectedElements,
@@ -714,5 +762,9 @@ export {
     clearRedo,
     savePresentation,
     openPresentation,
-    loadPresentation
+    loadPresentation,
+    startViewing,
+    stopViewing,
+    viewingNextSlide,
+    viewingPrevSlide
 }

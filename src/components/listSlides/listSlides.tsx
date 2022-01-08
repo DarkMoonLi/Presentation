@@ -5,7 +5,6 @@ import store from "../../store/store";
 function ListSlides() {
 
   const listSlides = store.getState().presentation.slides;
-  console.log(listSlides);
 
   return(
     <div>

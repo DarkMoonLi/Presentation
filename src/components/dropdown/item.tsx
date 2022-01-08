@@ -3,12 +3,12 @@ import store from '../../store/store'
 
 type ItemTypes = {
   title: string,
-  action: Function
+  action: any
 }
 
 function Item ({title, action}: ItemTypes) {
   return (
-    <li className={styles.navbarItem} onClick={() => store.dispatch(action())}>
+    <li className={styles.navbarItem} onClick={() => store.dispatch(action)}>
       <span className={styles.navbarItemTitle}>{title}</span>
     </li>
   )}

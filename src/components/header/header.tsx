@@ -24,7 +24,7 @@ function Header() {
                 </Dropdown>
                 <Dropdown title="Edit">
                     <Item title="Редактировать" action = {getApplication}/>
-                    <Item title="Режим просмотра" action = {startViewingMode}/>
+                    <Item title="Режим просмотра" action = {startViewingMode()}/>
                 </Dropdown>
                 <Dropdown title="Insert">
                     <Item title="Текст" action = {() => dispatch(addText, {})}/>

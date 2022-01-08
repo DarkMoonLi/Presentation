@@ -1,5 +1,5 @@
 import store from "../store/store";
-import { openNewPresentation } from "../store/actionCreators/presentationActionCreators";
+import { openPresentationFromFile } from "../store/actionCreators/presentationActionCreators";
 import { addNewImage } from "../store/actionCreators/slideElementActionCreators";
 
 export type Application = {
@@ -283,6 +283,23 @@ function getApplication(): Application {
         }
     }
 };
+
+function createNewPresentation(Appl: Application): Application {
+    let slide = getDefaultSlide();
+    return {
+        ...Appl,
+        selectedElements: [slide.id],
+        presentation: {
+            title: 'Название презентации',
+            type: 'presentation',
+            slides: [slide]
+        },
+        viewing: {
+            ...Appl.viewing,
+            currentSlide: slide
+        }
+    }
+}
 
 function setTitle(Appl: Application, newTitle: string): Application {
     return {
@@ -694,9 +711,18 @@ function savePresentation(Appl: Application, fileName: string): Application {
 }
 
 function loadPresentation(Appl: Application, file: string) {
-    fetch(file)
-    .then(response => response.json())
-    .then(json => store.dispatch(openNewPresentation(json)))
+    const inp = document.createElement("input");
+    inp.type = 'file';
+    inp.click();
+    inp.addEventListener('change', () => {
+        let files = inp.files;
+        if (files != null) {
+            let file = URL.createObjectURL(files[0]);
+            fetch(file)
+            .then(response => response.json())
+            .then(json => store.dispatch(openPresentationFromFile(json)))
+        }
+    })
     return(Appl)
 }
 
@@ -709,6 +735,7 @@ function openPresentation(Appl: Application, newPresentation: Presentation): App
 
 export {
     getApplication,
+    createNewPresentation,
     putSelectedElement,
     deleteSelectedElement,
     clearSelectedElements,

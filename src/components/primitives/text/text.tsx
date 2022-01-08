@@ -30,8 +30,6 @@ function SomebodyText(text: TextType) {
     border: border
   };
 
-  console.log(state);
-
   if (state.selectedElements.includes(text.id)) {
     return (
       <div

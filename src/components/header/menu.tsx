@@ -1,4 +1,3 @@
-import { createRef } from 'react';
 import { downloadFile, uploadFile } from '../../store/actionCreators/downloadFile';
 import { reDo } from '../../store/actionCreators/redo';
 import { addNewImageFromFile, addNewText } from '../../store/actionCreators/slideElementActionCreators';
@@ -19,16 +18,7 @@ function Menu () {
       <button className={styles.iconText} onClick={() => store.dispatch(addNewText())}></button>
       <button onClick={() => store.dispatch(addNewImageFromFile())}>{"Загрузить изображение"}</button>
       <button onClick={() => store.dispatch(downloadFile(store.getState().presentation.title))}>{"Сохранить презентацию"}</button>
-      <form method='post'>
-        <input ref={createRef} type="file" className={styles.iconImage} onChange={(event) => {
-          let files = event.target.files;
-          if (files !== null) {
-            const data = window.URL.createObjectURL(files[0]);
-            store.dispatch(uploadFile(data))
-          }
-        }}></input>
-      </form>
-      
+      <button onClick={() => store.dispatch(uploadFile())}>{"Загрузить презентацию"}</button>      
       <button className={styles.iconPrimitive}></button>
     </div>
   )}

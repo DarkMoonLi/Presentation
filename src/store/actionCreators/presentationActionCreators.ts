@@ -1,9 +1,15 @@
 import { Presentation } from "../../scripts/structure";
-import { NewPresentation } from "../actions/presentationActions";
+import { NewPresentation, presentationFromFile } from "../actions/presentationActions";
 
-export function openNewPresentation(presentation: Presentation) {
+export function openPresentationFromFile(presentation: Presentation) {
     return {
-        type: NewPresentation,
+        type: presentationFromFile,
         value: presentation
+    }
+}
+
+export function openNewPresentation() {
+    return {
+        type: NewPresentation
     }
 }

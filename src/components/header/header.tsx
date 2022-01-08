@@ -5,9 +5,10 @@ import Menu from "./menu";
 import TitlePresentation from "./title";
 import store from "../../store/store";
 import { startViewingMode } from "../../store/actionCreators/viewing";
-import { downloadFile } from "../../store/actionCreators/downloadFile";
+import { downloadFile, uploadFile } from "../../store/actionCreators/downloadFile";
 import { addNewText, addNewPrimitive, addNewImageFromFile } from "../../store/actionCreators/slideElementActionCreators";
 import { getApplication } from "../../scripts/structure"
+import { openNewPresentation } from "../../store/actionCreators/presentationActionCreators";
 
 function Header() {
     return (
@@ -17,9 +18,9 @@ function Header() {
                 <TitlePresentation />
                 <div className={styles.containerDropdown}>
                 <Dropdown title="File" >
-                    <Item title="Создать" action = {getApplication} />
+                    <Item title="Создать" action = {openNewPresentation()} />
                     <Item title="Сохранить" action = {downloadFile(store.getState().presentation.title)}/>
-                    <Item title="Открыть" action = {getApplication}/>
+                    <Item title="Открыть" action = {uploadFile()}/>
                     <Item title="Экспортировать" action = {getApplication}/>
                 </Dropdown>
                 <Dropdown title="Edit">

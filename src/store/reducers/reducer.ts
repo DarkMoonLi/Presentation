@@ -1,11 +1,11 @@
-import { Application, clearSelectedElements, clearSelectedElementsOnSlide, moveElements, putSelectedElement, setTitle, deleteSelectedElement, changeTextContent, savePresentation, openPresentation, addSlide, loadPresentation, deleteSlide, redo, clearRedo, undo, addText, addImageFromFile, startViewing, stopViewing, viewingNextSlide, viewingPrevSlide, addImage, addPrimitives } from "../../scripts/structure";
+import { Application, clearSelectedElements, clearSelectedElementsOnSlide, moveElements, putSelectedElement, setTitle, deleteSelectedElement, changeTextContent, savePresentation, openPresentation, addSlide, loadPresentation, deleteSlide, redo, clearRedo, undo, addText, addImageFromFile, startViewing, stopViewing, viewingNextSlide, viewingPrevSlide, addImage, addPrimitives, createNewPresentation } from "../../scripts/structure";
 import { putElem, clearAllElems, clearSlideElems, deleteElem } from "../actions/selectedElements"
 import { move } from "../actions/moveElements"
 import { changePresentationTitle } from "../actions/title";
 import { changeText } from "../actions/text";
 import { download, upload } from "../actions/download";
 import { addNewSlide, delSlide } from "../actions/slides";
-import { NewPresentation } from "../actions/presentationActions";
+import { NewPresentation, presentationFromFile } from "../actions/presentationActions";
 import { clearRedoAction, redoAction } from "../actions/redo";
 import { undoAction } from "../actions/undoActions";
 import { newImage, newImageFromFile, newPrimitive, newText } from "../actions/slideElementActions";
@@ -29,7 +29,8 @@ function reducer(state: Application = {} as Application, action: any) {
         case changePresentationTitle: return setTitle(state, action.value);
         case download: return savePresentation(state, action.value);
         case upload: return loadPresentation(state, action.value);
-        case NewPresentation: return openPresentation(state, action.value)
+        case presentationFromFile: return openPresentation(state, action.value);
+        case NewPresentation: return createNewPresentation(state);
         // Работа со слайдами
         case addNewSlide: return addSlide(state);
         case delSlide: return deleteSlide(state);

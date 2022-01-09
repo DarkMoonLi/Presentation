@@ -1,4 +1,3 @@
-import { editor } from "./editor"
 import { getApplication } from "./structure"
 
 const newAppl = getApplication()

@@ -1,7 +1,4 @@
 import { TextType } from "../../../scripts/structure";
-import { useRef, useState, useEffect } from "react";
-import { useDragAndDrop } from "../../DragAndDrop/dragAndDrop";
-import { moveElements } from "../../../store/actionCreators/moveElements";
 import store from "../../../store/store";
 import { putSelectedElement, clearSelectedElementsOnSlide, deleteSelectedElement } from "../../../store/actionCreators/selectedElement";
 import { clearAllRedo } from '../../../store/actionCreators/redo';

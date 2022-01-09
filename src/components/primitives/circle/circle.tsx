@@ -25,5 +25,5 @@ function Circle(circle: PrimitiveType){
       />
     </svg>
   )}
-
+  
 export default Circle

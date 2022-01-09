@@ -5,4 +5,5 @@ import reducer from "./reducers/reducer"
 
 const store = createStore(reducer, initialState);
 store.subscribe(() => render)
+
 export default store;

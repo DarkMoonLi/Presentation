@@ -1,8 +1,17 @@
 import Header from './components/header/header'
 import Main from './components/main/main';
-import { Application } from './scripts/structure';
+import { View } from './components/viewing/viewing';
+import store from './store/store';
 
-function App(editor: any) {
+function App() {
+  if (store.getState().viewing.on) {
+    return (
+      <div>
+        <View />
+      </div>
+    )
+  };
+
   return (
     <div>
       <Header />

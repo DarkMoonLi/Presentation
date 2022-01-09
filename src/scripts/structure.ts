@@ -1,38 +1,47 @@
-import { editor } from "./editor";
+import store from "../store/store";
+import { openPresentationFromFile } from "../store/actionCreators/presentationActionCreators";
+import { addNewImage } from "../store/actionCreators/slideElementActionCreators";
 
-type Application = {
+export type Application = {
     readonly selectedElements: Array<string>,
     readonly undo: Array<Presentation>,
     readonly redo: Array<Presentation>,
-    readonly presentation: Presentation
+    readonly presentation: Presentation,
+    readonly viewing: Viewing
 };
 
-type Presentation = {
+export type Viewing = {
+    readonly on: boolean,
+    readonly currentSlide: Slide
+};
+
+export type Presentation = {
     readonly title: string,
     readonly type: 'presentation',
     readonly slides: Array<Slide>
 };
 
-type Slide = {
+export type Slide = {
     readonly id: string,
     readonly background: string,
     readonly content: Array<TextType|PrimitiveType|ImageType>
 };
 
-type PrimitiveType = {
+export type PrimitiveType = {
     readonly id: string,
     readonly type: 'circle' | 'rectangle' | 'triangle',
     readonly position: {
         readonly x: number,
         readonly y: number,
-    }
+    },
     readonly size: {
         readonly width: number,
         readonly height: number,
-    }
+    },
+    readonly color: string
 };
 
-type TextType = {
+export type TextType = {
     readonly id: string,
     readonly type: 'text',
     readonly position: {
@@ -50,7 +59,7 @@ type TextType = {
     readonly content: string
 };
 
-type ImageType = {
+export type ImageType = {
     readonly id: string,
     readonly type: 'image',
     readonly position: {
@@ -74,15 +83,15 @@ function getDefaultText(): TextType {
         id: getId(),
         type: 'text',
         position: {
-            x: 50,
-            y: 50
+            x: 100,
+            y: 250
         },
         size: {
-            width: 100,
-            height: 100
+            width: 1220,
+            height: 400
         },
         font: '',
-        fontSize: 14,
+        fontSize: 48,
         weight: 'normal',
         color: 'FFFFFF',
         content: 'Текст слайда'
@@ -94,15 +103,15 @@ function getDefaultSlideTitle(): TextType {
         id: getId(),
         type: 'text',
         position: {
-            x: 20,
-            y: 20
+            x: 100,
+            y: 100
         },
         size: {
-            width: 60,
-            height: 30
+            width: 1220,
+            height: 100
         },
         font: '',
-        fontSize: 20,
+        fontSize: 64,
         weight: 'normal',
         color: 'FFFFFF',
         content: 'Заголовок слайда'
@@ -120,7 +129,6 @@ function getDefaultSlide(): Slide {
 function putSelectedElement(Appl: Application, id: string): Application {
     return {
         ...Appl,
-        undo: [...Appl.undo, {...Appl.presentation}],
         selectedElements: [...Appl.selectedElements, id]
     }
 };
@@ -146,6 +154,20 @@ function clearSelectedElements(Appl: Application): Application {
     }
 }
 
+function clearSelectedElementsOnSlide(Appl: Application): Application {
+    let newSelectedElements: Array<string> = [];
+    for (let slide of Appl.presentation.slides) {
+        if (Appl.selectedElements.includes(slide.id)) {
+            newSelectedElements.push(slide.id)
+        }
+    };
+    
+    return {
+        ...Appl,
+        selectedElements: [...newSelectedElements]
+    }
+}
+
 function undo(Appl: Application): Application {
     let newUndo: Array<Presentation> = [...Appl.undo];
     if (newUndo.length !== 0) {
@@ -168,8 +190,8 @@ function redo(Appl: Application): Application {
     let newRedo: Array<Presentation> = [...Appl.redo];
     if (newRedo.length !== 0) {
         let changedRedo: Array<Presentation> = [];
-        let newUndo: Array<Presentation> = (newRedo[newRedo.length - 1].type == Appl.presentation.type) ? [...Appl.undo, {...Appl.presentation}] : [...Appl.undo];
-        let redoPresentation: Presentation = (newRedo[newRedo.length - 1].type == Appl.presentation.type) ? {...newRedo[newRedo.length - 1]} : {...Appl.presentation};
+        let newUndo: Array<Presentation> = (newRedo[newRedo.length - 1].type === Appl.presentation.type) ? [...Appl.undo, {...Appl.presentation}] : [...Appl.undo];
+        let redoPresentation: Presentation = (newRedo[newRedo.length - 1].type === Appl.presentation.type) ? {...newRedo[newRedo.length - 1]} : {...Appl.presentation};
         newRedo.pop();
         changedRedo = [...newRedo];
 
@@ -191,52 +213,93 @@ function clearRedo(Appl: Application): Application {
     }
 }
 
-const defaultApp: Application = {
-    selectedElements: [],
-    undo: [],
-    redo: [],
-    presentation: {
-        title: 'Название презентации',
-        type: 'presentation',
-        slides: [getDefaultSlide()]
+function startViewing(Appl: Application): Application {
+    return {
+        ...Appl,
+        viewing: {
+            ...Appl.viewing,
+            on: true
+        }
     }
 }
 
-function getApplication(): Application {
+function viewingNextSlide(Appl: Application): Application {
+    let index = Appl.presentation.slides.indexOf(Appl.viewing.currentSlide);
+    index = index + 1;
+    console.log(index);
+    if (index < Appl.presentation.slides.length) {
+        return {
+            ...Appl,
+            viewing: {
+                ...Appl.viewing,
+                currentSlide: Appl.presentation.slides[index]
+            }
+        }
+    }
+
+    return Appl
+}
+
+function viewingPrevSlide(Appl: Application): Application {
+    let index = Appl.presentation.slides.indexOf(Appl.viewing.currentSlide);
+    index = index - 1;
+    console.log(index);
+    if (index > -1) {
+        return {
+            ...Appl,
+            viewing: {
+                ...Appl.viewing,
+                currentSlide: Appl.presentation.slides[index]
+            }
+        }
+    }
+    return Appl
+}
+
+function stopViewing(Appl: Application): Application {
     return {
-        selectedElements: [],
+        ...Appl,
+        viewing: {
+            ...Appl.viewing,
+            on: false
+        }
+    }    
+}
+
+function getApplication(): Application {
+    let slide = getDefaultSlide();
+    return {
+        selectedElements: [slide.id],
         undo: [],
         redo: [],
         presentation: {
             title: 'Название презентации',
             type: 'presentation',
-            slides: [getDefaultSlide()]
+            slides: [slide]
+        },
+        viewing: {
+            on: false,
+            currentSlide: slide
         }
     }
 };
 
-function createNewPresentation(Appl: Application = defaultApp): Application {
-    if (Appl === defaultApp) {
-        return { ...Appl }
-    } else {
-        return Appl = {
-            ...defaultApp,
-            undo: [...Appl.undo, {...Appl.presentation}]
-        }
-    }
-}
-
-function newPresentation(Appl: Application): Application {
+function createNewPresentation(Appl: Application): Application {
+    let slide = getDefaultSlide();
     return {
         ...Appl,
-        undo: [...Appl.undo, {...Appl.presentation}],
+        selectedElements: [slide.id],
         presentation: {
             title: 'Название презентации',
             type: 'presentation',
-            slides: [getDefaultSlide()]
+            slides: [slide]
+        },
+        viewing: {
+            ...Appl.viewing,
+            currentSlide: slide
         }
     }
-};
+}
 
 function setTitle(Appl: Application, newTitle: string): Application {
     return {
@@ -261,13 +324,11 @@ function addSlide(Appl: Application): Application {
     }
 };
 
-// Продумать Undo
 function deleteSlide(Appl: Application): Application {
-    // Appl.selectedElements
     let newSlides: Array<Slide> = [];
 
-    newSlides = [...newSlides.filter(function(slide) {
-        return Appl.selectedElements.indexOf(slide.id) !== 1
+    newSlides = [...Appl.presentation.slides.filter(function(slide) {
+        return (!Appl.selectedElements.includes(slide.id))
     })]
 
     return {
@@ -312,8 +373,24 @@ function move(Appl: Application, prevIndex: number, newIndex: number): Applicati
     }
 };
 
-function addImage(Appl: Application, adress: string, id: string, file: Blob, fromFile: boolean): Application {
-    //
+function addImageFromFile(Appl: Application): Application {
+    const inp = document.createElement("input");
+    inp.type = 'file';
+    inp.click();
+    inp.addEventListener('change', () => {
+        let files = inp.files;
+        if (files != null) {
+            let file = files[0];
+            let image = URL.createObjectURL(file);
+            return store.dispatch(addNewImage(image));
+        }
+    });
+    inp.remove();
+    console.log('first');
+    return Appl    
+};
+
+function addImage(Appl: Application, adress: string): Application {
     let newImage: ImageType = {
         id: getId(),
         type: 'image',
@@ -326,51 +403,19 @@ function addImage(Appl: Application, adress: string, id: string, file: Blob, fro
             height: 100
         },
         link: '',
-        content: ''
+        content: adress
     };
 
-    if (fromFile) {
-        // Лучше попробовать так
-        let image = URL.createObjectURL(file)
-        newImage = {
-            ...newImage,
-            content: image
-        } 
-
-        // Возможно не потребуется
-        let newPromise = new Promise(function(resolve, reject) {
-            let newFileReader = new FileReader();
-            newFileReader.onloadend = () => resolve(newFileReader.result);
-            newFileReader.onerror = () => reject(new Error('Не удалось открыть файл'));
-            newFileReader.readAsDataURL(file);            
-        })
-        newPromise.then(
-            result => {
-                newImage = {
-                    ...newImage,
-                    // Подумать
-                    link: String(result),
-                    content: String(result)
-                }
-            },
-            error => alert(error.message)
-        );
-    } else {
-        newImage = {
-            ...newImage,
-            link: adress
-        }
-    }
-
     let changeSlides: Array<Slide> = [...Appl.presentation.slides];
-    for (let slide of changeSlides) {
-        if (slide.id === id) {
-            slide= {
+    changeSlides = changeSlides.map(function(slide) {
+        if (Appl.selectedElements.includes(slide.id)) {
+            return {
                 ...slide,
                 content: [...slide.content, newImage]
             }
         }
-    }
+        return {...slide}
+    });
 
     return {
         ...Appl,
@@ -382,16 +427,17 @@ function addImage(Appl: Application, adress: string, id: string, file: Blob, fro
     }
 };
 
-function addPrimitives(Appl: Application, primitivesType: 'circle' | 'rectangle' | 'triangle', id: string): Application {
+function addPrimitives(Appl: Application, primitivesType: 'circle' | 'rectangle' | 'triangle'): Application {
     let newPrimitive: PrimitiveType = {
         id: getId(),
         type: primitivesType,
         position: { x: 100, y: 100 },
         size: { width: 100, height: 100 },
+        color: '#FF0000'
     };
 
     let changeSlides: Array<Slide> = [...Appl.presentation.slides.map(function(slide) {
-        if (slide.id === id) {
+        if (Appl.selectedElements.indexOf(slide.id) !== -1) {
             return {
                 ...slide,
                 content: [...slide.content, newPrimitive]
@@ -535,13 +581,19 @@ function changeWindowSize(Appl: Application, newWidth: number, newHeight: number
     }
 };
 
-function addText(Appl: Application, index: number): Application {
+function addText(Appl: Application): Application {
 
     let changeSlides: Array<Slide> = [...Appl.presentation.slides];
-    changeSlides[index] = {
-        ...changeSlides[index],
-        content: [...changeSlides[index].content, getDefaultText()]
-    };
+    changeSlides = [...changeSlides.map(function(slide) {
+        if (Appl.selectedElements.includes(slide.id)) {
+            return {
+                ...slide,
+                content: [...slide.content, getDefaultText()]
+            }
+        } else {
+            return slide
+        }
+    })]
 
     return {
         ...Appl,
@@ -552,6 +604,37 @@ function addText(Appl: Application, index: number): Application {
         }
     }
 };
+
+function changeTextContent(Appl: Application, newText: string): Application {
+    let changeSlides: Array<Slide> = [...Appl.presentation.slides];
+    changeSlides = [...changeSlides.map(function(slide) {
+        if (Appl.selectedElements.includes(slide.id)) {
+            return {
+                ...slide,
+                content: [...slide.content.map(function(content) {
+                    if ((Appl.selectedElements.includes(content.id)) && (content.type === 'text')) {
+                        return {
+                            ...content,
+                            content: newText
+                        } 
+                    }
+                    return {...content}
+                })]
+            }
+        };
+        return {
+            ...slide
+        };
+    })];
+    
+    return {
+        ...Appl,
+        presentation: {
+            ...Appl.presentation,
+            slides: [...changeSlides]
+        }
+    }
+}
 
 function changeFont(Appl: Application, newFont: string = '', newFontSize: number = 14): Application {
     // Изменение шрифта, нам нужен шрифт по умолчанию
@@ -585,7 +668,7 @@ function changeFont(Appl: Application, newFont: string = '', newFontSize: number
     }
 };
 
-function changeTextColor(Appl: Application, newColor: string): Application {
+function changeColor(Appl: Application, newColor: string): Application {
     let changeSlides: Array<Slide> = [...Appl.presentation.slides];
     
     for (let slide of changeSlides) {
@@ -593,7 +676,7 @@ function changeTextColor(Appl: Application, newColor: string): Application {
             slide = {
                 ...slide,
                 content: [...slide.content.map(function(content) {
-                    if ((Appl.selectedElements.indexOf(content.id) !== -1) && (content.type === 'text')) {
+                    if ((Appl.selectedElements.indexOf(content.id) !== -1) && (content.type !== 'image')) {
                         return {
                             ...content,
                             color: newColor
@@ -616,39 +699,72 @@ function changeTextColor(Appl: Application, newColor: string): Application {
     }
 };
 
-export type {
-    Application,
-    Presentation,
-    Slide,
-    ImageType,
-    TextType,
-    PrimitiveType
-};
+function savePresentation(Appl: Application, fileName: string): Application {
+    let a = document.createElement("a");
+    let file = new Blob([JSON.stringify(Appl.presentation)], {type: "application/json"});
+    a.href = URL.createObjectURL(file);
+    a.download = fileName;
+    a.click();
+    return Appl
+}
+
+function loadPresentation(Appl: Application, file: string) {
+    const inp = document.createElement("input");
+    inp.type = 'file';
+    inp.click();
+    inp.addEventListener('change', () => {
+        let files = inp.files;
+        if (files != null) {
+            let file = URL.createObjectURL(files[0]);
+            fetch(file)
+            .then(response => response.json())
+            .then(json => store.dispatch(openPresentationFromFile(json)))
+        }
+    })
+    return(Appl)
+}
+
+function openPresentation(Appl: Application, newPresentation: Presentation): Application {
+    return {
+        ...Appl,
+        presentation: newPresentation
+    }
+}
 
 export {
     getApplication,
+    createNewPresentation,
     putSelectedElement,
     deleteSelectedElement,
     clearSelectedElements,
-    newPresentation,
-    createNewPresentation,
+    clearSelectedElementsOnSlide,
+    getDefaultSlide,
+    getDefaultText,
+    getId,
     setTitle,
     addSlide,
     deleteSlide,
     move,
     addImage,
+    addImageFromFile,
     addPrimitives,
     addText,
+    changeTextContent,
     changeBackground,
     deleteElements,
     moveElements,
     changeLayer,
     changeWindowSize,
     changeFont,
-    changeTextColor,
+    changeColor,
     undo,
     redo,
-    clearRedo, 
-    getId,
-    getDefaultSlide
+    clearRedo,
+    savePresentation,
+    openPresentation,
+    loadPresentation,
+    startViewing,
+    stopViewing,
+    viewingNextSlide,
+    viewingPrevSlide
 }

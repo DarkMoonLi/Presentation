@@ -1,3 +1,4 @@
+import { moveElements } from "../../store/actionCreators/moveElements";
 import store from "../../store/store";
 import getContent from "../content/content";
 import styles from "./workspace.module.css";

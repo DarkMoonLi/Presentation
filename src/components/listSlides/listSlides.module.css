@@ -5,7 +5,8 @@
   margin: 0;
   padding: 0;
   width: 360px;
-  height: 902px;
+  height: 100%;
+  max-height: 842px;
   border: 1px solid #000;
   touch-action: auto;
 }

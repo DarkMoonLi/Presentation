@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, MutableRefObject } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import styles from './dropdown.module.css';
 
 function Dropdown(props: any) { 

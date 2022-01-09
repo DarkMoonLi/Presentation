@@ -2,6 +2,9 @@
 {
   display: flex;
   background-color: #565771;
+  background-color: #7073aa;
+  /* background: linear-gradient(100deg, #7073aa, #d186e7); */
+  /* background: linear-gradient(to top left, powderblue, pink); */
 }
 
 .dBlock
@@ -12,11 +15,12 @@
 
 .logo
 {
+  margin: 10px;
   background-image: url(/src/image/cat.jpeg);
   background-size: contain;
   display: inline-block;
-  width: 65px;
-  height: 65px;
+  width: 60px;
+  height: 57px;
 }
 
 .menu

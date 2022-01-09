@@ -1,9 +1,14 @@
-import {addImage, addPrimitives, addText, createNewPresentation} from "../../scripts/structure";
 import Dropdown from "../dropdown/dropdown";
 import Item from "../dropdown/item";
 import styles from './header.module.css'
 import Menu from "./menu";
 import TitlePresentation from "./title";
+import store from "../../store/store";
+import { startViewingMode } from "../../store/actionCreators/viewing";
+import { downloadFile, uploadFile } from "../../store/actionCreators/downloadFile";
+import { addNewText, addNewPrimitive, addNewImageFromFile } from "../../store/actionCreators/slideElementActionCreators";
+import { getApplication } from "../../scripts/structure"
+import { openNewPresentation } from "../../store/actionCreators/presentationActionCreators";
 
 function Header() {
     return (
@@ -13,18 +18,21 @@ function Header() {
                 <TitlePresentation />
                 <div className={styles.containerDropdown}>
                 <Dropdown title="File" >
-                    <Item title="Создать" action = {createNewPresentation} />
-                    <Item title="Сохранить" action = {createNewPresentation}/>
-                    <Item title="Открыть" action = {createNewPresentation}/>
-                    <Item title="Экспортировать" action = {createNewPresentation}/>
+                    <Item title="Создать" action = {openNewPresentation()} />
+                    <Item title="Сохранить" action = {downloadFile(store.getState().presentation.title)}/>
+                    <Item title="Открыть" action = {uploadFile()}/>
+                    <Item title="Экспортировать" action = {getApplication}/>
                 </Dropdown>
                 <Dropdown title="Edit">
-                    <Item title="Редактировать" action = {createNewPresentation}/>
+                    <Item title="Редактировать" action = {getApplication}/>
+                    <Item title="Режим просмотра" action = {startViewingMode()}/>
                 </Dropdown>
                 <Dropdown title="Insert">
-                    <Item title="Текст" action = {addText}/>
-                    <Item title="Изображение" action = {addImage}/>
-                    <Item title="Примитив" action = {addPrimitives}/>
+                    <Item title="Текст" action = {addNewText()}/>
+                    <Item title="Изображение" action = {addNewImageFromFile()}/>
+                    <Item title="Круг" action={addNewPrimitive('circle')}/>
+                    <Item title="Треугольник" action={addNewPrimitive('triangle')}/>
+                    <Item title="Прямоугольник" action={addNewPrimitive('rectangle')}/>
                 </Dropdown>
                 </div>
                 <Menu />

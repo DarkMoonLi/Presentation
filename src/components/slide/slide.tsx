@@ -1,21 +1,33 @@
 import styles from './slide.module.css'
-import '../../scripts/structure'
-import { getId, putSelectedElement, Slide } from "../../scripts/structure";
-import SomebodyText from '../primitives/text/text';
-import { dispatch, editor } from '../../scripts/editor';
+import { Slide } from "../../scripts/structure";
+import getContent from '../content/content';
+import store from '../../store/store';
+import { putSelectedElement, clearSelectedElement } from '../../store/actionCreators/selectedElement';
 
 type MiniSlide = {
-    slide: Slide
+    slide: Slide,
     index: number
 }
 
 export default function SlideView({slide, index}: MiniSlide) {
-    const id = slide.id
     return (
-        <li className={styles.slideContainer} key={slide.id}>
+        <li key={slide.id} className={styles.slideContainer}>
             <span className={styles.numberSlide}>{index}</span>
-            <div className={styles.slide} onClick={() => dispatch(putSelectedElement, {id})}>
-                
-            </div>
+            <svg 
+                width={'1416px'}
+                height={'658px'}
+                viewBox='0 0 1400 800'
+                preserveAspectRatio='xMinYMax meet'
+                id={slide.id} 
+                className={styles.slide} 
+                onClick={(event) => {
+                    if (!event.ctrlKey) {
+                        store.dispatch(clearSelectedElement());
+                    }
+                    store.dispatch(putSelectedElement(slide.id))
+                }}
+            >
+                {getContent(slide)}
+            </svg>
         </li>
 )}

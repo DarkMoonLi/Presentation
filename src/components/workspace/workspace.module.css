@@ -1,10 +1,9 @@
 .workspaceWrap {
-  height: 782px;
+  height: 842px;
   border: 1px solid #000;
   padding: 60px;
   width: 100%;
   background-color: #ECECEC;
-  text-align: center;
 }
 
 .workspace {

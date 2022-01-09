@@ -1,21 +1,22 @@
 import styles from './title.module.css'
-import '../../scripts/structure'
-import { setTitle } from '../../scripts/structure';
-import { useState } from 'react';
-import { dispatch, editor } from '../../scripts/editor';
+import store from '../../store/store';
+import { changeTitle } from '../../store/actionCreators/title';
 
-function TitlePresentation () {
+function handleSelect(event: any) {
+  event.target.select()
+}
 
-  const [value, setValue] = useState(editor.presentation.title);
-
-  function handleChange(event: any) {
-      setValue(event.target.value);
-      dispatch(setTitle, {value});
-  }
+function TitlePresentation (this: any) {
 
   return (
     <div className={styles.titleContainer}>
-      <input type='text' value={value} className={styles.titlePresentation} onChange={handleChange} placeholder='Untitled presentation'/>
+      <input 
+        type='text' 
+        value={store.getState().presentation.title} 
+        className={styles.titlePresentation} 
+        onChange={(event) => store.dispatch(changeTitle(event.target.value))} 
+        onClick={handleSelect}
+        placeholder='Untitled presentation'/>
     </div>
   )}
 

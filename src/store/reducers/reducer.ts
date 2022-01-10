@@ -1,10 +1,10 @@
-import { Application, clearSelectedElements, clearSelectedElementsOnSlide, moveElements, putSelectedElement, setTitle, deleteSelectedElement, changeTextContent, savePresentation, openPresentation, addSlide, loadPresentation, deleteSlide, redo, clearRedo, undo, addText, addImageFromFile, startViewing, stopViewing, viewingNextSlide, viewingPrevSlide, addImage, addPrimitives, createNewPresentation } from "../../scripts/structure";
+import { Application, clearSelectedElements, clearSelectedElementsOnSlide, moveElements, putSelectedElement, setTitle, deleteSelectedElement, changeTextContent, savePresentation, openPresentation, addSlide, loadPresentation, deleteSlide, redo, clearRedo, undo, addText, addImageFromFile, startViewing, stopViewing, viewingNextSlide, viewingPrevSlide, addImage, addPrimitives, createNewPresentation, loadBackground, setBackgroundImg } from "../../scripts/structure";
 import { putElem, clearAllElems, clearSlideElems, deleteElem } from "../actions/selectedElements"
 import { move } from "../actions/moveElements"
 import { changePresentationTitle } from "../actions/title";
 import { changeText } from "../actions/text";
 import { download, upload } from "../actions/download";
-import { addNewSlide, delSlide } from "../actions/slides";
+import { addNewSlide, delSlide, setBackground, uploadImg } from "../actions/slides";
 import { NewPresentation, presentationFromFile } from "../actions/presentationActions";
 import { clearRedoAction, redoAction } from "../actions/redo";
 import { undoAction } from "../actions/undoActions";
@@ -34,6 +34,8 @@ function reducer(state: Application = {} as Application, action: any) {
         // Работа со слайдами
         case addNewSlide: return addSlide(state);
         case delSlide: return deleteSlide(state);
+        case uploadImg: return loadBackground(state);
+        case setBackground: return setBackgroundImg(state, action.value);
         // undo и redo
         case redoAction: return redo(state);
         case clearRedoAction: return clearRedo(state);

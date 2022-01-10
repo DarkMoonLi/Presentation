@@ -1,108 +1,91 @@
 import { TextType } from "../../../scripts/structure";
-import { useRef, useState, useEffect } from "react";
-import { useDragAndDrop } from "../../DragAndDrop/dragAndDrop";
-import { moveElements } from "../../../store/actionCreators/moveElements";
 import store from "../../../store/store";
 import { putSelectedElement, clearSelectedElementsOnSlide, deleteSelectedElement } from "../../../store/actionCreators/selectedElement";
 import { clearAllRedo } from '../../../store/actionCreators/redo';
 import { changeTextValue } from '../../../store/actionCreators/text';
+import { useRef, useState } from "react";
+import { useDragAndDrop } from "../../DragAndDrop/dragAndDrop";
+import { moveElements } from "../../../store/actionCreators/moveElements";
+import { useResizeElement } from "../../DragAndDrop/resizeElement";
 
 function SomebodyText(text: TextType) {
-
-  //const ref = useRef<HTMLDivElement>(null);
 
   let border = '';
 
   const state = store.getState();
   if (state.selectedElements.includes(text.id)) {
-    border = '3px solid #000';
+    border = '1px solid #000';
   }
 
-  const textStyle = {
-    x: text.position.x,
-    y: text.position.y,
-    width: text.size.width,
-    height: text.size.height,
-    fontFamily: text.font,
-    fontSize: text.fontSize,
-    color: text.color,
-    fontWeight: text.weight,
-    border: border
-  };
+  const elemRef = useRef(null);
+  const resizeRef = useRef(null);
+  const [position, setPosition] = useState({ x: text.position.x, y: text.position.y });
+  const [moving, setMoving] = useState(false);
+  const [resize, setResize] = useState({width: text.size.width, height: text.size.height})
+  const [edit, setEdit] = useState(false);
 
-  if (state.selectedElements.includes(text.id)) {
-    return (
-      <div
-        //ref={ref}
-        style={{
-          ...textStyle,
-          border: ''
-        }}
-        onMouseDown={(event) => {
-          let startX = event.pageX;
-          let startY = event.pageY;
+  useDragAndDrop(elemRef, position, setPosition, setMoving, setEdit);
+  useResizeElement(resizeRef, resize, setResize, setMoving, setEdit)
 
-          function onMove() {
-            const deltaX = event.pageX - startX; 
-            const deltaY = event.pageY - startY;
-       
-            const newPos = {
-              x: text.position.x + deltaX,
-              y: text.position.y + deltaY
-            };
-            store.dispatch(moveElements(newPos))
-          };
 
-          function stopMove() {
-            document.removeEventListener("mousemove", onMove);
-            document.removeEventListener("mouseup", stopMove);        
-          };
-
-          document.addEventListener("mousemove", onMove);
-          document.addEventListener("mouseup", stopMove);
-        }}
-      >
-        <textarea
-          id={text.id}
-          style={textStyle}
-          color={text.color}
-          wrap="soft"
-          value={text.content}
-          onClick={(event) => {
-            if (!event.ctrlKey) {
-              store.dispatch(clearSelectedElementsOnSlide());
-              store.dispatch(putSelectedElement(text.id));
-            } else {store.dispatch(deleteSelectedElement(text.id))};
-          }}
-          onChange={(event) => {
-            if (state.redo.length !== 0) {
-              store.dispatch(clearAllRedo());
-            }
-            let newText = event.target.value;
-            store.dispatch(changeTextValue(newText))
-          }}
-          onBlur={(event) => {
-            store.dispatch(deleteSelectedElement(text.id))
-          }}
-        />
-      </div>
-    )
-  }
-
-  return(
-    <p
-      id={text.id} 
-      style={textStyle}
-      onClick={(event) => {
-        if (!event.ctrlKey) {
-          store.dispatch(clearSelectedElementsOnSlide())
-        }
-        const textId = text.id
-        store.dispatch(putSelectedElement(textId));
-      }}
+  return (
+    <foreignObject
+      width={'100%'}
+      height={'100%'}
+      x={text.position.x}
+      y={text.position.y}
     >
-      {text.content}
-    </p>
+      <textarea
+        ref={elemRef}
+        id={text.id}
+        readOnly={edit ? true : false}
+        style={{
+          width: resize.width,
+          height: resize.height,
+          fontFamily: text.font,
+          fontSize: text.fontSize,
+          color: text.color,
+          fontWeight: text.weight,
+          border: border,
+          backgroundColor: 'transparent',
+          textAlign: 'center',
+          position: 'absolute',
+          scale: '1'
+        }}
+        color={text.color}
+        wrap="soft"
+        value={text.content}
+        onClick={(event) => {
+          setEdit(false);
+          if (!event.ctrlKey) {
+            store.dispatch(clearSelectedElementsOnSlide());
+            store.dispatch(putSelectedElement(text.id));
+          } else { store.dispatch(deleteSelectedElement(text.id)) };
+        }}
+        onChange={(event) => {
+          if (state.redo.length !== 0) {
+            store.dispatch(clearAllRedo());
+          }
+          let newText = event.target.value;
+          store.dispatch(changeTextValue(newText))
+        }}
+        onBlur={(event) => {
+          store.dispatch(deleteSelectedElement(text.id))
+        }}
+        onMouseMove={() => (moving && (store.dispatch(moveElements(position))))}
+        onDoubleClick={() => setEdit(true)}
+      />
+      <div ref={resizeRef} style={{
+        position: 'absolute',
+        display: 'block',
+        width: '9px',
+        height: '9px',
+        backgroundColor: '#000',
+        border: '2px solid #000',
+        borderRadius: '4px',
+        cursor: 'se-resize'
+        }}></div>
+    </foreignObject>
   )
 }
 

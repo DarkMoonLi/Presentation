@@ -1,22 +1,31 @@
 .titleContainer
 {
-  display: block;
-  width: 100%;
+  margin: 15px 10px 15px 10px;
+  display: inline-block;
 }
 
 .titlePresentation
 {
-  display: block;
-  padding: 0;
-  border-width: 1px 0;
-  border-style: solid;
-  border-color: #000;
-  background-color: #494B68;
+  font-size: 20px;
   color: #fff;
-  text-align: center;
-  height: 30px;
-  width: 100%;
+  height: 35px;
+  background-color: inherit;
   outline: 0;
+  border: 0;
+  padding: 0;
+  padding: 10px 15px;
+  padding-right: 0;
+  border-radius: 5px;
+  border: 1px solid rgb(173, 170, 170);
+  position: relative;
+  transition: 250ms;
+}
+
+.titlePresentation:focus
+{
+  border-radius: 5px;
+  border: 1px solid rgb(216, 216, 216);
+  transition: 100ms;
 }
 
 .titlePresentation::placeholder

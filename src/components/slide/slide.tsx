@@ -10,12 +10,26 @@ type MiniSlide = {
 }
 
 export default function SlideView({slide, index}: MiniSlide) {
+    const slideStyle = {
+        backgroundImage: `url(${slide.backgroundImg})`,
+        backgroundColor: slide.background,
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'contain',
+        backgroundPosition: 'center'
+    };
+
     return (
         <li key={slide.id} className={styles.slideContainer}>
             <span className={styles.numberSlide}>{index}</span>
-            <div 
+            <svg 
+                width={'1416px'}
+                height={'658px'}
+                viewBox='0 0 1400 800'
+                preserveAspectRatio='xMinYMax meet'
                 id={slide.id} 
-                className={styles.slide} 
+                background-image={slide.backgroundImg}
+                className={styles.slide}  
+                style={slideStyle}
                 onClick={(event) => {
                     if (!event.ctrlKey) {
                         store.dispatch(clearSelectedElement());
@@ -23,9 +37,7 @@ export default function SlideView({slide, index}: MiniSlide) {
                     store.dispatch(putSelectedElement(slide.id))
                 }}
             >
-            
                 {getContent(slide)}
-                
-            </div>
+            </svg>
         </li>
 )}

@@ -18,9 +18,9 @@ export function addEditorChangeHandler(handler: Function)
   editorChangeHandler = handler
 }
 
-export function dispatch(modifyFn: Function, payload: any)
+export function dispatch(modifyFn: Function, ...payload: any)
 {
-  const newEditor: Application = modifyFn(editor, payload);
+  const newEditor: Application = modifyFn(editor, ...payload);
   if (newEditor !== undefined) {
     setEditor(newEditor)
   } else {

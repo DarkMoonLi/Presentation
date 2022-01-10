@@ -6,25 +6,33 @@ function Workspace() {
 
   let state = store.getState();
 
+
   for (let slide of state.presentation.slides) {
     if (state.selectedElements.includes(slide.id)) {
+      const slideStyle = {
+        backgroundImage: `url(${slide.backgroundImg})`,
+        backgroundRepeat: "no-repeat",
+        backgroundSize: 'contain',
+        backgroundColor: slide.background,
+        backgroundPosition: 'center'
+      };
       return(
-        <div className={styles.workspaceWrap} style={{color: slide.background}}>
-          <div className={styles.workspace}>
+        <div id={slide.id} className={styles.workspaceWrap}>
+          <svg className={styles.workspace} style={slideStyle}>
             
             {getContent(slide)}
 
-          </div>
-        </div>
+          </svg>
+        </div> 
       )
     }
   }
 
   return (
     <div className={styles.workspaceWrap} style={{color: state.presentation.slides[0].background}}>
-      <div className={styles.workspace}>
+      <svg className={styles.workspace}>
         {getContent(state.presentation.slides[0])}
-      </div>
+      </svg>
     </div>
   )
 

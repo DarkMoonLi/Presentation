@@ -1,6 +1,7 @@
 import store from "../store/store";
 import { openPresentationFromFile } from "../store/actionCreators/presentationActionCreators";
 import { addNewImage } from "../store/actionCreators/slideElementActionCreators";
+import { setBackImage } from "../store/actionCreators/slidesActions";
 
 export type Application = {
     readonly selectedElements: Array<string>,
@@ -24,6 +25,7 @@ export type Presentation = {
 export type Slide = {
     readonly id: string,
     readonly background: string,
+    readonly backgroundImg: string,
     readonly content: Array<TextType|PrimitiveType|ImageType>
 };
 
@@ -84,14 +86,14 @@ function getDefaultText(): TextType {
         type: 'text',
         position: {
             x: 100,
-            y: 150
+            y: 250
         },
         size: {
-            width: 200,
-            height: 100
+            width: 1220,
+            height: 400
         },
         font: '',
-        fontSize: 14,
+        fontSize: 48,
         weight: 'normal',
         color: 'FFFFFF',
         content: 'Текст слайда'
@@ -103,15 +105,15 @@ function getDefaultSlideTitle(): TextType {
         id: getId(),
         type: 'text',
         position: {
-            x: 20,
-            y: 20
+            x: 100,
+            y: 100
         },
         size: {
-            width: 200,
-            height: 60
+            width: 1220,
+            height: 100
         },
         font: '',
-        fontSize: 20,
+        fontSize: 64,
         weight: 'normal',
         color: 'FFFFFF',
         content: 'Заголовок слайда'
@@ -122,6 +124,7 @@ function getDefaultSlide(): Slide {
     return {
         id: getId(),
         background: 'FFFFFF',
+        backgroundImg: '',
         content: [getDefaultSlideTitle(), getDefaultText()]
     }
 };
@@ -327,9 +330,13 @@ function addSlide(Appl: Application): Application {
 function deleteSlide(Appl: Application): Application {
     let newSlides: Array<Slide> = [];
 
-    newSlides = [...Appl.presentation.slides.filter(function(slide) {
-        return (!Appl.selectedElements.includes(slide.id))
-    })]
+    if (Appl.presentation.slides.length > 1) {
+        newSlides = [...Appl.presentation.slides.filter(function(slide) {
+            return (!Appl.selectedElements.includes(slide.id))
+        })]
+    } else {
+        newSlides = [getDefaultSlide()]
+    }
 
     return {
         ...Appl,
@@ -731,6 +738,47 @@ function openPresentation(Appl: Application, newPresentation: Presentation): App
     }
 }
 
+function loadBackground(Appl: Application): Application {
+    const inp = document.createElement("input");
+    inp.type = 'file';
+    inp.click();
+    inp.addEventListener('change', () => {
+        let files = inp.files;
+        if (files != null) {
+            //let reader = new FileReader();
+            //reader.readAsDataURL(files[0]);
+            //reader.onload = () => {
+            //    console.log(reader.result);
+            //    if (reader.result !== null) store.dispatch(setBackImage(reader.result));
+            //}
+            let img = URL.createObjectURL(files[0]);
+            return store.dispatch(setBackImage(img));
+        }
+    });
+    return Appl
+}
+
+function setBackgroundImg(Appl: Application, img: string): Application {
+    let slides = Appl.presentation.slides;
+    slides = slides.map((slide) => {
+        if (Appl.selectedElements.includes(slide.id)) {
+            return {
+                ...slide,
+                backgroundImg: img
+            }
+        }
+        return slide
+    });
+
+    return {
+        ...Appl,
+        presentation: {
+            ...Appl.presentation,
+            slides: slides
+        }
+    }
+}
+
 export {
     getApplication,
     createNewPresentation,
@@ -766,5 +814,7 @@ export {
     startViewing,
     stopViewing,
     viewingNextSlide,
-    viewingPrevSlide
+    viewingPrevSlide,
+    loadBackground,
+    setBackgroundImg
 }

@@ -1,12 +1,11 @@
-import { changeWindowSize, TextType } from "../../../scripts/structure";
+import { TextType } from "../../../scripts/structure";
 import store from "../../../store/store";
 import { putSelectedElement, clearSelectedElementsOnSlide, deleteSelectedElement } from "../../../store/actionCreators/selectedElement";
-import { clearAllRedo } from '../../../store/actionCreators/redo';
 import { changeTextValue } from '../../../store/actionCreators/text';
 import { useRef, useState } from "react";
 import { useDragAndDrop } from "../../DragAndDrop/dragAndDrop";
-import { moveElements } from "../../../store/actionCreators/moveElements";
-import useResizeObserver from "../../DragAndDrop/resizeElement";
+import { changeSize, moveElements } from "../../../store/actionCreators/moveElements";
+import { useResizeElement1, useResizeElement2, useResizeElement3, useResizeElement4 } from "../../DragAndDrop/resizeElement";
 
 function SomebodyText(text: TextType) {
 
@@ -18,12 +17,21 @@ function SomebodyText(text: TextType) {
   }
 
   const elemRef = useRef(null);
+  const resizeRef1 = useRef(null);
+  const resizeRef2 = useRef(null);
+  const resizeRef3 = useRef(null);
+  const resizeRef4 = useRef(null);
   const [position, setPosition] = useState({ x: text.position.x, y: text.position.y });
   const [moving, setMoving] = useState(false);
+  const [size, setSize] = useState({width: text.size.width, height: text.size.height});
+  const [resizing, setResize] = useState(false);
   const [edit, setEdit] = useState(false);
 
   useDragAndDrop(elemRef, position, setPosition, setMoving, setEdit);
-  const [resizeRef, widthSize, heightSize] = useResizeObserver('', text.size)
+  useResizeElement1(resizeRef1, size, position, setSize, setPosition, setResize, setEdit);
+  useResizeElement2(resizeRef2, size, position, setSize, setPosition, setResize, setEdit);
+  useResizeElement3(resizeRef3, size, position, setSize, setPosition, setResize, setEdit);
+  useResizeElement4(resizeRef4, size, position, setSize, setPosition, setResize, setEdit);
 
 
   return (
@@ -32,7 +40,6 @@ function SomebodyText(text: TextType) {
       height={text.size.height}
       x={text.position.x}
       y={text.position.y}
-      ref={resizeRef}
     >
       <textarea
         ref={elemRef}
@@ -52,6 +59,7 @@ function SomebodyText(text: TextType) {
           scale: '1'
         }}
         color={text.color}
+        wrap="soft"
         value={text.content}
         onClick={(event) => {
           setEdit(false);
@@ -61,18 +69,16 @@ function SomebodyText(text: TextType) {
           } else { store.dispatch(deleteSelectedElement(text.id)) };
         }}
         onChange={(event) => {
-          if (state.redo.length !== 0) {
-            store.dispatch(clearAllRedo());
-          }
           let newText = event.target.value;
           store.dispatch(changeTextValue(newText))
         }}
-        onBlur={(event) => {
+        onBlur={() => {
           store.dispatch(deleteSelectedElement(text.id))
         }}
         onMouseMove={() => (moving && (store.dispatch(moveElements(position))))}
+        onDoubleClick={() => setEdit(true)}
       />
-      <div ref={resizeRef} style={{
+      <div ref={resizeRef1} style={{
         position: 'absolute',
         display: 'block',
         width: '9px',
@@ -80,11 +86,70 @@ function SomebodyText(text: TextType) {
         backgroundColor: '#000',
         border: '2px solid #000',
         borderRadius: '4px',
-        cursor: 'se-resize',
-        bottom: 0,
-        right: 0
+        cursor: 'se-resize'
         }}
-        onMouseMove={() => {store.dispatch(changeWindowSize)}}></div>
+        onMouseMove={() => {
+          resizing && (store.dispatch(putSelectedElement(text.id)))
+          resizing && (store.dispatch(moveElements(position)))
+          resizing && (store.dispatch(changeSize(size)))
+          resizing && (store.dispatch(deleteSelectedElement(text.id)))
+        }}
+      ></div>
+      <div ref={resizeRef2} style={{
+        position: 'absolute',
+        left: text.size.width - 9,
+        display: 'block',
+        width: '9px',
+        height: '9px',
+        backgroundColor: '#000',
+        border: '2px solid #000',
+        borderRadius: '4px',
+        cursor: 'se-resize'
+        }}
+        onMouseMove={() => {
+          resizing && (store.dispatch(putSelectedElement(text.id)))
+          resizing && (store.dispatch(moveElements(position)))
+          resizing && (store.dispatch(changeSize(size)))
+          resizing && (store.dispatch(deleteSelectedElement(text.id)))
+        }}
+      ></div>
+        <div ref={resizeRef3} style={{
+        position: 'absolute',
+        left: text.size.width - 9,
+        top: text.size.height - 9,
+        display: 'block',
+        width: '9px',
+        height: '9px',
+        backgroundColor: '#000',
+        border: '2px solid #000',
+        borderRadius: '4px',
+        cursor: 'se-resize'
+        }}
+        onMouseMove={() => {
+          resizing && (store.dispatch(putSelectedElement(text.id)))
+          resizing && (store.dispatch(moveElements(position)))
+          resizing && (store.dispatch(changeSize(size)))
+          resizing && (store.dispatch(deleteSelectedElement(text.id)))
+        }}
+      ></div>
+      <div ref={resizeRef4} style={{
+        position: 'absolute',
+        top: text.size.height - 9,
+        display: 'block',
+        width: '9px',
+        height: '9px',
+        backgroundColor: '#000',
+        border: '2px solid #000',
+        borderRadius: '4px',
+        cursor: 'se-resize'
+        }}
+        onMouseMove={() => {
+          resizing && (store.dispatch(putSelectedElement(text.id)))
+          resizing && (store.dispatch(moveElements(position)))
+          resizing && (store.dispatch(changeSize(size)))
+          resizing && (store.dispatch(deleteSelectedElement(text.id)))
+        }}
+      ></div>
     </foreignObject>
   )
 }

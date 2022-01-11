@@ -1,4 +1,7 @@
 .viewing {
     display: block;
     background-color: white;
+    margin:auto;
+    width: 100%;
+    height: 950px;
 }

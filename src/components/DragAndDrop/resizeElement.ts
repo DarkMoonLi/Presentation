@@ -1,50 +1,245 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect } from "react";
 
-const useResizeObserver = (option = 'contentRect', size: any) => {
-  const ref = useRef(null);
-  const [height, setHeight] = useState();
-  const [width, setWidth] = useState();
+export const useResizeElement1 = (elementRef: any,
+                                  initSize: {
+                                    width: number,
+                                    height: number
+                                  }, 
+                                  initPos: {
+                                    x: number,
+                                    y: number
+                                  }, 
+                                  setResize: any, 
+                                  setPos: any, 
+                                  setMoving: any,
+                                  setEdit: any) => {
 
-  useEffect(() => {
-    if (ref.current) {
-      const observer = new ResizeObserver((entries) => {
-        handleResize(entries);
-      });
-      observer.observe(ref.current);
+  let startPos: {
+    x: number,
+    y: number
+  };
 
-      // Callback fired when component is unmounted
-      return () => {
-        observer.disconnect();
-      };
+  const onMouseDown = (e: MouseEvent) => {
+    startPos = {
+      x: e.pageX,
+      y: e.pageY
     }
-    // Added this return for eslint rule -> no-consisten-return
-    return undefined;
-  });
-
-  function handleResize(entries: any) {
-    for (const entry of entries) {
-      if (
-        option === 'borderBoxSize' &&
-        entry.borderBoxSize &&
-        entry.borderBoxSize.length > 0
-      ) {
-        setHeight(entry.borderBoxSize[0].blockSize);
-        setWidth(entry.borderBoxSize[0].inlineSize);
-      } else if (
-        option === 'contentBoxSize' &&
-        entry.contentBoxSize &&
-        entry.contentBoxSize.length > 0
-      ) {
-        setHeight(entry.contentBoxSize[0].blockSize);
-        setWidth(entry.contentBoxSize[0].inlineSize);
-      } else {
-        setHeight(entry.contentRect.height);
-        setWidth(entry.contentRect.width);
-      }
-    }
+    setMoving(true)
+    setEdit(false);
+    document.addEventListener("mousemove", onMove);
+    document.addEventListener("mouseup", onStopMove);
   }
 
-  return [ref, width, height];
+  const onMove = (e: MouseEvent) => {
+    const delta = { x: e.x - startPos.x, y: e.y - startPos.y };
+    let newPos = {
+      x: initPos.x + delta.x,
+      y: initPos.y + delta.y
+    };
+    let newSize = {
+      width: initSize.width - delta.x,
+      height: initSize.height - delta.y
+    };
+    setResize(newSize);
+    setPos(newPos);
+  }
+
+  const onStopMove = () => {
+    document.removeEventListener("mousemove", onMove);
+    document.removeEventListener("mouseup", onStopMove);
+    setMoving(false);
+  };
+
+  useEffect(() => {
+    if (elementRef.current)
+      elementRef.current.addEventListener("mousedown", onMouseDown);
+
+    return () => {
+      if (elementRef.current)
+        elementRef.current.removeEventListener("mousedown", onMouseDown);
+    }
+  })
 };
 
-export default useResizeObserver;
+export const useResizeElement2 = (elementRef: any,
+                                  initSize: {
+                                    width: number,
+                                    height: number
+                                  },
+                                  initPos: {
+                                    x: number,
+                                    y: number
+                                  },
+                                  setResize: any,
+                                  setPos: any,
+                                  setMoving: any,
+                                  setEdit: any) => {
+
+  let startPos: {
+    x: number,
+    y: number
+  };
+
+  const onMouseDown = (e: MouseEvent) => {
+    setMoving(true);
+    setEdit(false);
+    startPos = {
+      x: e.pageX,
+      y: e.pageY
+    }
+    document.addEventListener("mousemove", onMove);
+    document.addEventListener("mouseup", onStopMove);
+  }
+
+  const onMove = (e: MouseEvent) => {
+    const delta = { x: e.pageX - startPos.x, y: e.pageY - startPos.y }
+    let newPos = {
+      x: initPos.x,
+      y: initPos.y + delta.y
+    }
+    let newSize = {
+      width: initSize.width + delta.x,
+      height: initSize.height - delta.y
+    }
+    setPos(newPos);
+    setResize(newSize);
+  }
+
+  const onStopMove = () => {
+    document.removeEventListener("mousemove", onMove);
+    document.removeEventListener("mouseup", onStopMove);
+    setMoving(false)
+  };
+
+  useEffect(() => {
+    if (elementRef.current)
+      elementRef.current.addEventListener("mousedown", onMouseDown);
+
+    return () => {
+      if (elementRef.current)
+        elementRef.current.removeEventListener("mousedown", onMouseDown);
+    }
+  })
+};
+
+export const useResizeElement3 = (elementRef: any,
+                                  initSize: {
+                                    width: number,
+                                    height: number
+                                  },
+                                  initPos: {
+                                    x: number,
+                                    y: number
+                                  }, 
+                                  setResize: any,
+                                  setPos: any,
+                                  setMoving: any,
+                                  setEdit: any) => {
+
+  let startPos: {
+    x: number,
+    y: number
+  };
+
+  const onMouseDown = (e: MouseEvent) => {
+    setMoving(true)
+    setEdit(false)
+    startPos = {
+      x: e.pageX,
+      y: e.pageY
+    };
+    document.addEventListener("mousemove", onMove);
+    document.addEventListener("mouseup", onStopMove);
+  }
+
+  const onMove = (e: MouseEvent) => {
+    const delta = { x: e.pageX - startPos.x, y: e.pageY - startPos.y };
+    let newPos = {
+      x: initPos.x,
+      y: initPos.y,
+    }
+    let newSize = {
+      width: initSize.width + delta.x,
+      height: initSize.height + delta.y
+    };
+    setPos(newPos);
+    setResize(newSize);
+  }
+
+  const onStopMove = () => {
+    document.removeEventListener("mousemove", onMove);
+    document.removeEventListener("mouseup", onStopMove);
+    setMoving(false)
+  };
+
+  useEffect(() => {
+    if (elementRef.current)
+      elementRef.current.addEventListener("mousedown", onMouseDown);
+
+    return () => {
+      if (elementRef.current)
+        elementRef.current.removeEventListener("mousedown", onMouseDown);
+    }
+  })
+};
+
+export const useResizeElement4 = (elementRef: any, 
+                                  initSize: {
+                                    width: number,
+                                    height: number
+                                  }, 
+                                  initPos: {
+                                    x: number,
+                                    y: number
+                                  },
+                                  setResize: any,
+                                  setPos: any, 
+                                  setMoving: any, 
+                                  setEdit: any) => {
+
+  let startPosition: {
+    x: number,
+    y: number
+  };
+
+  const onMouseDown = (e: MouseEvent) => {
+    startPosition = {
+      x: e.pageX,
+      y: e.pageY
+    };
+    setMoving(true)
+    setEdit(false)
+    document.addEventListener("mousemove", onMove);
+    document.addEventListener("mouseup", onStopMove);
+  }
+
+  const onMove = (e: MouseEvent) => {
+    const delta = { x: e.pageX - startPosition.x, y: e.pageY - startPosition.y }
+    let newPos = {
+      x: initPos.x + delta.x,
+      y: initPos.y
+    };
+    let newSize = {
+      width: initSize.width - delta.x,
+      height: initSize.height + delta.y
+    };
+    setPos(newPos);
+    setResize(newSize);
+  }
+
+  const onStopMove = () => {
+    document.removeEventListener("mousemove", onMove);
+    document.removeEventListener("mouseup", onStopMove);
+    setMoving(false)
+  };
+
+  useEffect(() => {
+    if (elementRef.current)
+      elementRef.current.addEventListener("mousedown", onMouseDown);
+
+    return () => {
+      if (elementRef.current)
+        elementRef.current.removeEventListener("mousedown", onMouseDown);
+    }
+  })
+};

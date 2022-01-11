@@ -10,8 +10,13 @@ type MiniSlide = {
 }
 
 export default function SlideView({slide, index}: MiniSlide) {
-
-    const state = store.getState();
+    const slideStyle = {
+        backgroundImage: `url(${slide.backgroundImg})`,
+        backgroundColor: slide.background,
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'contain',
+        backgroundPosition: 'center'
+    };
 
     return (
         <li key={slide.id} className={styles.slideContainer}>
@@ -22,8 +27,9 @@ export default function SlideView({slide, index}: MiniSlide) {
                 viewBox='0 0 1400 800'
                 preserveAspectRatio='xMinYMax meet'
                 id={slide.id} 
-                className={styles.slide} 
-                style={{backgroundColor: state.presentation.slides[index - 1].background}}
+                background-image={slide.backgroundImg}
+                className={styles.slide}  
+                style={slideStyle}
                 onClick={(event) => {
                     if (!event.ctrlKey) {
                         store.dispatch(clearSelectedElement());

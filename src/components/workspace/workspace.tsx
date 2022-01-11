@@ -9,8 +9,8 @@ function Workspace() {
   for (let slide of state.presentation.slides) {
     if (state.selectedElements.includes(slide.id)) {
       return(
-        <div className={styles.workspaceWrap} style={{color: slide.background}}>
-          <svg className={styles.workspace}>
+        <div className={styles.workspaceWrap}>
+          <svg className={styles.workspace} style={{backgroundColor: slide.background}}>
             
             {getContent(slide)}
 
@@ -21,8 +21,8 @@ function Workspace() {
   }
 
   return (
-    <div className={styles.workspaceWrap} style={{color: state.presentation.slides[0].background}}>
-      <svg className={styles.workspace}>
+    <div className={styles.workspaceWrap}>
+      <svg className={styles.workspace} style={{backgroundColor: state.presentation.slides[0].background}}>
         {getContent(state.presentation.slides[0])}
       </svg>
     </div>

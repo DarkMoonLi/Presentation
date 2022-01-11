@@ -24,9 +24,9 @@ export function View() {
             className={styles.viewing}
             onClick={() => store.dispatch(getNextSlide())}
         >
-            <div>
+            <svg>
                 {getContent(store.getState().viewing.currentSlide)}
-            </div>
+            </svg>
         </div>
     )
 }

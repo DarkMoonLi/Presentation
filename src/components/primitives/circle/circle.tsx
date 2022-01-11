@@ -12,14 +12,15 @@ function Circle(circle: PrimitiveType){
     border = '3px solid #000';
   }
 
-  const ref = useRef();
+  const ref = useRef(null);
   const [position, setPosition] = useState({x: circle.position.x, y: circle.position.y});
-  //useDragAndDrop(ref, position, setPosition, moveElements);
-  //store.dispatch(moveElements(position))
+  const [edit, setEdit] = useState(false);
+  const [moving, setMoving] = useState(false);
+  useDragAndDrop(ref, position, setPosition, setMoving, setEdit);
 
   return(
-    <svg>
       <circle 
+        ref={ref}
         id={circle.id} 
         cx={circle.position.x} 
         cy={circle.position.y} 
@@ -32,8 +33,8 @@ function Circle(circle: PrimitiveType){
             store.dispatch(putSelectedElement(circle.id));
           } else {store.dispatch(deleteSelectedElement(circle.id))}
         }}
+        onMouseMove={() => store.dispatch(moveElements(position))}
       />
-    </svg>
   )}
   
 export default Circle

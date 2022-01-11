@@ -1,48 +1,50 @@
-import { useEffect } from "react";
+import { useState, useEffect, useRef } from 'react';
 
-export const useResizeElement = (elementRef: any, initSize: { width: number; height: number }, setSize: any, setResize: any, setEdit: any) => {
-
-  let beginSize: {
-    width: number,
-    height: number
-  }
-
-  const onMouseDown = (e: any) => {
-    beginSize = {
-      width: initSize.width,
-      height: initSize.height
-    }
-    setResize(true)
-    setEdit(false)
-    document.addEventListener("mousemove", onMove);
-    document.addEventListener("mouseup", onStopMove);
-  }
-
-  const onMove = (e: MouseEvent) => {
-    let newSize ={x: 0, y: 0}
-    const delta = { x: e.pageX - beginSize.width, y: e.pageY - beginSize.height }
-    if (delta.x >= 0 && delta.y >= 0)
-    {
-      newSize = { x: initSize.width + delta.x, y: initSize.height + delta.y }
-    } else {
-      newSize = { x: initSize.width - delta.x, y: initSize.height - delta.y }
-    }
-    setSize(newSize);
-  }
-
-  const onStopMove = () => {
-    document.removeEventListener("mousemove", onMove);
-    document.removeEventListener("mouseup", onStopMove);
-    setResize(false)
-  };
+const useResizeObserver = (option = 'contentRect', size: any) => {
+  const ref = useRef(null);
+  const [height, setHeight] = useState();
+  const [width, setWidth] = useState();
 
   useEffect(() => {
-    if (elementRef.current)
-      elementRef.current.addEventListener("mousedown", onMouseDown);
+    if (ref.current) {
+      const observer = new ResizeObserver((entries) => {
+        handleResize(entries);
+      });
+      observer.observe(ref.current);
 
-    return () => {
-      if (elementRef.current)
-        elementRef.current.removeEventListener("mousedown", onMouseDown);
+      // Callback fired when component is unmounted
+      return () => {
+        observer.disconnect();
+      };
     }
-  })
+    // Added this return for eslint rule -> no-consisten-return
+    return undefined;
+  });
+
+  function handleResize(entries: any) {
+    for (const entry of entries) {
+      if (
+        option === 'borderBoxSize' &&
+        entry.borderBoxSize &&
+        entry.borderBoxSize.length > 0
+      ) {
+        setHeight(entry.borderBoxSize[0].blockSize);
+        setWidth(entry.borderBoxSize[0].inlineSize);
+      } else if (
+        option === 'contentBoxSize' &&
+        entry.contentBoxSize &&
+        entry.contentBoxSize.length > 0
+      ) {
+        setHeight(entry.contentBoxSize[0].blockSize);
+        setWidth(entry.contentBoxSize[0].inlineSize);
+      } else {
+        setHeight(entry.contentRect.height);
+        setWidth(entry.contentRect.width);
+      }
+    }
+  }
+
+  return [ref, width, height];
 };
+
+export default useResizeObserver;

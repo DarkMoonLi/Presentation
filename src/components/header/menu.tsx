@@ -1,12 +1,17 @@
+import { useState } from 'react';
 import { downloadFile, uploadFile } from '../../store/actionCreators/downloadFile';
 import { reDo } from '../../store/actionCreators/redo';
 import { addNewImageFromFile, addNewText } from '../../store/actionCreators/slideElementActionCreators';
 import { deleteSlide, newSlide } from '../../store/actionCreators/slidesActions';
 import { unDo } from '../../store/actionCreators/undoActionCreators';
 import store from '../../store/store';
+import { ColorPicker } from '../colorPicker/colorPicker';
 import styles from './menu.module.css'
 
 function Menu () {
+  
+  const [isModal, setModal] = useState(false)
+  const onClose = () => setModal(false)
   
   return (
     <div className={styles.menu}>
@@ -20,6 +25,8 @@ function Menu () {
       <button onClick={() => store.dispatch(downloadFile(store.getState().presentation.title))}>{"Сохранить презентацию"}</button>
       <button onClick={() => store.dispatch(uploadFile())}>{"Загрузить презентацию"}</button>      
       <button className={styles.iconPrimitive}></button>
+      <button className={styles.iconBackground} onClick={() => setModal(true)}></button>
+      {isModal ? (<ColorPicker setModal={setModal}/>) : null}
     </div>
   )}
 

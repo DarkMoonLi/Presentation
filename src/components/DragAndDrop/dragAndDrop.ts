@@ -9,17 +9,17 @@ export const useDragAndDrop = (elementRef: any, initPosition: { x: number; y: nu
 
     const onMouseDown = (e: MouseEvent) => {
         startPosition = {
-            x: e.pageX,
-            y: e.pageY
+            x: e.clientX,
+            y: e.clientY
         }
-        setMoving(true)
-        setEdit(false)
+        setMoving(true);
+        setEdit(false);
         document.addEventListener("mousemove", onMove);
         document.addEventListener("mouseup", onStopMove);
     }
 
     const onMove = (e: MouseEvent) => {
-        const delta = { x: e.pageX - startPosition.x, y: e.pageY - startPosition.y }
+        const delta = { x: e.clientX - startPosition.x, y: e.clientY - startPosition.y }
         const newPos = { x: initPosition.x + delta.x, y: initPosition.y + delta.y }
         setPosition(newPos);
     }

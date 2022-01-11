@@ -1,4 +1,4 @@
-import { TextType } from "../../../scripts/structure";
+import { changeWindowSize, TextType } from "../../../scripts/structure";
 import store from "../../../store/store";
 import { putSelectedElement, clearSelectedElementsOnSlide, deleteSelectedElement } from "../../../store/actionCreators/selectedElement";
 import { clearAllRedo } from '../../../store/actionCreators/redo';
@@ -6,7 +6,7 @@ import { changeTextValue } from '../../../store/actionCreators/text';
 import { useRef, useState } from "react";
 import { useDragAndDrop } from "../../DragAndDrop/dragAndDrop";
 import { moveElements } from "../../../store/actionCreators/moveElements";
-import { useResizeElement } from "../../DragAndDrop/resizeElement";
+import useResizeObserver from "../../DragAndDrop/resizeElement";
 
 function SomebodyText(text: TextType) {
 
@@ -18,30 +18,29 @@ function SomebodyText(text: TextType) {
   }
 
   const elemRef = useRef(null);
-  const resizeRef = useRef(null);
   const [position, setPosition] = useState({ x: text.position.x, y: text.position.y });
   const [moving, setMoving] = useState(false);
-  const [resize, setResize] = useState({width: text.size.width, height: text.size.height})
   const [edit, setEdit] = useState(false);
 
   useDragAndDrop(elemRef, position, setPosition, setMoving, setEdit);
-  useResizeElement(resizeRef, resize, setResize, setMoving, setEdit)
+  const [resizeRef, widthSize, heightSize] = useResizeObserver('', text.size)
 
 
   return (
     <foreignObject
-      width={'100%'}
-      height={'100%'}
+      width={text.size.width}
+      height={text.size.height}
       x={text.position.x}
       y={text.position.y}
+      ref={resizeRef}
     >
       <textarea
         ref={elemRef}
         id={text.id}
         readOnly={edit ? true : false}
         style={{
-          width: resize.width,
-          height: resize.height,
+          width: text.size.width,
+          height: text.size.height,
           fontFamily: text.font,
           fontSize: text.fontSize,
           color: text.color,
@@ -53,7 +52,6 @@ function SomebodyText(text: TextType) {
           scale: '1'
         }}
         color={text.color}
-        wrap="soft"
         value={text.content}
         onClick={(event) => {
           setEdit(false);
@@ -72,8 +70,7 @@ function SomebodyText(text: TextType) {
         onBlur={(event) => {
           store.dispatch(deleteSelectedElement(text.id))
         }}
-        onMouseMove={() => (moving && (store.dispatch(moveElements(position))))}
-        onDoubleClick={() => setEdit(true)}
+        onMouseUp={() => (moving && (store.dispatch(moveElements(position))))}
       />
       <div ref={resizeRef} style={{
         position: 'absolute',
@@ -83,8 +80,11 @@ function SomebodyText(text: TextType) {
         backgroundColor: '#000',
         border: '2px solid #000',
         borderRadius: '4px',
-        cursor: 'se-resize'
-        }}></div>
+        cursor: 'se-resize',
+        bottom: 0,
+        right: 0
+        }}
+        onMouseUp={() => {store.dispatch(changeWindowSize)}}></div>
     </foreignObject>
   )
 }

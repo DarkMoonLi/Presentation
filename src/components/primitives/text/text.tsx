@@ -42,7 +42,7 @@ function SomebodyText(text: TextType) {
       y={text.position.y}
     >
       <textarea
-        ref={elemRef}
+        ref={moving ? elemRef : undefined}
         id={text.id}
         readOnly={edit ? true : false}
         style={{

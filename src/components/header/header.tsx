@@ -17,17 +17,17 @@ function Header() {
             <div className={styles.dBlock}>
                 <TitlePresentation />
                 <div className={styles.containerDropdown}>
-                <Dropdown title="File" >
+                <Dropdown title="Файл" >
                     <Item title="Создать" action = {openNewPresentation()} />
                     <Item title="Сохранить" action = {downloadFile(store.getState().presentation.title)}/>
                     <Item title="Открыть" action = {uploadFile()}/>
                     <Item title="Экспортировать" action = {getApplication}/>
                 </Dropdown>
-                <Dropdown title="Edit">
+                <Dropdown title="Правка">
                     <Item title="Редактировать" action = {getApplication}/>
                     <Item title="Режим просмотра" action = {startViewingMode()}/>
                 </Dropdown>
-                <Dropdown title="Insert">
+                <Dropdown title="Вставка">
                     <Item title="Текст" action = {addNewText()}/>
                     <Item title="Изображение" action = {addNewImageFromFile()}/>
                     <Item title="Круг" action={addNewPrimitive('circle')}/>

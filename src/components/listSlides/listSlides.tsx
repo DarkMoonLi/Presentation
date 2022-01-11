@@ -7,7 +7,7 @@ function ListSlides() {
   const listSlides = store.getState().presentation.slides;
 
   return(
-    <div>
+    <div className={styles.slidesContainer}>
       <ul className={styles.slides}>
         {listSlides.map((item, index) => <SlideView slide={item} index={index + 1}/>)}
       </ul>

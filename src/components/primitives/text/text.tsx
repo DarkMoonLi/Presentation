@@ -30,8 +30,8 @@ function SomebodyText(text: TextType) {
 
   return (
     <foreignObject
-      width={'100%'}
-      height={'100%'}
+      width={text.size.width}
+      height={text.size.height}
       x={text.position.x}
       y={text.position.y}
     >
@@ -69,7 +69,7 @@ function SomebodyText(text: TextType) {
           let newText = event.target.value;
           store.dispatch(changeTextValue(newText))
         }}
-        onBlur={(event) => {
+        onBlur={() => {
           store.dispatch(deleteSelectedElement(text.id))
         }}
         onMouseMove={() => (moving && (store.dispatch(moveElements(position))))}

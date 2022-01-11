@@ -17,16 +17,30 @@ function processKey(event: KeyboardEvent) {
 };
 
 export function View() {
-    document.removeEventListener('keydown', processKey)
-    document.addEventListener('keydown', processKey)
+    document.removeEventListener('keydown', processKey);
+    document.addEventListener('keydown', processKey);
+    let state = store.getState()
+    const slideStyle = {
+        backgroundImage: `url(${state.viewing.currentSlide.backgroundImg})`,
+        backgroundRepeat: "no-repeat",
+        backgroundSize: 'contain',
+        backgroundColor: state.viewing.currentSlide.background,
+        backgroundPosition: 'center'
+    };
     return (
         <div 
             className={styles.viewing}
             onClick={() => store.dispatch(getNextSlide())}
         >
-            <div>
-                {getContent(store.getState().viewing.currentSlide)}
-            </div>
+            <svg
+                className={styles.viewing}
+                style={slideStyle}
+                viewBox='0 0 1400 800'
+                pointerEvents='none'
+                preserveAspectRatio='xMinYMax meet'
+            >
+                {getContent(state.viewing.currentSlide)}
+            </svg>
         </div>
     )
 }

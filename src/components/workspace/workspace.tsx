@@ -6,7 +6,6 @@ function Workspace() {
 
   let state = store.getState();
 
-
   for (let slide of state.presentation.slides) {
     if (state.selectedElements.includes(slide.id)) {
       const slideStyle = {

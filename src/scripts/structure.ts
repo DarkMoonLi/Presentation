@@ -183,7 +183,11 @@ function undo(Appl: Application): Application {
             ...Appl,
             undo: [...changedUndo],
             redo: [...Appl.redo, Appl.presentation],
-            presentation: newPresentation
+            presentation: newPresentation,
+            viewing: {
+                ...Appl.viewing,
+                currentSlide: newPresentation.slides[0]
+            }
         }
     };
     return {...Appl}
@@ -202,7 +206,11 @@ function redo(Appl: Application): Application {
             ...Appl,
             undo: newUndo,
             redo: changedRedo,
-            presentation: redoPresentation
+            presentation: redoPresentation,
+            viewing: {
+                ...Appl.viewing,
+                currentSlide: redoPresentation.slides[0]
+            }
         }
     };
 
@@ -344,6 +352,10 @@ function deleteSlide(Appl: Application): Application {
         presentation: {
             ...Appl.presentation,
             slides: [...newSlides]
+        },
+        viewing: {
+            ...Appl.viewing,
+            currentSlide: newSlides[0]
         }
     }
 };
@@ -376,6 +388,10 @@ function move(Appl: Application, prevIndex: number, newIndex: number): Applicati
         presentation: {
             ...Appl.presentation,
             slides: [...newSlides]
+        },
+        viewing: {
+            ...Appl.viewing,
+            currentSlide: newSlides[0]
         }
     }
 };
@@ -430,6 +446,10 @@ function addImage(Appl: Application, adress: string): Application {
         presentation: {
             ...Appl.presentation,
             slides: [...changeSlides]
+        },
+        viewing: {
+            ...Appl.viewing,
+            currentSlide: changeSlides[0]
         }
     }
 };
@@ -458,6 +478,10 @@ function addPrimitives(Appl: Application, primitivesType: 'circle' | 'rectangle'
         presentation: {
             ...Appl.presentation,
             slides: changeSlides
+        },
+        viewing: {
+            ...Appl.viewing,
+            currentSlide: changeSlides[0]
         }
     }
 };
@@ -483,6 +507,10 @@ function changeBackground(Appl: Application, newBackground: string): Application
         presentation: {
             ...Appl.presentation,
             slides: [...changeSlides]
+        },
+        viewing: {
+            ...Appl.viewing,
+            currentSlide: changeSlides[0]
         }
     }
 };
@@ -510,6 +538,10 @@ function deleteElements(Appl: Application): Application {
         presentation: {
             ...Appl.presentation,
             slides: [...changeSlides]
+        },
+        viewing: {
+            ...Appl.viewing,
+            currentSlide: changeSlides[0]
         }
     }
 };
@@ -540,6 +572,10 @@ function moveElements(Appl: Application, newX: number, newY: number): Applicatio
         presentation: {
             ...Appl.presentation,
             slides: [...changeSlides]
+        },
+        viewing: {
+            ...Appl.viewing,
+            currentSlide: changeSlides[0]
         }
     }
 };
@@ -584,6 +620,10 @@ function changeWindowSize(Appl: Application, newWidth: number, newHeight: number
         presentation: {
             ...Appl.presentation,
             slides: [...changeSlides]
+        },
+        viewing: {
+            ...Appl.viewing,
+            currentSlide: changeSlides[0]
         }
     }
 };
@@ -608,6 +648,10 @@ function addText(Appl: Application): Application {
         presentation: {
             ...Appl.presentation,
             slides: [...changeSlides]
+        },
+        viewing: {
+            ...Appl.viewing,
+            currentSlide: changeSlides[0]
         }
     }
 };
@@ -639,6 +683,10 @@ function changeTextContent(Appl: Application, newText: string): Application {
         presentation: {
             ...Appl.presentation,
             slides: [...changeSlides]
+        },
+        viewing: {
+            ...Appl.viewing,
+            currentSlide: changeSlides[0]
         }
     }
 }
@@ -671,6 +719,10 @@ function changeFont(Appl: Application, newFont: string = '', newFontSize: number
         presentation: {
             ...Appl.presentation,
             slides: [...changeSlides]
+        },
+        viewing: {
+            ...Appl.viewing,
+            currentSlide: changeSlides[0]
         }
     }
 };
@@ -702,6 +754,10 @@ function changeColor(Appl: Application, newColor: string): Application {
         presentation: {
             ...Appl.presentation,
             slides: [...changeSlides]
+        },
+        viewing: {
+            ...Appl.viewing,
+            currentSlide: changeSlides[0]
         }
     }
 };
@@ -734,7 +790,11 @@ function loadPresentation(Appl: Application, file: string) {
 function openPresentation(Appl: Application, newPresentation: Presentation): Application {
     return {
         ...Appl,
-        presentation: newPresentation
+        presentation: newPresentation,
+        viewing: {
+            ...Appl.viewing,
+            currentSlide: newPresentation.slides[0]
+        }
     }
 }
 
@@ -745,12 +805,6 @@ function loadBackground(Appl: Application): Application {
     inp.addEventListener('change', () => {
         let files = inp.files;
         if (files != null) {
-            //let reader = new FileReader();
-            //reader.readAsDataURL(files[0]);
-            //reader.onload = () => {
-            //    console.log(reader.result);
-            //    if (reader.result !== null) store.dispatch(setBackImage(reader.result));
-            //}
             let img = URL.createObjectURL(files[0]);
             return store.dispatch(setBackImage(img));
         }
@@ -775,6 +829,10 @@ function setBackgroundImg(Appl: Application, img: string): Application {
         presentation: {
             ...Appl.presentation,
             slides: slides
+        },
+        viewing: {
+            ...Appl.viewing,
+            currentSlide: slides[0]
         }
     }
 }

@@ -9,15 +9,15 @@ export default function getContent(slide: Slide) {
 
     return slide.content.map(function(content) {
         if (content.type === 'text') {
-            return SomebodyText(content)
+            return <SomebodyText {...content}/>
         } else if (content.type === 'circle') {
-            return Circle(content)
+            return <Circle {...content}/>
         } else if (content.type === 'triangle') {
-            return Triangle(content)
+            return <Triangle {...content}/>
         } else if (content.type === 'rectangle') {
-            return Rectangle(content)
+            return <Rectangle {...content}/>
         } else if (content.type === 'image') {
-            return SomeImage(content)
+            return <SomeImage {...content}/>
         }
     })
 }

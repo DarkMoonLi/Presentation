@@ -9,6 +9,7 @@
 
 .navbarNav
 {
+  z-index: 9999;
   margin: 0;
   margin-top: 10px;
   position: absolute;

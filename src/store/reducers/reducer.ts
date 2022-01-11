@@ -1,4 +1,4 @@
-import { Application, clearSelectedElements, clearSelectedElementsOnSlide, moveElements, putSelectedElement, setTitle, deleteSelectedElement, changeTextContent, savePresentation, openPresentation, addSlide, loadPresentation, deleteSlide, redo, clearRedo, undo, addText, addImageFromFile, startViewing, stopViewing, viewingNextSlide, viewingPrevSlide, addImage, addPrimitives, createNewPresentation } from "../../scripts/structure";
+import { Application, clearSelectedElements, clearSelectedElementsOnSlide, moveElements, putSelectedElement, setTitle, deleteSelectedElement, changeTextContent, savePresentation, openPresentation, addSlide, loadPresentation, deleteSlide, redo, clearRedo, undo, addText, addImageFromFile, startViewing, stopViewing, viewingNextSlide, viewingPrevSlide, addImage, addPrimitives, createNewPresentation, changeBackground } from "../../scripts/structure";
 import { putElem, clearAllElems, clearSlideElems, deleteElem } from "../actions/selectedElements"
 import { move } from "../actions/moveElements"
 import { changePresentationTitle } from "../actions/title";
@@ -10,6 +10,7 @@ import { clearRedoAction, redoAction } from "../actions/redo";
 import { undoAction } from "../actions/undoActions";
 import { newImage, newImageFromFile, newPrimitive, newText } from "../actions/slideElementActions";
 import { nextSlide, offViewingMode, onViewingMode, prevSlide } from "../actions/viewing";
+import { changeBack } from "../actions/changeBackground";
 
 function reducer(state: Application = {} as Application, action: any) {
     switch(action.type) {
@@ -25,6 +26,7 @@ function reducer(state: Application = {} as Application, action: any) {
         case newImageFromFile: return addImageFromFile(state);
         case newImage: return addImage(state, action.value);
         case newPrimitive: return addPrimitives(state, action.value);
+        case changeBack: return changeBackground(state, action.newBackground)
         // Работа с презентацией
         case changePresentationTitle: return setTitle(state, action.value);
         case download: return savePresentation(state, action.value);

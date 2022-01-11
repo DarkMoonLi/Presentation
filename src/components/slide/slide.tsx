@@ -10,6 +10,9 @@ type MiniSlide = {
 }
 
 export default function SlideView({slide, index}: MiniSlide) {
+
+    const state = store.getState();
+
     return (
         <li key={slide.id} className={styles.slideContainer}>
             <span className={styles.numberSlide}>{index}</span>
@@ -20,6 +23,7 @@ export default function SlideView({slide, index}: MiniSlide) {
                 preserveAspectRatio='xMinYMax meet'
                 id={slide.id} 
                 className={styles.slide} 
+                style={{backgroundColor: state.presentation.slides[index - 1].background}}
                 onClick={(event) => {
                     if (!event.ctrlKey) {
                         store.dispatch(clearSelectedElement());

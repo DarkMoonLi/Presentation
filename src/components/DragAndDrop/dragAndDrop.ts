@@ -1,25 +1,42 @@
-import { useState } from "react";
-import { moveElements } from "../../scripts/structure";
+import { useEffect } from "react";
 
-let coords: { x?: any; y?: any; } = {};
+export const useDragAndDrop = (elementRef: any, initPosition: { x: number; y: number }, setPosition: any, setMoving: any, setEdit: any) => {
 
-export function handleMouseDown(elem: any) {
-    coords = {
-        x: elem.pageX,
-        y: elem.pageY
+    let startPosition: {
+        x: number,
+        y: number
     }
-    document.addEventListener('mousemove', handleMouseMove);
-};
 
-export function handleMouseUp(){
-    document.removeEventListener('mousemove', handleMouseMove);
-    coords = {};
-};
+    const onMouseDown = (e: MouseEvent) => {
+        startPosition = {
+            x: e.clientX,
+            y: e.clientY
+        }
+        setMoving(true);
+        setEdit(false);
+        document.addEventListener("mousemove", onMove);
+        document.addEventListener("mouseup", onStopMove);
+    }
 
-export function handleMouseMove(elem: { pageX: number; pageY: number; }) {
-    const xDiff = coords.x - elem.pageX;
-    const yDiff = coords.y - elem.pageY;
+    const onMove = (e: MouseEvent) => {
+        const delta = { x: e.clientX - startPosition.x, y: e.clientY - startPosition.y }
+        const newPos = { x: initPosition.x + delta.x, y: initPosition.y + delta.y }
+        setPosition(newPos);
+    }
 
-    coords.x = elem.pageX;
-    coords.y = elem.pageY;
+    const onStopMove = () => {
+        document.removeEventListener("mousemove", onMove);
+        document.removeEventListener("mouseup", onStopMove);
+        setMoving(false)
+    };
+
+    useEffect(() => {
+        if (elementRef.current)
+            elementRef.current.addEventListener("mousedown", onMouseDown);
+
+        return () => {
+            if (elementRef.current)
+                elementRef.current.removeEventListener("mousedown", onMouseDown);
+        }
+    })
 };

@@ -13,8 +13,8 @@
 
 .slide
 {
-    background-color: #fff;
-    width: 100%;
+    overflow: hidden;
+    position: relative;
     height: 180px;
     /* height: 100vh; */
     box-shadow: 0 0 3px #969ae9;

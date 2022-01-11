@@ -17,7 +17,7 @@ function SomebodyText(text: TextType) {
     border = '1px solid #000';
   }
 
-  const elemRef = useRef(null);
+  let elemRef = useRef(null);
   const [position, setPosition] = useState({ x: text.position.x, y: text.position.y });
   const [moving, setMoving] = useState(false);
   const [edit, setEdit] = useState(false);
@@ -35,7 +35,7 @@ function SomebodyText(text: TextType) {
       ref={resizeRef}
     >
       <textarea
-        ref={elemRef}
+        ref={moving ? elemRef : undefined}
         id={text.id}
         readOnly={edit ? true : false}
         style={{

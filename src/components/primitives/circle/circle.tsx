@@ -5,22 +5,21 @@ import { clearSelectedElementsOnSlide, deleteSelectedElement, putSelectedElement
 import store from "../../../store/store";
 import { useDragAndDrop } from "../../DragAndDrop/dragAndDrop";
 
-function Circle(circle: PrimitiveType) {
+function Circle(circle: PrimitiveType){
   let border = '';
 
   if (store.getState().selectedElements.includes(circle.id)) {
     border = '3px solid #000';
   }
 
-  const ref = useRef(null);
+  const ref = useRef();
   const [position, setPosition] = useState({x: circle.position.x, y: circle.position.y});
-  const [edit, setEdit] = useState(false);
-  const [moving, setMoving] = useState(false);
-  useDragAndDrop(ref, position, setPosition, setMoving, setEdit);
+  //useDragAndDrop(ref, position, setPosition, moveElements);
+  //store.dispatch(moveElements(position))
 
   return(
+    <svg>
       <circle 
-        ref={ref}
         id={circle.id} 
         cx={circle.position.x} 
         cy={circle.position.y} 
@@ -33,8 +32,8 @@ function Circle(circle: PrimitiveType) {
             store.dispatch(putSelectedElement(circle.id));
           } else {store.dispatch(deleteSelectedElement(circle.id))}
         }}
-        onMouseMove={() => store.dispatch(moveElements(position))}
       />
+    </svg>
   )}
   
 export default Circle

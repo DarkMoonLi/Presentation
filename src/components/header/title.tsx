@@ -16,7 +16,7 @@ function TitlePresentation (this: any) {
         className={styles.titlePresentation} 
         onChange={(event) => store.dispatch(changeTitle(event.target.value))} 
         onClick={handleSelect}
-        placeholder='Название презентации'/>
+        placeholder='Untitled presentation'/>
     </div>
   )}
 

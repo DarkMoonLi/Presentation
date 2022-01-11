@@ -1,6 +1,7 @@
 import store from "../store/store";
 import { openPresentationFromFile } from "../store/actionCreators/presentationActionCreators";
 import { addNewImage } from "../store/actionCreators/slideElementActionCreators";
+import { setBackImage } from "../store/actionCreators/slidesActions"; 
 
 export type Application = {
     readonly selectedElements: Array<string>,
@@ -24,6 +25,7 @@ export type Presentation = {
 export type Slide = {
     readonly id: string,
     readonly background: string,
+    readonly backgroundImg: string,
     readonly content: Array<TextType|PrimitiveType|ImageType>
 };
 
@@ -122,6 +124,7 @@ function getDefaultSlide(): Slide {
     return {
         id: getId(),
         background: 'FFFFFF',
+        backgroundImg: '',
         content: [getDefaultSlideTitle(), getDefaultText()]
     }
 };
@@ -180,7 +183,11 @@ function undo(Appl: Application): Application {
             ...Appl,
             undo: [...changedUndo],
             redo: [...Appl.redo, Appl.presentation],
-            presentation: newPresentation
+            presentation: newPresentation,
+            viewing: {
+                ...Appl.viewing,
+                currentSlide: newPresentation.slides[0]
+            }
         }
     };
     return {...Appl}
@@ -199,18 +206,15 @@ function redo(Appl: Application): Application {
             ...Appl,
             undo: newUndo,
             redo: changedRedo,
-            presentation: redoPresentation
+            presentation: redoPresentation,
+            viewing: {
+                ...Appl.viewing,
+                currentSlide: redoPresentation.slides[0]
+            }
         }
     };
 
     return {...Appl}
-}
-
-function clearRedo(Appl: Application): Application {
-    return {
-        ...Appl,
-        redo: []
-    }
 }
 
 function startViewing(Appl: Application): Application {
@@ -289,6 +293,8 @@ function createNewPresentation(Appl: Application): Application {
     return {
         ...Appl,
         selectedElements: [slide.id],
+        undo: [...Appl.undo, {...Appl.presentation}],
+        redo: [],
         presentation: {
             title: 'Название презентации',
             type: 'presentation',
@@ -305,6 +311,7 @@ function setTitle(Appl: Application, newTitle: string): Application {
     return {
         ...Appl,
         undo: [...Appl.undo, {...Appl.presentation}],
+        redo: [],
         presentation: {
             ...Appl.presentation,
             title: newTitle
@@ -312,11 +319,11 @@ function setTitle(Appl: Application, newTitle: string): Application {
     }
 };
 
-// Продумать Undo
 function addSlide(Appl: Application): Application {
     return {
         ...Appl,
         undo: [...Appl.undo, {...Appl.presentation}],
+        redo: [],
         presentation: {
             ...Appl.presentation,
             slides: [...Appl.presentation.slides, getDefaultSlide()]
@@ -327,16 +334,25 @@ function addSlide(Appl: Application): Application {
 function deleteSlide(Appl: Application): Application {
     let newSlides: Array<Slide> = [];
 
-    newSlides = [...Appl.presentation.slides.filter(function(slide) {
-        return (!Appl.selectedElements.includes(slide.id))
-    })]
+    if (Appl.presentation.slides.length > 1) {
+        newSlides = [...Appl.presentation.slides.filter(function(slide) {
+            return (!Appl.selectedElements.includes(slide.id))
+        })]
+    } else {
+        newSlides = [getDefaultSlide()]
+    }
 
     return {
         ...Appl,
         undo: [...Appl.undo, {...Appl.presentation}],
+        redo: [],
         presentation: {
             ...Appl.presentation,
             slides: [...newSlides]
+        },
+        viewing: {
+            ...Appl.viewing,
+            currentSlide: newSlides[0]
         }
     }
 };
@@ -366,9 +382,14 @@ function move(Appl: Application, prevIndex: number, newIndex: number): Applicati
     return {
         ...Appl,
         undo: [...Appl.undo, {...Appl.presentation}],
+        redo: [],
         presentation: {
             ...Appl.presentation,
             slides: [...newSlides]
+        },
+        viewing: {
+            ...Appl.viewing,
+            currentSlide: newSlides[0]
         }
     }
 };
@@ -420,9 +441,14 @@ function addImage(Appl: Application, adress: string): Application {
     return {
         ...Appl,
         undo: [...Appl.undo, {...Appl.presentation}],
+        redo: [],
         presentation: {
             ...Appl.presentation,
             slides: [...changeSlides]
+        },
+        viewing: {
+            ...Appl.viewing,
+            currentSlide: changeSlides[0]
         }
     }
 };
@@ -448,9 +474,14 @@ function addPrimitives(Appl: Application, primitivesType: 'circle' | 'rectangle'
     return {
         ...Appl,
         undo: [...Appl.undo, {...Appl.presentation}],
+        redo: [],
         presentation: {
             ...Appl.presentation,
             slides: changeSlides
+        },
+        viewing: {
+            ...Appl.viewing,
+            currentSlide: changeSlides[0]
         }
     }
 };
@@ -473,9 +504,14 @@ function changeBackground(Appl: Application, newBackground: string): Application
     return {
         ...Appl,
         undo: [...Appl.undo, {...Appl.presentation}],
+        redo: [],
         presentation: {
             ...Appl.presentation,
             slides: [...changeSlides]
+        },
+        viewing: {
+            ...Appl.viewing,
+            currentSlide: changeSlides[0]
         }
     }
 };
@@ -500,20 +536,25 @@ function deleteElements(Appl: Application): Application {
     return {
         ...Appl,
         undo: [...Appl.undo, {...Appl.presentation}],
+        redo: [],
         presentation: {
             ...Appl.presentation,
             slides: [...changeSlides]
+        },
+        viewing: {
+            ...Appl.viewing,
+            currentSlide: changeSlides[0]
         }
     }
 };
 
 function moveElements(Appl: Application, newX: number, newY: number): Application {
     let changeSlides: Array<Slide> = [...Appl.presentation.slides.map(function(slide) {
-        if (Appl.selectedElements.indexOf(slide.id) !== -1) {
+        if (Appl.selectedElements.includes(slide.id)) {
             return {
                 ...slide,
                 content: [...slide.content.map(function(content) {
-                    if (Appl.selectedElements.indexOf(content.id) !== -1) {
+                    if (Appl.selectedElements.includes(content.id)) {
                         return {
                             ...content,
                             position: {
@@ -530,9 +571,14 @@ function moveElements(Appl: Application, newX: number, newY: number): Applicatio
     return {
         ...Appl,
         undo: [...Appl.undo, {...Appl.presentation}],
+        redo: [],
         presentation: {
             ...Appl.presentation,
             slides: [...changeSlides]
+        },
+        viewing: {
+            ...Appl.viewing,
+            currentSlide: changeSlides[0]
         }
     }
 };
@@ -553,11 +599,11 @@ function changeLayer(Appl: Application, newLayer: number): Application {
 
 function changeWindowSize(Appl: Application, newWidth: number, newHeight: number): Application {
     let changeSlides: Array<Slide> = [...Appl.presentation.slides.map(function(slide) {
-        if (Appl.selectedElements.indexOf(slide.id) !== -1) {
+        if (Appl.selectedElements.includes(slide.id)) {
             return {
                 ...slide,
                 content: [...slide.content.map(function(content) {
-                    if (Appl.selectedElements.indexOf(content.id) !== -1) {
+                    if (Appl.selectedElements.includes(content.id)) {
                         return {
                             ...content,
                             size: {
@@ -574,9 +620,14 @@ function changeWindowSize(Appl: Application, newWidth: number, newHeight: number
     return {
         ...Appl,
         undo: [...Appl.undo, {...Appl.presentation}],
+        redo: [],
         presentation: {
             ...Appl.presentation,
             slides: [...changeSlides]
+        },
+        viewing: {
+            ...Appl.viewing,
+            currentSlide: changeSlides[0]
         }
     }
 };
@@ -598,9 +649,14 @@ function addText(Appl: Application): Application {
     return {
         ...Appl,
         undo: [...Appl.undo, {...Appl.presentation}],
+        redo: [],
         presentation: {
             ...Appl.presentation,
             slides: [...changeSlides]
+        },
+        viewing: {
+            ...Appl.viewing,
+            currentSlide: changeSlides[0]
         }
     }
 };
@@ -629,9 +685,15 @@ function changeTextContent(Appl: Application, newText: string): Application {
     
     return {
         ...Appl,
+        undo: [...Appl.undo, {...Appl.presentation}],
+        redo: [],
         presentation: {
             ...Appl.presentation,
             slides: [...changeSlides]
+        },
+        viewing: {
+            ...Appl.viewing,
+            currentSlide: changeSlides[0]
         }
     }
 }
@@ -661,9 +723,15 @@ function changeFont(Appl: Application, newFont: string = '', newFontSize: number
 
     return {
         ...Appl,
+        undo: [...Appl.undo, {...Appl.presentation}],
+        redo: [],
         presentation: {
             ...Appl.presentation,
             slides: [...changeSlides]
+        },
+        viewing: {
+            ...Appl.viewing,
+            currentSlide: changeSlides[0]
         }
     }
 };
@@ -692,9 +760,14 @@ function changeColor(Appl: Application, newColor: string): Application {
     return {
         ...Appl,
         undo: [...Appl.undo, {...Appl.presentation}],
+        redo: [],
         presentation: {
             ...Appl.presentation,
             slides: [...changeSlides]
+        },
+        viewing: {
+            ...Appl.viewing,
+            currentSlide: changeSlides[0]
         }
     }
 };
@@ -727,7 +800,53 @@ function loadPresentation(Appl: Application, file: string) {
 function openPresentation(Appl: Application, newPresentation: Presentation): Application {
     return {
         ...Appl,
-        presentation: newPresentation
+        presentation: newPresentation,
+        redo: [],
+        viewing: {
+            ...Appl.viewing,
+            currentSlide: newPresentation.slides[0]
+        }
+    }
+}
+
+function loadBackground(Appl: Application): Application {
+    const inp = document.createElement("input");
+    inp.type = 'file';
+    inp.click();
+    inp.addEventListener('change', () => {
+        let files = inp.files;
+        if (files != null) {
+            let img = URL.createObjectURL(files[0]);
+            return store.dispatch(setBackImage(img));
+        }
+    });
+    return Appl
+}
+
+function setBackgroundImg(Appl: Application, img: string): Application {
+    let slides = Appl.presentation.slides;
+    slides = slides.map((slide) => {
+        if (Appl.selectedElements.includes(slide.id)) {
+            return {
+                ...slide,
+                backgroundImg: img
+            }
+        }
+        return slide
+    });
+
+    return {
+        ...Appl,
+        undo: [...Appl.undo, {...Appl.presentation}],
+        redo: [],
+        presentation: {
+            ...Appl.presentation,
+            slides: slides
+        },
+        viewing: {
+            ...Appl.viewing,
+            currentSlide: slides[0]
+        }
     }
 }
 
@@ -759,12 +878,13 @@ export {
     changeColor,
     undo,
     redo,
-    clearRedo,
     savePresentation,
     openPresentation,
     loadPresentation,
     startViewing,
     stopViewing,
     viewingNextSlide,
-    viewingPrevSlide
+    viewingPrevSlide,
+    loadBackground,
+    setBackgroundImg
 }

@@ -3,20 +3,16 @@
   display: flex;
   align-items: center;
   height: 28px;
-  margin-left: 10px;
-  margin-bottom: 2px;
 }
 
 .iconAdd
 {
-  background-image: url(/src/image/icon/plus-vector.svg);
+  background-image: url(/src/image/icon/plus.png);
   background-size: contain;
-  background-color: inherit;
+  border: 1px solid #000;
   width: 25px;
   height: 25px;
   margin: 0 2px;
-  border: 0;
-  outline: none;
 }
 
 .iconAdd:hover
@@ -24,24 +20,11 @@
   cursor: pointer;
 }
 
-.iconDelete
-{
-  outline: none;
-  background-color: #fff;
-  width: 22px;
-  height: 5px;
-  border-radius: 10px;
-  border: 0;
-}
-
 .iconUndo
 {
-  background-image: url(/src/image/icon/undo1.png);
+  background-image: url(/src/image/icon/undo.png);
   background-size: contain;
-  /* border: 1px solid #000; */
-  background-color: inherit;
-  outline: none;
-  border: 0;
+  border: 1px solid #000;
   width: 25px;
   height: 25px;
   margin: 0 2px;
@@ -54,10 +37,9 @@
 
 .iconRedo
 {
-  background-image: url(/src/image/icon/redo2.png);
+  background-image: url(/src/image/icon/redo.png);
   background-size: contain;
-  border: none;
-  background-color: inherit;
+  border: 1px solid #000;
   width: 25px;
   height: 25px;
   margin: 0 2px;
@@ -70,10 +52,9 @@
 
 .iconSelect
 {
-  background-image: url(/src/image/icon/select1.png);
+  background-image: url(/src/image/icon/select.png);
   background-size: contain;
-  border: none;
-  background-color: inherit;
+  border: 1px solid #000;
   width: 25px;
   height: 25px;
   margin: 0 2px;
@@ -86,10 +67,9 @@
 
 .iconText
 {
-  background-image: url(/src/image/icon/text1.png);
+  background-image: url(/src/image/icon/text.png);
   background-size: contain;
-  border: none;
-  background-color: inherit;
+  border: 1px solid #000;
   width: 25px;
   height: 25px;
   margin: 0 2px;
@@ -100,124 +80,32 @@
   cursor: pointer;
 }
 
-.iconImage,
-.iconSave,
-.iconOpen
+.iconImage
 {
+  background-image: url(/src/image/icon/image.png);
   background-size: contain;
-  background-color: inherit;
+  border: 1px solid #000;
   width: 25px;
   height: 25px;
   margin: 0 2px; 
-  border: none;
 }
 
-.iconImage
-{
-  background-image: url(/src/image/icon/upload-img.png);
-}
-
-.iconImage::after,
-.iconOpen::after,
-.iconSave::after
-{
-  content: attr(data-title); 
-  opacity: 0;
-  pointer-events: none;
-  transition: 100ms;
-  color: #fff;
-  background-color: #7073aa;
-  border: 2px solid #8589ce;
-  min-width: 200px;
-  border-radius: 5px;
-  box-shadow: 0 0 5px #8589ce;
-  position: absolute;
-  left: -60px;
-  top: 27px;
-}
-
-[data-title]:hover::after {
-  opacity: 1;
-}
-
-.iconImage::after 
-{
-  top: 110px;
-  left: 226px;
-}
-
-.iconSave::after
-{
-  top: 110px;
-  left: 260px;
-}
-
-.iconOpen::after
-{
-  top: 110px;
-  left: 290px;
-}
-
-.iconImage:hover,
-.iconSave:hover,
-.iconOpen:hover
+.iconImage:hover
 {
   cursor: pointer;
 }
 
-.iconSave
-{
-  background-image: url(/src/image/icon/save1.png);
-}
-
-.iconOpen
-{
-  background-image: url(/src/image/icon/open1.png);
-}
-
 .iconPrimitive
 {
-  background-image: url(/src/image/icon/primitives.png);
+  background-image: url(/src/image/icon/primitive.png);
   background-size: cover;
+  border: 1px solid #000;
   width: 25px;
   height: 25px;
   margin: 0 2px;
-  border: none;
-  background-color: inherit;
 }
 
 .iconPrimitive:hover
 {
   cursor: pointer;
-}
-
-.iconAdd,
-.iconDelete,
-.iconUndo,
-.iconRedo,
-.iconSelect,
-.iconText,
-.iconImage, 
-.iconPrimitive,
-.iconOpen, 
-.iconSave
-{
-  margin-right: 10px;
-  box-shadow: 2px #fff;
-
-}
-
-.iconAdd:active,
-.iconDelete:active,
-.iconUndo:active,
-.iconRedo:active,
-.iconSelect:active,
-.iconText:active,
-.iconImage:active, 
-.iconPrimitive:active,
-.iconOpen:active,
-.iconSave:active
-{
-  opacity: 0.6;
-  transition: 100ms;
 }

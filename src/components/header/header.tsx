@@ -21,10 +21,10 @@ function Header() {
                     <Item title="Создать" action = {openNewPresentation()} />
                     <Item title="Сохранить" action = {downloadFile(store.getState().presentation.title)}/>
                     <Item title="Открыть" action = {uploadFile()}/>
-                    <Item title="Экспортировать" action = {getApplication}/>
+                    <Item title="Экспортировать" action = {getApplication()}/>
                 </Dropdown>
                 <Dropdown title="Edit">
-                    <Item title="Редактировать" action = {getApplication}/>
+                    <Item title="Редактировать" action = {getApplication()}/>
                     <Item title="Режим просмотра" action = {startViewingMode()}/>
                 </Dropdown>
                 <Dropdown title="Insert">

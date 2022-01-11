@@ -1,7 +1,6 @@
 import { TextType } from "../../../scripts/structure";
 import store from "../../../store/store";
 import { putSelectedElement, clearSelectedElementsOnSlide, deleteSelectedElement } from "../../../store/actionCreators/selectedElement";
-import { clearAllRedo } from '../../../store/actionCreators/redo';
 import { changeTextValue } from '../../../store/actionCreators/text';
 import { useRef, useState } from "react";
 import { useDragAndDrop } from "../../DragAndDrop/dragAndDrop";
@@ -63,9 +62,6 @@ function SomebodyText(text: TextType) {
           } else { store.dispatch(deleteSelectedElement(text.id)) };
         }}
         onChange={(event) => {
-          if (state.redo.length !== 0) {
-            store.dispatch(clearAllRedo());
-          }
           let newText = event.target.value;
           store.dispatch(changeTextValue(newText))
         }}

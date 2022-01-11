@@ -217,13 +217,6 @@ function redo(Appl: Application): Application {
     return {...Appl}
 }
 
-function clearRedo(Appl: Application): Application {
-    return {
-        ...Appl,
-        redo: []
-    }
-}
-
 function startViewing(Appl: Application): Application {
     return {
         ...Appl,
@@ -300,6 +293,8 @@ function createNewPresentation(Appl: Application): Application {
     return {
         ...Appl,
         selectedElements: [slide.id],
+        undo: [...Appl.undo, {...Appl.presentation}],
+        redo: [],
         presentation: {
             title: 'Название презентации',
             type: 'presentation',
@@ -316,6 +311,7 @@ function setTitle(Appl: Application, newTitle: string): Application {
     return {
         ...Appl,
         undo: [...Appl.undo, {...Appl.presentation}],
+        redo: [],
         presentation: {
             ...Appl.presentation,
             title: newTitle
@@ -323,11 +319,11 @@ function setTitle(Appl: Application, newTitle: string): Application {
     }
 };
 
-// Продумать Undo
 function addSlide(Appl: Application): Application {
     return {
         ...Appl,
         undo: [...Appl.undo, {...Appl.presentation}],
+        redo: [],
         presentation: {
             ...Appl.presentation,
             slides: [...Appl.presentation.slides, getDefaultSlide()]
@@ -349,6 +345,7 @@ function deleteSlide(Appl: Application): Application {
     return {
         ...Appl,
         undo: [...Appl.undo, {...Appl.presentation}],
+        redo: [],
         presentation: {
             ...Appl.presentation,
             slides: [...newSlides]
@@ -385,6 +382,7 @@ function move(Appl: Application, prevIndex: number, newIndex: number): Applicati
     return {
         ...Appl,
         undo: [...Appl.undo, {...Appl.presentation}],
+        redo: [],
         presentation: {
             ...Appl.presentation,
             slides: [...newSlides]
@@ -443,6 +441,7 @@ function addImage(Appl: Application, adress: string): Application {
     return {
         ...Appl,
         undo: [...Appl.undo, {...Appl.presentation}],
+        redo: [],
         presentation: {
             ...Appl.presentation,
             slides: [...changeSlides]
@@ -475,6 +474,7 @@ function addPrimitives(Appl: Application, primitivesType: 'circle' | 'rectangle'
     return {
         ...Appl,
         undo: [...Appl.undo, {...Appl.presentation}],
+        redo: [],
         presentation: {
             ...Appl.presentation,
             slides: changeSlides
@@ -504,6 +504,7 @@ function changeBackground(Appl: Application, newBackground: string): Application
     return {
         ...Appl,
         undo: [...Appl.undo, {...Appl.presentation}],
+        redo: [],
         presentation: {
             ...Appl.presentation,
             slides: [...changeSlides]
@@ -535,6 +536,7 @@ function deleteElements(Appl: Application): Application {
     return {
         ...Appl,
         undo: [...Appl.undo, {...Appl.presentation}],
+        redo: [],
         presentation: {
             ...Appl.presentation,
             slides: [...changeSlides]
@@ -569,6 +571,7 @@ function moveElements(Appl: Application, newX: number, newY: number): Applicatio
     return {
         ...Appl,
         undo: [...Appl.undo, {...Appl.presentation}],
+        redo: [],
         presentation: {
             ...Appl.presentation,
             slides: [...changeSlides]
@@ -617,6 +620,7 @@ function changeWindowSize(Appl: Application, newWidth: number, newHeight: number
     return {
         ...Appl,
         undo: [...Appl.undo, {...Appl.presentation}],
+        redo: [],
         presentation: {
             ...Appl.presentation,
             slides: [...changeSlides]
@@ -645,6 +649,7 @@ function addText(Appl: Application): Application {
     return {
         ...Appl,
         undo: [...Appl.undo, {...Appl.presentation}],
+        redo: [],
         presentation: {
             ...Appl.presentation,
             slides: [...changeSlides]
@@ -680,6 +685,8 @@ function changeTextContent(Appl: Application, newText: string): Application {
     
     return {
         ...Appl,
+        undo: [...Appl.undo, {...Appl.presentation}],
+        redo: [],
         presentation: {
             ...Appl.presentation,
             slides: [...changeSlides]
@@ -716,6 +723,8 @@ function changeFont(Appl: Application, newFont: string = '', newFontSize: number
 
     return {
         ...Appl,
+        undo: [...Appl.undo, {...Appl.presentation}],
+        redo: [],
         presentation: {
             ...Appl.presentation,
             slides: [...changeSlides]
@@ -751,6 +760,7 @@ function changeColor(Appl: Application, newColor: string): Application {
     return {
         ...Appl,
         undo: [...Appl.undo, {...Appl.presentation}],
+        redo: [],
         presentation: {
             ...Appl.presentation,
             slides: [...changeSlides]
@@ -791,6 +801,7 @@ function openPresentation(Appl: Application, newPresentation: Presentation): App
     return {
         ...Appl,
         presentation: newPresentation,
+        redo: [],
         viewing: {
             ...Appl.viewing,
             currentSlide: newPresentation.slides[0]
@@ -826,6 +837,8 @@ function setBackgroundImg(Appl: Application, img: string): Application {
 
     return {
         ...Appl,
+        undo: [...Appl.undo, {...Appl.presentation}],
+        redo: [],
         presentation: {
             ...Appl.presentation,
             slides: slides
@@ -865,7 +878,6 @@ export {
     changeColor,
     undo,
     redo,
-    clearRedo,
     savePresentation,
     openPresentation,
     loadPresentation,

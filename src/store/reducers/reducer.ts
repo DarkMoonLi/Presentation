@@ -1,4 +1,4 @@
-import { Application, clearSelectedElements, clearSelectedElementsOnSlide, moveElements, putSelectedElement, setTitle, deleteSelectedElement, changeTextContent, savePresentation, openPresentation, addSlide, loadPresentation, deleteSlide, redo, clearRedo, undo, addText, addImageFromFile, startViewing, stopViewing, viewingNextSlide, viewingPrevSlide, addImage, addPrimitives, createNewPresentation, loadBackground, setBackgroundImg } from "../../scripts/structure";
+import { Application, clearSelectedElements, clearSelectedElementsOnSlide, moveElements, putSelectedElement, setTitle, deleteSelectedElement, changeTextContent, savePresentation, openPresentation, addSlide, loadPresentation, deleteSlide, redo, undo, addText, addImageFromFile, startViewing, stopViewing, viewingNextSlide, viewingPrevSlide, addImage, addPrimitives, createNewPresentation, loadBackground, setBackgroundImg } from "../../scripts/structure";
 import { putElem, clearAllElems, clearSlideElems, deleteElem } from "../actions/selectedElements"
 import { move } from "../actions/moveElements"
 import { changePresentationTitle } from "../actions/title";
@@ -6,7 +6,7 @@ import { changeText } from "../actions/text";
 import { download, upload } from "../actions/download";
 import { addNewSlide, delSlide, setBackground, uploadImg } from "../actions/slides";
 import { NewPresentation, presentationFromFile } from "../actions/presentationActions";
-import { clearRedoAction, redoAction } from "../actions/redo";
+import { redoAction } from "../actions/redo";
 import { undoAction } from "../actions/undoActions";
 import { newImage, newImageFromFile, newPrimitive, newText } from "../actions/slideElementActions";
 import { nextSlide, offViewingMode, onViewingMode, prevSlide } from "../actions/viewing";
@@ -38,7 +38,6 @@ function reducer(state: Application = {} as Application, action: any) {
         case setBackground: return setBackgroundImg(state, action.value);
         // undo и redo
         case redoAction: return redo(state);
-        case clearRedoAction: return clearRedo(state);
         case undoAction: return undo(state);
         // viewing
         case onViewingMode: return startViewing(state);

@@ -27,7 +27,7 @@ export const useDragAndDrop = (elementRef: any, initPosition: { x: number; y: nu
     const onStopMove = () => {
         document.removeEventListener("mousemove", onMove);
         document.removeEventListener("mouseup", onStopMove);
-        setMoving(false)
+        setMoving(false);
     };
 
     useEffect(() => {

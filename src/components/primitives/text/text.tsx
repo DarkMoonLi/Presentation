@@ -53,6 +53,10 @@ function SomebodyText(text: TextType) {
         };
         console.log(state.selectedElements);
       }}
+      onMouseMove={() => {
+        moving && (store.dispatch(moveElements(position)))
+        resizing && store.dispatch(changeSize(size, position))
+      }}
       onClick={() => setEdit(false)}
       onDoubleClick={() => setEdit(true)}
     >
@@ -71,14 +75,12 @@ function SomebodyText(text: TextType) {
           backgroundColor: 'transparent',
           textAlign: 'center',
           position: 'absolute',
-          scale: '1'
+          scale: '1',
+          resize: 'none'
         }}
         color={text.color}
         wrap="soft"
         value={text.content}
-        /*onClick={() => {
-          setEdit(false);
-        }}*/
         onChange={(event) => {
           let newText = event.target.value;
           store.dispatch(changeTextValue(newText))
@@ -86,8 +88,6 @@ function SomebodyText(text: TextType) {
         onBlur={() => {
           store.dispatch(deleteSelectedElement(text.id))
         }}
-        onMouseMove={() => (moving && (store.dispatch(moveElements(position))))}
-        //onDoubleClick={() => setEdit(true)}
       />
       <div ref={resizeRef1} style={{
         position: 'absolute',
@@ -99,7 +99,6 @@ function SomebodyText(text: TextType) {
         borderRadius: '4px',
         cursor: 'se-resize'
         }}
-        onMouseMove={() => resizing && (store.dispatch(changeSize(size, position)))}
       ></div>
       <div ref={resizeRef2} style={{
         position: 'absolute',
@@ -112,7 +111,6 @@ function SomebodyText(text: TextType) {
         borderRadius: '4px',
         cursor: 'se-resize'
         }}
-        onMouseMove={() => resizing && (store.dispatch(changeSize(size, position)))}
       ></div>
         <div ref={resizeRef3} style={{
         position: 'absolute',
@@ -126,7 +124,6 @@ function SomebodyText(text: TextType) {
         borderRadius: '4px',
         cursor: 'se-resize'
         }}
-        onMouseMove={() => resizing && (store.dispatch(changeSize(size, position)))}
       ></div>
       <div ref={resizeRef4} style={{
         position: 'absolute',
@@ -139,7 +136,6 @@ function SomebodyText(text: TextType) {
         borderRadius: '4px',
         cursor: 'se-resize'
         }}
-        onMouseMove={() => resizing && store.dispatch(changeSize(size, position))}
       ></div>
     </foreignObject>
   )

@@ -59,6 +59,12 @@ function Triangle(triangle: PrimitiveType) {
         };
         console.log(state.selectedElements);
       }}
+      onMouseMove={() => {
+        moving && store.dispatch(moveElements(position))
+        resizing && store.dispatch(changeSize(size, position))
+      }} 
+      onClick={() => setEdit(false)} 
+      onDoubleClick={() => setEdit(true)}
     >
       <svg
         ref={elemRef}
@@ -68,9 +74,6 @@ function Triangle(triangle: PrimitiveType) {
           left: triangle.position.x,
           top: triangle.position.y
         }}
-        onMouseMove={() => moving && store.dispatch(moveElements(position))} 
-        onClick={() => setEdit(false)} 
-        onDoubleClick={() => setEdit(true)}
       >
         <polygon 
           id={triangle.id} 
@@ -88,7 +91,7 @@ function Triangle(triangle: PrimitiveType) {
         borderRadius: '4px',
         cursor: 'se-resize'
         }}
-        onMouseMove={() => resizing && store.dispatch(changeSize(size, position))}
+
       ></div>
       <div ref={resizeRef2} style={{
         position: 'absolute',
@@ -101,7 +104,6 @@ function Triangle(triangle: PrimitiveType) {
         borderRadius: '4px',
         cursor: 'se-resize'
         }}
-        onMouseMove={() => resizing && store.dispatch(changeSize(size, position))}
       ></div>
       <div ref={resizeRef3} style={{
         position: 'absolute',
@@ -115,7 +117,6 @@ function Triangle(triangle: PrimitiveType) {
         borderRadius: '4px',
         cursor: 'se-resize'
         }}
-        onMouseMove={() => resizing && store.dispatch(changeSize(size, position))}
       ></div>
       <div ref={resizeRef4} style={{
         position: 'absolute',
@@ -128,7 +129,6 @@ function Triangle(triangle: PrimitiveType) {
         borderRadius: '4px',
         cursor: 'se-resize'
         }}
-        onMouseMove={() => resizing && store.dispatch(changeSize(size, position))}
       ></div>
     </foreignObject>
   )

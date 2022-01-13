@@ -50,6 +50,12 @@ function Rectangle(rectangle: PrimitiveType) {
         };
         console.log(state.selectedElements);
       }}
+      onMouseMove={() => {
+        moving && store.dispatch(moveElements(position))
+        resizing && store.dispatch(changeSize(size, position))
+      }}
+      onClick={() => setEdit(false)}
+      onDoubleClick={() => setEdit(true)}
     >
       <svg
         ref={elemRef}
@@ -59,9 +65,6 @@ function Rectangle(rectangle: PrimitiveType) {
           left: rectangle.position.x,
           top: rectangle.position.y
         }}
-        onMouseMove={() => moving && store.dispatch(moveElements(position))}
-        onClick={() => setEdit(false)}
-        onDoubleClick={() => setEdit(true)}
       >
         <rect 
           id={rectangle.id} 
@@ -81,7 +84,6 @@ function Rectangle(rectangle: PrimitiveType) {
         borderRadius: '4px',
         cursor: 'se-resize'
         }}
-        onMouseMove={() => resizing && store.dispatch(changeSize(size, position))}
       ></div>
       <div ref={resizeRef2} style={{
         position: 'absolute',
@@ -94,7 +96,6 @@ function Rectangle(rectangle: PrimitiveType) {
         borderRadius: '4px',
         cursor: 'se-resize'
         }}
-        onMouseMove={() => resizing && store.dispatch(changeSize(size, position))}
       ></div>
       <div ref={resizeRef3} style={{
         position: 'absolute',
@@ -108,7 +109,6 @@ function Rectangle(rectangle: PrimitiveType) {
         borderRadius: '4px',
         cursor: 'se-resize'
         }}
-        onMouseMove={() => resizing && store.dispatch(changeSize(size, position))}
       ></div>
       <div ref={resizeRef4} style={{
         position: 'absolute',
@@ -121,7 +121,6 @@ function Rectangle(rectangle: PrimitiveType) {
         borderRadius: '4px',
         cursor: 'se-resize'
         }}
-        onMouseMove={() => resizing && store.dispatch(changeSize(size, position))}
       ></div>
     </foreignObject>
   )

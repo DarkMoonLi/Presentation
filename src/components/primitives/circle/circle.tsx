@@ -50,6 +50,12 @@ function Circle(circle: PrimitiveType) {
         };
         console.log(state.selectedElements);
       }}
+      onMouseMove={() => {
+        moving && store.dispatch(moveElements(position));
+        resizing && store.dispatch(changeSize(size, position))
+      }} 
+      onClick={() => setEdit(false)} 
+      onDoubleClick={() => setEdit(true)}
     >
       <svg
         ref={elemRef}
@@ -59,9 +65,6 @@ function Circle(circle: PrimitiveType) {
           left: circle.position.x,
           top: circle.position.y
         }}
-        onMouseMove={() => moving && store.dispatch(moveElements(position))} 
-        onClick={() => setEdit(false)} 
-        onDoubleClick={() => setEdit(true)}
       >
         <circle 
           id={circle.id}
@@ -82,7 +85,6 @@ function Circle(circle: PrimitiveType) {
         borderRadius: '4px',
         cursor: 'se-resize'
         }}
-        onMouseMove={() => resizing && store.dispatch(changeSize(size, position))}
       ></div>
       <div ref={resizeRef2} style={{
         position: 'absolute',
@@ -95,7 +97,6 @@ function Circle(circle: PrimitiveType) {
         borderRadius: '4px',
         cursor: 'se-resize'
         }}
-        onMouseMove={() => resizing && store.dispatch(changeSize(size, position))}
       ></div>
       <div ref={resizeRef3} style={{
         position: 'absolute',
@@ -109,7 +110,6 @@ function Circle(circle: PrimitiveType) {
         borderRadius: '4px',
         cursor: 'se-resize'
         }}
-        onMouseMove={() => resizing && store.dispatch(changeSize(size, position))}
       ></div>
       <div ref={resizeRef4} style={{
         position: 'absolute',
@@ -122,7 +122,6 @@ function Circle(circle: PrimitiveType) {
         borderRadius: '4px',
         cursor: 'se-resize'
         }}
-        onMouseMove={() => resizing && store.dispatch(changeSize(size, position))}
       ></div>
     </foreignObject>
   )

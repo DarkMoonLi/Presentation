@@ -51,6 +51,12 @@ export default function SomeImage(image: ImageType) {
         };
         console.log(state.selectedElements);
       }}
+      onMouseMove={() => {
+        moving && store.dispatch(moveElements(position));
+        resizing && store.dispatch(changeSize(size, position))
+      }} 
+      onClick={() => setEdit(false)} 
+      onDoubleClick={() => setEdit(true)}
     >
       <svg
         ref={elemRef}
@@ -60,9 +66,6 @@ export default function SomeImage(image: ImageType) {
             left: image.position.x,
             top: image.position.y
         }}
-        onMouseMove={() => moving && store.dispatch(moveElements(position))} 
-        onClick={() => setEdit(false)} 
-        onDoubleClick={() => setEdit(true)}
       >
         <image 
           href={image.content} 

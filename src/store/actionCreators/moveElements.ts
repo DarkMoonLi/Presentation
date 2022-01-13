@@ -7,9 +7,12 @@ export function moveElements(position: {x: number, y: number}) {
     }
 }
 
-export function changeSize(size: {width: number, height: number}) {
+export function changeSize(size: {width: number, height: number}, pos: {x: number, y: number}) {
     return {
         type: resize,
-        newSize: size
+        width: size.width,
+        height: size.height,
+        x: pos.x,
+        y: pos.y
     }
 }

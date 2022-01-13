@@ -2,24 +2,31 @@
 {
   display: inline-block;
   position: relative;
-  background-color: red;
+  color: #fff;
+  padding-left: 10px;
+  padding-top: 0;
 }
 
 .navbarNav
 {
+  margin: 0;
+  margin-top: 10px;
   position: absolute;
-  z-index: 9999;
+  box-shadow: 0 0 3px #8589ce;
+  border-radius: 5px;
   top: 18px;
   padding: 0;
-  background-color: #565771;
-  background-color: pink;
+  outline: 0;
 }
 
 .navbarBottom
 {
-  border: 0;
-  background-color: #565771;
-  padding: 9px 10px;
   cursor: pointer;
-  background-color: plum;
+  background-color: inherit;
+  font-size: 14px;
+  color: #fff;
+  outline: 0;
+  border-radius: 5px;
+  border: 2px solid #8589ce;
+  padding: 2px 10px;
 }

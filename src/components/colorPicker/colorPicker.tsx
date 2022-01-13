@@ -13,11 +13,9 @@ import {
 } from "./utils";
 
 import style from "./colorPicker.module.css";
-import { dispatch } from "../../scripts/editor";
-import { changeBackground } from "../../scripts/structure";
 import store from "../../store/store";
 import { changeBackgroundFunc } from "../../store/actionCreators/changeBackground";
-import { state } from "../../scripts/state";
+
 type ColorPickerProps = {
 	onChange?: (color: string) => void;
 	startColor?: string;
@@ -36,6 +34,7 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
 	startColor,
 	setModal
 }) => {
+
 	const [color, setColor] = React.useState<Color>(() =>
 		validateStartColor(startColor)
 	);

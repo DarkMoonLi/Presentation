@@ -10,6 +10,9 @@ type MiniSlide = {
 }
 
 export default function SlideView({slide, index}: MiniSlide) {
+
+    const state = store.getState();
+
     const slideStyle = {
         backgroundImage: `url(${slide.backgroundImg})`,
         backgroundColor: slide.background,
@@ -27,8 +30,7 @@ export default function SlideView({slide, index}: MiniSlide) {
                 viewBox='0 0 1400 800'
                 preserveAspectRatio='xMinYMax meet'
                 id={slide.id} 
-                background-image={slide.backgroundImg}
-                className={styles.slide}  
+                className={styles.slide} 
                 style={slideStyle}
                 onClick={(event) => {
                     if (!event.ctrlKey) {

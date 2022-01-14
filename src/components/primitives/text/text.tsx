@@ -6,7 +6,6 @@ import { useRef, useState } from "react";
 import { useDragAndDrop } from "../../DragAndDrop/dragAndDrop";
 import { changeSize, moveElements } from "../../../store/actionCreators/moveElements";
 import { useResizeElement1, useResizeElement2, useResizeElement3, useResizeElement4 } from "../../DragAndDrop/resizeElement";
-import { resizeBlock } from "../../DragAndDrop/resizeBlocks";
 
 function SomebodyText(text: TextType) {
 
@@ -51,7 +50,6 @@ function SomebodyText(text: TextType) {
           else
             store.dispatch(deleteSelectedElement(text.id)) 
         };
-        console.log(state.selectedElements);
       }}
       onMouseMove={() => {
         moving && (store.dispatch(moveElements(position)))
@@ -84,9 +82,6 @@ function SomebodyText(text: TextType) {
         onChange={(event) => {
           let newText = event.target.value;
           store.dispatch(changeTextValue(newText))
-        }}
-        onBlur={() => {
-          store.dispatch(deleteSelectedElement(text.id))
         }}
       />
       <div ref={resizeRef1} style={{

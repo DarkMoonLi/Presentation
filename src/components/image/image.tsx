@@ -76,6 +76,7 @@ export default function SomeImage(image: ImageType) {
       <div ref={resizeRef1} style={{
         position: 'absolute',
         display: 'block',
+        top: 0,
         width: '9px',
         height: '9px',
         backgroundColor: '#000',
@@ -88,6 +89,7 @@ export default function SomeImage(image: ImageType) {
       <div ref={resizeRef2} style={{
         position: 'absolute',
         left: image.size.width - 9,
+        top: 0,
         display: 'block',
         width: '9px',
         height: '9px',

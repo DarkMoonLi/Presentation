@@ -517,6 +517,7 @@ function deleteElements(Appl: Application): Application {
     let changeSlides: Array<Slide> = [...Appl.presentation.slides];
     let selectedElements: Array<string> = [...Appl.selectedElements];
 
+    console.log(selectedElements);
     changeSlides = [...changeSlides.map(function(slide) {
         if (selectedElements.includes(slide.id)) {
             let newContent: Array<TextType|ImageType|PrimitiveType> = [...slide.content.filter(function(content) {

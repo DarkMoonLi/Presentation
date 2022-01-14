@@ -3,6 +3,10 @@ import { Slide } from "../../scripts/structure";
 import getContent from '../content/content';
 import store from '../../store/store';
 import { putSelectedElement, clearSelectedElement } from '../../store/actionCreators/selectedElement';
+import { useEffect, useRef, useState } from "react";
+import { useDragAndDrop } from "../DragAndDrop/dragAndDrop";
+import { nextSlide, prevSlide } from '../../store/actions/viewing';
+import { moveSlides } from '../../store/actionCreators/slidesActions';
 
 type MiniSlide = {
     slide: Slide,
@@ -12,6 +16,32 @@ type MiniSlide = {
 export default function SlideView({slide, index}: MiniSlide) {
 
     const state = store.getState();
+    let prevSlidePos = 0;
+    let nextSlidePos = 0;
+    if (state.presentation.slides[index-2] != null) {
+        let prevSlide = document.getElementById(state.presentation.slides[index-2].id);
+        prevSlidePos = (prevSlide != null) ? prevSlide.getBoundingClientRect().top : 0;
+    };
+    if (state.presentation.slides[index] != null) {
+        let nextSlide = document.getElementById(state.presentation.slides[index].id);
+        nextSlidePos = (nextSlide != null) ? nextSlide.getBoundingClientRect().top : 0;
+    }
+    let nowSlide = document.getElementById(slide.id);
+    let slidePos = {
+        x: (nowSlide != null) ? nowSlide.getBoundingClientRect().left : 0,
+        y: (nowSlide != null) ? nowSlide.getBoundingClientRect().top : 0
+    };
+
+    console.log(prevSlidePos);
+    console.log(slidePos);
+    console.log(nextSlidePos);
+
+    const elemRef = useRef(null);
+    const [position, setPosition] = useState({x: slidePos.x, y: slidePos.y});
+    const [moving, setMoving] = useState(false);
+    const [edit, setEdit] = useState(false);
+  
+    useDragAndDrop(elemRef, position, setPosition, setMoving, setEdit);
 
     const slideStyle = {
         backgroundImage: `url(${slide.backgroundImg})`,
@@ -22,24 +52,42 @@ export default function SlideView({slide, index}: MiniSlide) {
     };
 
     return (
-        <li key={slide.id} className={styles.slideContainer}>
+        <foreignObject
+            ref={elemRef}
+            onMouseMove={() => {
+                if (position.y < prevSlidePos) {
+                    moving && store.dispatch(moveSlides(index-1, (index-2 >= 0) ? index-2 : 0))
+                }
+                if ((position.y > nextSlidePos) && (nextSlidePos !== 0)) {
+                    moving && store.dispatch(moveSlides(index-1, index))
+                }
+            }}
+            onClick={(event) => {
+                setEdit(false)
+                if (!event.ctrlKey) {
+                    store.dispatch(clearSelectedElement())
+                }
+                store.dispatch(putSelectedElement(slide.id))
+            }}
+            onDoubleClick={() => setEdit(true)}
+            onContextMenu={(event) => {
+                event.preventDefault()
+            }}
+        >
+        <li 
+            key={slide.id} 
+            className={styles.slideContainer} 
+        >
             <span className={styles.numberSlide}>{index}</span>
             <svg 
-                width={'1416px'}
-                height={'658px'}
                 viewBox='0 0 1400 800'
                 preserveAspectRatio='xMinYMax meet'
                 id={slide.id} 
                 className={styles.slide} 
                 style={slideStyle}
-                onClick={(event) => {
-                    if (!event.ctrlKey) {
-                        store.dispatch(clearSelectedElement());
-                    }
-                    store.dispatch(putSelectedElement(slide.id))
-                }}
             >
                 {getContent(slide)}
             </svg>
         </li>
+        </foreignObject>
 )}

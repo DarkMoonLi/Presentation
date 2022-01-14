@@ -1,8 +1,8 @@
-import { move, resize } from "../actions/moveElements";
+import { moving, resize } from "../actions/moveElements";
 
 export function moveElements(position: {x: number, y: number}) {
     return {
-        type: move,
+        type: moving,
         newPos: position
     }
 }

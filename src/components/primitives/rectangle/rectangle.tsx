@@ -77,6 +77,7 @@ function Rectangle(rectangle: PrimitiveType) {
       <div ref={resizeRef1} style={{
         position: 'absolute',
         display: 'block',
+        top: 0,
         width: '9px',
         height: '9px',
         backgroundColor: '#000',
@@ -89,6 +90,7 @@ function Rectangle(rectangle: PrimitiveType) {
         position: 'absolute',
         left: rectangle.size.width - 9,
         display: 'block',
+        top: 0,
         width: '9px',
         height: '9px',
         backgroundColor: '#000',

@@ -84,6 +84,7 @@ function Triangle(triangle: PrimitiveType) {
       <div ref={resizeRef1} style={{
         position: 'absolute',
         display: 'block',
+        top: 0,
         width: '9px',
         height: '9px',
         backgroundColor: '#000',
@@ -96,6 +97,7 @@ function Triangle(triangle: PrimitiveType) {
       <div ref={resizeRef2} style={{
         position: 'absolute',
         left: triangle.size.width - 9,
+        top: 0,
         display: 'block',
         width: '9px',
         height: '9px',

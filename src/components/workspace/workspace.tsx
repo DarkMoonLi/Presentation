@@ -18,7 +18,14 @@ function Workspace() {
 
       return(
         <div className={styles.workspaceWrap}>
-          <svg className={styles.workspace} style={slideStyle}>
+          <svg 
+            className={styles.workspace} 
+            style={slideStyle}
+            onContextMenu={(event) => {
+              event.preventDefault();
+              console.log(event);
+            }}
+          >
             
             {getContent(slide)}
 

@@ -1,7 +1,7 @@
 import store from "../store/store";
 import { openPresentationFromFile } from "../store/actionCreators/presentationActionCreators";
 import { addNewImage } from "../store/actionCreators/slideElementActionCreators";
-import { setBackImage } from "../store/actionCreators/slidesActions"; 
+import { setBackImage } from "../store/actionCreators/slidesActions";
 
 export type Application = {
     readonly selectedElements: Array<string>,
@@ -230,7 +230,6 @@ function startViewing(Appl: Application): Application {
 function viewingNextSlide(Appl: Application): Application {
     let index = Appl.presentation.slides.indexOf(Appl.viewing.currentSlide);
     index = index + 1;
-    console.log(index);
     if (index < Appl.presentation.slides.length) {
         return {
             ...Appl,
@@ -247,7 +246,6 @@ function viewingNextSlide(Appl: Application): Application {
 function viewingPrevSlide(Appl: Application): Application {
     let index = Appl.presentation.slides.indexOf(Appl.viewing.currentSlide);
     index = index - 1;
-    console.log(index);
     if (index > -1) {
         return {
             ...Appl,
@@ -407,7 +405,6 @@ function addImageFromFile(Appl: Application): Application {
         }
     });
     inp.remove();
-    console.log('first');
     return Appl    
 };
 
@@ -463,7 +460,7 @@ function addPrimitives(Appl: Application, primitivesType: 'circle' | 'rectangle'
     };
 
     let changeSlides: Array<Slide> = [...Appl.presentation.slides.map(function(slide) {
-        if (Appl.selectedElements.indexOf(slide.id) !== -1) {
+        if (Appl.selectedElements.includes(slide.id)) {
             return {
                 ...slide,
                 content: [...slide.content, newPrimitive]
@@ -520,10 +517,11 @@ function deleteElements(Appl: Application): Application {
     let changeSlides: Array<Slide> = [...Appl.presentation.slides];
     let selectedElements: Array<string> = [...Appl.selectedElements];
 
+    console.log(selectedElements);
     changeSlides = [...changeSlides.map(function(slide) {
-        if (selectedElements.indexOf(slide.id) !== -1) {
+        if (selectedElements.includes(slide.id)) {
             let newContent: Array<TextType|ImageType|PrimitiveType> = [...slide.content.filter(function(content) {
-                return selectedElements.indexOf(content.id) === -1
+                return !selectedElements.includes(content.id)
             })];
 
             return {
@@ -597,7 +595,7 @@ function changeLayer(Appl: Application, newLayer: number): Application {
     }
 };
 
-function changeWindowSize(Appl: Application, newWidth: number, newHeight: number): Application {
+function changeWindowSize(Appl: Application, newWidth: number, newHeight: number, newX: number, newY: number): Application {
     let changeSlides: Array<Slide> = [...Appl.presentation.slides.map(function(slide) {
         if (Appl.selectedElements.includes(slide.id)) {
             return {
@@ -606,12 +604,17 @@ function changeWindowSize(Appl: Application, newWidth: number, newHeight: number
                     if (Appl.selectedElements.includes(content.id)) {
                         return {
                             ...content,
+                            position: {
+                                x: newX,
+                                y: newY
+                            },
                             size: {
                                 width: newWidth,
                                 height: newHeight
                             }
                         }
-                    } else { return content }
+                    }
+                    return content
                 })]
             }
         } else { return slide }
@@ -815,7 +818,7 @@ function loadBackground(Appl: Application): Application {
     inp.click();
     inp.addEventListener('change', () => {
         let files = inp.files;
-        if (files != null) {
+        if (files !== null) {
             let img = URL.createObjectURL(files[0]);
             return store.dispatch(setBackImage(img));
         }

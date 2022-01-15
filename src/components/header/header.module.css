@@ -1,10 +1,29 @@
 .header
 {
+  position: relative;
   display: flex;
-  background-color: #565771;
   background-color: #7073aa;
-  /* background: linear-gradient(100deg, #7073aa, #d186e7); */
-  /* background: linear-gradient(to top left, powderblue, pink); */
+  box-shadow: 0 0 8px #949497;
+}
+
+.header::before 
+{
+  content: url("../../image/logo.png");
+  position: absolute;
+  right: 186px;
+  top: 19px;
+  opacity: 0.3;
+}
+
+.header::after
+{
+  content: url("../../image/bg.jpeg");
+  position: absolute;
+  transform: scale(.6);
+  top: -52px;
+  right: 0;
+  right: -60px;
+  opacity: 0.1;
 }
 
 .dBlock
@@ -19,10 +38,14 @@
   background-image: url(/src/image/cat.jpeg);
   background-size: contain;
   display: inline-block;
-  width: 60px;
-  height: 57px;
+  width: 100%;
+  max-width: 57px;
+  height: auto;
+  border: #8589ce 2px solid;
+  border-radius: 50%;
+  max-height: 57px;
 }
-
+   
 .menu
 {
   display: none;
@@ -40,5 +63,6 @@
 
 .containerDropdown
 {
-  border-bottom: 1px solid #000;
+  display: flex;
+  justify-content: start;
 }

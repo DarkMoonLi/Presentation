@@ -33,13 +33,30 @@ function SomebodyText(text: TextType) {
   useResizeElement3(resizeRef3, size, position, setSize, setPosition, setResize, setEdit);
   useResizeElement4(resizeRef4, size, position, setSize, setPosition, setResize, setEdit);
 
-
   return (
     <foreignObject
       width={text.size.width}
       height={text.size.height}
       x={text.position.x}
       y={text.position.y}
+      onMouseDown={(event) => {
+        if (!event.ctrlKey) {
+          store.dispatch(clearSelectedElementsOnSlide());
+          store.dispatch(putSelectedElement(text.id));
+        } 
+        if (event.ctrlKey) { 
+          if (!state.selectedElements.includes(text.id)) 
+            store.dispatch(putSelectedElement(text.id));
+          else
+            store.dispatch(deleteSelectedElement(text.id)) 
+        };
+      }}
+      onMouseMove={() => {
+        moving && (store.dispatch(moveElements(position)))
+        resizing && store.dispatch(changeSize(size, position))
+      }}
+      onClick={() => setEdit(false)}
+      onDoubleClick={() => setEdit(true)}
     >
       <textarea
         ref={moving ? elemRef : undefined}
@@ -56,27 +73,16 @@ function SomebodyText(text: TextType) {
           backgroundColor: 'transparent',
           textAlign: 'center',
           position: 'absolute',
-          scale: '1'
+          scale: '1',
+          resize: 'none'
         }}
         color={text.color}
         wrap="soft"
         value={text.content}
-        onClick={(event) => {
-          setEdit(false);
-          if (!event.ctrlKey) {
-            store.dispatch(clearSelectedElementsOnSlide());
-            store.dispatch(putSelectedElement(text.id));
-          } else { store.dispatch(deleteSelectedElement(text.id)) };
-        }}
         onChange={(event) => {
           let newText = event.target.value;
           store.dispatch(changeTextValue(newText))
         }}
-        onBlur={() => {
-          store.dispatch(deleteSelectedElement(text.id))
-        }}
-        onMouseMove={() => (moving && (store.dispatch(moveElements(position))))}
-        onDoubleClick={() => setEdit(true)}
       />
       <div ref={resizeRef1} style={{
         position: 'absolute',
@@ -87,12 +93,6 @@ function SomebodyText(text: TextType) {
         border: '2px solid #000',
         borderRadius: '4px',
         cursor: 'se-resize'
-        }}
-        onMouseMove={() => {
-          resizing && (store.dispatch(putSelectedElement(text.id)))
-          resizing && (store.dispatch(moveElements(position)))
-          resizing && (store.dispatch(changeSize(size)))
-          resizing && (store.dispatch(deleteSelectedElement(text.id)))
         }}
       ></div>
       <div ref={resizeRef2} style={{
@@ -105,12 +105,6 @@ function SomebodyText(text: TextType) {
         border: '2px solid #000',
         borderRadius: '4px',
         cursor: 'se-resize'
-        }}
-        onMouseMove={() => {
-          resizing && (store.dispatch(putSelectedElement(text.id)))
-          resizing && (store.dispatch(moveElements(position)))
-          resizing && (store.dispatch(changeSize(size)))
-          resizing && (store.dispatch(deleteSelectedElement(text.id)))
         }}
       ></div>
         <div ref={resizeRef3} style={{
@@ -125,12 +119,6 @@ function SomebodyText(text: TextType) {
         borderRadius: '4px',
         cursor: 'se-resize'
         }}
-        onMouseMove={() => {
-          resizing && (store.dispatch(putSelectedElement(text.id)))
-          resizing && (store.dispatch(moveElements(position)))
-          resizing && (store.dispatch(changeSize(size)))
-          resizing && (store.dispatch(deleteSelectedElement(text.id)))
-        }}
       ></div>
       <div ref={resizeRef4} style={{
         position: 'absolute',
@@ -142,12 +130,6 @@ function SomebodyText(text: TextType) {
         border: '2px solid #000',
         borderRadius: '4px',
         cursor: 'se-resize'
-        }}
-        onMouseMove={() => {
-          resizing && (store.dispatch(putSelectedElement(text.id)))
-          resizing && (store.dispatch(moveElements(position)))
-          resizing && (store.dispatch(changeSize(size)))
-          resizing && (store.dispatch(deleteSelectedElement(text.id)))
         }}
       ></div>
     </foreignObject>

@@ -15,14 +15,22 @@ function Workspace() {
         backgroundColor: slide.background,
         backgroundPosition: 'center'
       };
+
       return(
-        <div id={slide.id} className={styles.workspaceWrap}>
-          <svg className={styles.workspace} style={slideStyle}>
+        <div className={styles.workspaceWrap}>
+          <svg 
+            className={styles.workspace} 
+            style={slideStyle}
+            onContextMenu={(event) => {
+              event.preventDefault();
+              console.log(event);
+            }}
+          >
             
             {getContent(slide)}
 
           </svg>
-        </div> 
+        </div>
       )
     }
   }

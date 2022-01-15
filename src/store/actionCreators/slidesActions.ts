@@ -1,4 +1,4 @@
-import { addNewSlide, delSlide, setBackground, uploadImg } from "../actions/slides";
+import { addNewSlide, delSlide, moveSlide, setBackground, uploadImg } from "../actions/slides";
 
 export function newSlide() {
     return {
@@ -22,5 +22,13 @@ export function setBackImage(img: string) {
 export function uploadBackImg() {
     return {
         type: uploadImg
+    }
+}
+
+export function moveSlides(prevIndex: number, nextIndex: number) {
+    return {
+        type: moveSlide,
+        prevIndex: prevIndex,
+        nextIndex: nextIndex
     }
 }

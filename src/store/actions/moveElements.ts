@@ -1,2 +1,2 @@
-export const move = 'moveElements';
+export const moving = 'moveElements';
 export const resize = 'resizeElements';

@@ -9,9 +9,9 @@ export const useResizeElement1 = (elementRef: any,
                                     x: number,
                                     y: number
                                   }, 
-                                  setResize: any, 
+                                  setSize: any, 
                                   setPos: any, 
-                                  setMoving: any,
+                                  setResize: any,
                                   setEdit: any) => {
 
   let startPos: {
@@ -24,30 +24,30 @@ export const useResizeElement1 = (elementRef: any,
       x: e.pageX,
       y: e.pageY
     }
-    setMoving(true)
+    setResize(true)
     setEdit(false);
     document.addEventListener("mousemove", onMove);
     document.addEventListener("mouseup", onStopMove);
   }
 
   const onMove = (e: MouseEvent) => {
-    const delta = { x: e.x - startPos.x, y: e.y - startPos.y };
-    let newPos = {
+    const delta = { x: e.pageX - startPos.x, y: e.pageY - startPos.y };
+    const newPos = {
       x: initPos.x + delta.x,
       y: initPos.y + delta.y
     };
-    let newSize = {
+    const newSize = {
       width: initSize.width - delta.x,
       height: initSize.height - delta.y
     };
-    setResize(newSize);
+    setSize(newSize);
     setPos(newPos);
   }
 
   const onStopMove = () => {
     document.removeEventListener("mousemove", onMove);
     document.removeEventListener("mouseup", onStopMove);
-    setMoving(false);
+    setResize(false);
   };
 
   useEffect(() => {
@@ -70,9 +70,9 @@ export const useResizeElement2 = (elementRef: any,
                                     x: number,
                                     y: number
                                   },
-                                  setResize: any,
+                                  setSize: any,
                                   setPos: any,
-                                  setMoving: any,
+                                  setResize: any,
                                   setEdit: any) => {
 
   let startPos: {
@@ -81,7 +81,7 @@ export const useResizeElement2 = (elementRef: any,
   };
 
   const onMouseDown = (e: MouseEvent) => {
-    setMoving(true);
+    setResize(true);
     setEdit(false);
     startPos = {
       x: e.pageX,
@@ -102,13 +102,13 @@ export const useResizeElement2 = (elementRef: any,
       height: initSize.height - delta.y
     }
     setPos(newPos);
-    setResize(newSize);
+    setSize(newSize);
   }
 
   const onStopMove = () => {
     document.removeEventListener("mousemove", onMove);
     document.removeEventListener("mouseup", onStopMove);
-    setMoving(false)
+    setResize(false)
   };
 
   useEffect(() => {
@@ -131,9 +131,9 @@ export const useResizeElement3 = (elementRef: any,
                                     x: number,
                                     y: number
                                   }, 
-                                  setResize: any,
+                                  setSize: any,
                                   setPos: any,
-                                  setMoving: any,
+                                  setResize: any,
                                   setEdit: any) => {
 
   let startPos: {
@@ -142,7 +142,7 @@ export const useResizeElement3 = (elementRef: any,
   };
 
   const onMouseDown = (e: MouseEvent) => {
-    setMoving(true)
+    setResize(true)
     setEdit(false)
     startPos = {
       x: e.pageX,
@@ -163,13 +163,13 @@ export const useResizeElement3 = (elementRef: any,
       height: initSize.height + delta.y
     };
     setPos(newPos);
-    setResize(newSize);
+    setSize(newSize);
   }
 
   const onStopMove = () => {
     document.removeEventListener("mousemove", onMove);
     document.removeEventListener("mouseup", onStopMove);
-    setMoving(false)
+    setResize(false)
   };
 
   useEffect(() => {
@@ -192,9 +192,9 @@ export const useResizeElement4 = (elementRef: any,
                                     x: number,
                                     y: number
                                   },
-                                  setResize: any,
+                                  setSize: any,
                                   setPos: any, 
-                                  setMoving: any, 
+                                  setResize: any, 
                                   setEdit: any) => {
 
   let startPosition: {
@@ -207,7 +207,7 @@ export const useResizeElement4 = (elementRef: any,
       x: e.pageX,
       y: e.pageY
     };
-    setMoving(true)
+    setResize(true)
     setEdit(false)
     document.addEventListener("mousemove", onMove);
     document.addEventListener("mouseup", onStopMove);
@@ -224,13 +224,13 @@ export const useResizeElement4 = (elementRef: any,
       height: initSize.height + delta.y
     };
     setPos(newPos);
-    setResize(newSize);
+    setSize(newSize);
   }
 
   const onStopMove = () => {
     document.removeEventListener("mousemove", onMove);
     document.removeEventListener("mouseup", onStopMove);
-    setMoving(false)
+    setResize(false)
   };
 
   useEffect(() => {

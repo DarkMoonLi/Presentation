@@ -1,4 +1,4 @@
-import { newImage, newImageFromFile, newPrimitive, newText } from "../actions/slideElementActions";
+import { deleteElems, newImage, newImageFromFile, newPrimitive, newText } from "../actions/slideElementActions";
 
 export function addNewText() {
     return {
@@ -23,5 +23,11 @@ export function addNewPrimitive(primitive: string) {
     return {
         type: newPrimitive,
         value: primitive
+    }    
+}
+
+export function deleteElements() {
+    return {
+        type: deleteElems
     }    
 }

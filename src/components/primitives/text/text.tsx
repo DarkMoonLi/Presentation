@@ -59,7 +59,7 @@ function SomebodyText(text: TextType) {
       onDoubleClick={() => setEdit(true)}
     >
       <textarea
-        ref={moving ? elemRef : undefined}
+        ref={elemRef}
         id={text.id}
         readOnly={edit ? true : false}
         style={{

@@ -1,4 +1,4 @@
-import { Application, clearSelectedElements, clearSelectedElementsOnSlide, moveElements, putSelectedElement, setTitle, deleteSelectedElement, changeTextContent, savePresentation, openPresentation, addSlide, loadPresentation, deleteSlide, redo, undo, addText, addImageFromFile, startViewing, stopViewing, viewingNextSlide, viewingPrevSlide, addImage, addPrimitives, createNewPresentation, loadBackground, setBackgroundImg, changeWindowSize } from "../../scripts/structure";
+import { Application, clearSelectedElements, clearSelectedElementsOnSlide, moveElements, putSelectedElement, setTitle, deleteSelectedElement, changeTextContent, savePresentation, openPresentation, addSlide, loadPresentation, deleteSlide, redo, undo, addText, addImageFromFile, startViewing, stopViewing, viewingNextSlide, viewingPrevSlide, addImage, addPrimitives, createNewPresentation, loadBackground, setBackgroundImg, changeWindowSize, changeBackground } from "../../scripts/structure";
 import { putElem, clearAllElems, clearSlideElems, deleteElem } from "../actions/selectedElements"
 import { move, resize } from "../actions/moveElements"
 import { changePresentationTitle } from "../actions/title";
@@ -26,6 +26,7 @@ function reducer(state: Application = {} as Application, action: any) {
         case newImageFromFile: return addImageFromFile(state);
         case newImage: return addImage(state, action.value);
         case newPrimitive: return addPrimitives(state, action.value);
+        case changeBackground: return changeBackground(state, action.background)
         // Работа с презентацией
         case changePresentationTitle: return setTitle(state, action.value);
         case download: return savePresentation(state, action.value);
@@ -36,7 +37,6 @@ function reducer(state: Application = {} as Application, action: any) {
         case addNewSlide: return addSlide(state);
         case delSlide: return deleteSlide(state);
         case uploadImg: return loadBackground(state);
-        case setBackground: return setBackgroundImg(state, action.value);
         // undo и redo
         case redoAction: return redo(state);
         case undoAction: return undo(state);

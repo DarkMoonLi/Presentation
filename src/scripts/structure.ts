@@ -230,7 +230,6 @@ function startViewing(Appl: Application): Application {
 function viewingNextSlide(Appl: Application): Application {
     let index = Appl.presentation.slides.indexOf(Appl.viewing.currentSlide);
     index = index + 1;
-    console.log(index);
     if (index < Appl.presentation.slides.length) {
         return {
             ...Appl,
@@ -247,7 +246,6 @@ function viewingNextSlide(Appl: Application): Application {
 function viewingPrevSlide(Appl: Application): Application {
     let index = Appl.presentation.slides.indexOf(Appl.viewing.currentSlide);
     index = index - 1;
-    console.log(index);
     if (index > -1) {
         return {
             ...Appl,
@@ -346,6 +344,7 @@ function deleteSlide(Appl: Application): Application {
         ...Appl,
         undo: [...Appl.undo, {...Appl.presentation}],
         redo: [],
+        selectedElements: [newSlides[0].id],
         presentation: {
             ...Appl.presentation,
             slides: [...newSlides]
@@ -360,7 +359,7 @@ function deleteSlide(Appl: Application): Application {
 // Исправить
 function move(Appl: Application, prevIndex: number, newIndex: number): Application {
     let newSlides: Array<Slide> = [...Appl.presentation.slides];
-    let selectedSlide: Slide = { ...newSlides[prevIndex] };
+    let selectedSlide: Slide = newSlides[prevIndex];
 
     if (prevIndex > newIndex) {
         for (let i = newSlides.length; i > 0; i--) {
@@ -368,7 +367,6 @@ function move(Appl: Application, prevIndex: number, newIndex: number): Applicati
                 newSlides[i + 1] = newSlides[i];
             };
         };
-        newSlides[newIndex] = selectedSlide;
     }
     else {
         for (let i = 0; i < newSlides.length; i++) {
@@ -376,8 +374,9 @@ function move(Appl: Application, prevIndex: number, newIndex: number): Applicati
                 newSlides[i] = newSlides[i + 1];
             };
         };
-        newSlides[newIndex] = selectedSlide;
     };
+
+    newSlides[newIndex] = {...selectedSlide};
 
     return {
         ...Appl,
@@ -407,7 +406,6 @@ function addImageFromFile(Appl: Application): Application {
         }
     });
     inp.remove();
-    console.log('first');
     return Appl    
 };
 
@@ -463,7 +461,7 @@ function addPrimitives(Appl: Application, primitivesType: 'circle' | 'rectangle'
     };
 
     let changeSlides: Array<Slide> = [...Appl.presentation.slides.map(function(slide) {
-        if (Appl.selectedElements.indexOf(slide.id) !== -1) {
+        if (Appl.selectedElements.includes(slide.id)) {
             return {
                 ...slide,
                 content: [...slide.content, newPrimitive]
@@ -520,10 +518,11 @@ function deleteElements(Appl: Application): Application {
     let changeSlides: Array<Slide> = [...Appl.presentation.slides];
     let selectedElements: Array<string> = [...Appl.selectedElements];
 
+    console.log(selectedElements);
     changeSlides = [...changeSlides.map(function(slide) {
-        if (selectedElements.indexOf(slide.id) !== -1) {
+        if (selectedElements.includes(slide.id)) {
             let newContent: Array<TextType|ImageType|PrimitiveType> = [...slide.content.filter(function(content) {
-                return selectedElements.indexOf(content.id) === -1
+                return !selectedElements.includes(content.id)
             })];
 
             return {
@@ -550,11 +549,11 @@ function deleteElements(Appl: Application): Application {
 
 function moveElements(Appl: Application, newX: number, newY: number): Application {
     let changeSlides: Array<Slide> = [...Appl.presentation.slides.map(function(slide) {
-        if (Appl.selectedElements.indexOf(slide.id) !== -1) {
+        if (Appl.selectedElements.includes(slide.id)) {
             return {
                 ...slide,
                 content: [...slide.content.map(function(content) {
-                    if (Appl.selectedElements.indexOf(content.id) !== -1) {
+                    if (Appl.selectedElements.includes(content.id)) {
                         return {
                             ...content,
                             position: {
@@ -597,21 +596,26 @@ function changeLayer(Appl: Application, newLayer: number): Application {
     }
 };
 
-function changeWindowSize(Appl: Application, newWidth: number, newHeight: number): Application {
+function changeWindowSize(Appl: Application, newWidth: number, newHeight: number, newX: number, newY: number): Application {
     let changeSlides: Array<Slide> = [...Appl.presentation.slides.map(function(slide) {
-        if (Appl.selectedElements.indexOf(slide.id) !== -1) {
+        if (Appl.selectedElements.includes(slide.id)) {
             return {
                 ...slide,
                 content: [...slide.content.map(function(content) {
-                    if (Appl.selectedElements.indexOf(content.id) !== -1) {
+                    if (Appl.selectedElements.includes(content.id)) {
                         return {
                             ...content,
+                            position: {
+                                x: newX,
+                                y: newY
+                            },
                             size: {
                                 width: newWidth,
                                 height: newHeight
                             }
                         }
-                    } else { return content }
+                    }
+                    return content
                 })]
             }
         } else { return slide }
@@ -815,7 +819,7 @@ function loadBackground(Appl: Application): Application {
     inp.click();
     inp.addEventListener('change', () => {
         let files = inp.files;
-        if (files != null) {
+        if (files !== null) {
             let img = URL.createObjectURL(files[0]);
             return store.dispatch(setBackImage(img));
         }

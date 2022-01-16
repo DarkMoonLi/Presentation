@@ -1,10 +1,10 @@
 import { AnyAction } from "redux";
-import { addImage, addImageFromFile, addPrimitives, addSlide, addText, Application, changeBackground, changeTextContent, changeWindowSize, deleteElements, deleteSlide, getDefaultSlide, loadBackground, move, moveElements, setBackgroundImg, Slide } from "../../scripts/structure";
+import { addImage, addImageFromFile, addPrimitives, addSlide, addText, Application, changeBackground, changeLayer, changeTextContent, changeWindowSize, deleteElements, deleteSlide, getDefaultSlide, loadBackground, move, moveElements, setBackgroundImg, Slide } from "../../scripts/structure";
 import { changeBack } from "../actions/changeBackground";
 import { upload } from "../actions/download";
 import { moving } from "../actions/moveElements";
 import { resize } from "../actions/resizeElements";
-import { deleteElems, newImage, newImageFromFile, newPrimitive, newText } from "../actions/slideElementActions";
+import { chLayer, deleteElems, newImage, newImageFromFile, newPrimitive, newText } from "../actions/slideElementActions";
 import { addNewSlide, delSlide, moveSlide, setBackground, uploadImg } from "../actions/slides";
 import { changeText } from "../actions/text";
 import { ActionType } from "./mainReducer";
@@ -23,6 +23,7 @@ export function slides(state: Application = {} as Application, action: AnyAction
         case newImage: return addImage(state, action.value);
         case newPrimitive: return addPrimitives(state, action.newPrimitive);
         case deleteElems: return deleteElements(state);
+        case chLayer: return changeLayer(state, action.value)
         default: return state.presentation.slides
     }
 }

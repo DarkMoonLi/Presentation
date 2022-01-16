@@ -495,18 +495,44 @@ function moveElements(Appl: Application, newX: number, newY: number): Applicatio
     }
 };
 
-function changeLayer(Appl: Application, newLayer: number): Application {
+function changeLayer(Appl: Application, newLayer: string): Array<Slide> {
     // Добавить в объект слои
     // Для определения элемента возможно использовать функцию, которая следит за выбранными элементами
     // и обработать их в цикле
-    return {
-        ...Appl,
-        undo: [...Appl.undo, {...Appl.presentation}],
-        presentation: {
-            ...Appl.presentation,
-            slides: []
-        }
-    }
+    let changeSlides = [...Appl.presentation.slides];
+    changeSlides = changeSlides.map((slide) => {
+        if (Appl.selectedElements.includes(slide.id)) {
+            let newContent = [...slide.content];
+            if (newLayer === 'down') {
+                for (let i = 0; i < newContent.length; i++) {
+                    if (Appl.selectedElements.includes(newContent[i].id)) {
+                        let content = newContent[i];
+                        newContent.splice(i, 1);
+                        newContent.unshift(content);
+                    }
+                }
+            };
+            if (newLayer === 'up') {
+                for (let i = 0; i < newContent.length; i++) {
+                    if (Appl.selectedElements.includes(newContent[i].id)) {
+                        let content = newContent[i];
+                        newContent.splice(i, 1);
+                        newContent.push(content);
+                    }
+                }
+            };
+
+            return {
+                ...slide,
+                content: newContent
+            }
+        };
+        return slide
+    });
+
+    console.log(changeSlides);
+
+    return changeSlides;
 };
 
 function changeWindowSize(Appl: Application, newWidth: number, newHeight: number, newX: number, newY: number): Application {

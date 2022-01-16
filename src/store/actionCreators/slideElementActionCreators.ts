@@ -1,4 +1,4 @@
-import { deleteElems, newImage, newImageFromFile, newPrimitive, newText } from "../actions/slideElementActions";
+import { chLayer, deleteElems, newImage, newImageFromFile, newPrimitive, newText } from "../actions/slideElementActions";
 
 export function addNewText() {
     return {
@@ -30,4 +30,11 @@ export function deleteElements() {
     return {
         type: deleteElems
     }    
+}
+
+export function changeLayer(layer: string) {
+    return {
+        type: chLayer,
+        value: layer
+    }
 }

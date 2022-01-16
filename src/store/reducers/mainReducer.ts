@@ -28,7 +28,7 @@ export type ActionType = {
         height: number
     },
     prevIndex: number,
-    nextIndex: number
+    newIndex: number
 }
 
 function reducer(state: Application = {} as Application, action: AnyAction /* = {} as ActionType*/): Application {

@@ -16,7 +16,7 @@ export function slides(state: Application = {} as Application, action: AnyAction
         case uploadImg: return loadBackground(state);
         case setBackground: return setBackgroundImg(state, action.value);
         case changeBack: return changeBackground(state, action.value);
-        case moveSlide: return move(state, action.precIndex, action.nextIndex);
+        case moveSlide: return move(state, action.prevIndex, action.newIndex);
         case changeText: return changeTextContent(state, action.value);
         case newText: return addText(state);
         case newImageFromFile: return addImageFromFile(state);

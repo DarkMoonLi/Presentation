@@ -3,7 +3,7 @@ import { Slide } from "../../scripts/structure";
 import getContent from '../content/content';
 import store from '../../store/store';
 import { putSelectedElement, clearSelectedElement } from '../../store/actionCreators/selectedElement';
-import { useRef, useState } from "react";
+import { SyntheticEvent, useRef, useState } from "react";
 import { useDragAndDrop } from "../DragAndDrop/dragAndDrop";
 import { moveSlides } from '../../store/actionCreators/slidesActions';
 
@@ -51,14 +51,12 @@ export default function SlideView({slide, index}: MiniSlide) {
         <foreignObject
             ref={elemRef}
             onMouseMove={() => {
-                moving && console.log(prevSlidePos, 'prev slide');
-                moving && console.log(position.y, 'now slide');
-                moving && console.log(nextSlidePos, 'next slide');
+                moving && console.log(position.y, prevSlidePos);
                 if (position.y < prevSlidePos) {
-                    moving && store.dispatch(moveSlides(index-1, (index-2 >= 0) ? index-2 : 0))
+                    moving && store.dispatch(moveSlides(index - 1, index - 2))
                 }
-                if ((position.y > nextSlidePos) && (nextSlidePos !== 0)) {
-                    moving && store.dispatch(moveSlides(index-1, index))
+                if (position.y > prevSlidePos + 220) {
+                    moving && store.dispatch(moveSlides(index - 1, index))
                 }
             }}
             onClick={(event) => {

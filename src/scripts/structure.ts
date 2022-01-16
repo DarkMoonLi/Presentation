@@ -293,10 +293,6 @@ function createNewPresentation(Appl: Application): Application {
     }
 }
 
-/*function setTitle(newTitle: string): string {
-    return newTitle
-};*/
-
 function addSlide(Appl: Application): Application {
     return {
         ...Appl,
@@ -333,39 +329,35 @@ function deleteSlide(Appl: Application): Application {
 // Исправить
 function move(Appl: Application, prevIndex: number, newIndex: number): Array<Slide> {
     let newSlides: Array<Slide> = [...Appl.presentation.slides];
-    let selectedSlide: Slide = newSlides[prevIndex];
+    
+    console.log(newSlides);
 
-    if (prevIndex > newIndex) {
-        for (let i = newSlides.length; i > 0; i--) {
-            if ((i < prevIndex) && (i >= newIndex)) {
-                newSlides[i + 1] = newSlides[i];
-            };
-        };
-    }
-    else {
-        for (let i = 0; i < newSlides.length; i++) {
-            if ((i >= prevIndex) && (i < newIndex)) {
-                newSlides[i] = newSlides[i + 1];
-            };
-        };
+    if (prevIndex < newIndex) {
+        for (let i = newSlides.length - 2; i >= 0; i--) {
+            if (Appl.selectedElements.includes(newSlides[i].id)) {
+                console.log(i);
+                let slide = newSlides[i + 1];
+                console.log(slide, 'first');
+                newSlides[i+1] = newSlides[i];
+                newSlides[i] = slide
+            }
+        }
     };
 
-    newSlides[newIndex] = {...selectedSlide};
+    if (prevIndex > newIndex) {
+        for (let i = 1; i < newSlides.length; i++) {
+            if (Appl.selectedElements.includes(newSlides[i].id)) {
+                console.log(i);
+                let slide = newSlides[i-1];
+                console.log(slide, 'second');
+                newSlides[i-1] = newSlides[i];
+                newSlides[i] = slide;
+                console.log(i)
+            }
+        }
+    }
 
     return newSlides;
-    /*return {
-        ...Appl,
-        undo: [...Appl.undo, {...Appl.presentation}],
-        redo: [],
-        presentation: {
-            ...Appl.presentation,
-            slides: [...newSlides]
-        },
-        viewing: {
-            ...Appl.viewing,
-            currentSlide: newSlides[0]
-        }
-    }*/
 };
 
 function addImageFromFile(Appl: Application): Array<Slide> {
@@ -412,20 +404,6 @@ function addImage(Appl: Application, adress: string): Array<Slide> {
     });
 
     return changeSlides;
-
-    /*return {
-        ...Appl,
-        undo: [...Appl.undo, {...Appl.presentation}],
-        redo: [],
-        presentation: {
-            ...Appl.presentation,
-            slides: [...changeSlides]
-        },
-        viewing: {
-            ...Appl.viewing,
-            currentSlide: changeSlides[0]
-        }
-    }*/
 };
 
 function addPrimitives(Appl: Application, primitivesType: 'circle' | 'rectangle' | 'triangle'): Array<Slide> {
@@ -447,19 +425,6 @@ function addPrimitives(Appl: Application, primitivesType: 'circle' | 'rectangle'
     })];
 
     return changeSlides;
-    /*return {
-        ...Appl,
-        undo: [...Appl.undo, {...Appl.presentation}],
-        redo: [],
-        presentation: {
-            ...Appl.presentation,
-            slides: changeSlides
-        },
-        viewing: {
-            ...Appl.viewing,
-            currentSlide: changeSlides[0]
-        }
-    }*/
 };
 
 function changeBackground(Appl: Application, newBackground: string): Array<Slide> {
@@ -478,26 +443,12 @@ function changeBackground(Appl: Application, newBackground: string): Array<Slide
     }
 
     return changeSlides;
-    /*return {
-        ...Appl,
-        undo: [...Appl.undo, {...Appl.presentation}],
-        redo: [],
-        presentation: {
-            ...Appl.presentation,
-            slides: [...changeSlides]
-        },
-        viewing: {
-            ...Appl.viewing,
-            currentSlide: changeSlides[0]
-        }
-    }*/
 };
 
 function deleteElements(Appl: Application): Array<Slide> {
     let changeSlides: Array<Slide> = [...Appl.presentation.slides];
     let selectedElements: Array<string> = [...Appl.selectedElements];
 
-    console.log(selectedElements);
     changeSlides = [...changeSlides.map(function(slide) {
         if (selectedElements.includes(slide.id)) {
             let newContent: Array<TextType|ImageType|PrimitiveType> = [...slide.content.filter(function(content) {
@@ -512,24 +463,9 @@ function deleteElements(Appl: Application): Array<Slide> {
     })];
 
     return changeSlides;
-
-    /*return {
-        ...Appl,
-        undo: [...Appl.undo, {...Appl.presentation}],
-        redo: [],
-        presentation: {
-            ...Appl.presentation,
-            slides: [...changeSlides]
-        },
-        viewing: {
-            ...Appl.viewing,
-            currentSlide: changeSlides[0]
-        }
-    }*/
 };
 
 function moveElements(Appl: Application, newX: number, newY: number): Application {
-    console.log(newX, newY);
     let changeSlides: Array<Slide> = [...Appl.presentation.slides.map(function(slide) {
         if (Appl.selectedElements.includes(slide.id)) {
             return {
@@ -549,10 +485,8 @@ function moveElements(Appl: Application, newX: number, newY: number): Applicatio
         } else { return slide }
     })];
 
-    //return changeSlides;
     return {
         ...Appl,
-        //undo: [...Appl.undo, {...Appl.presentation}],
         redo: [],
         presentation: {
             ...Appl.presentation,
@@ -600,10 +534,8 @@ function changeWindowSize(Appl: Application, newWidth: number, newHeight: number
         } else { return slide }
     })];
 
-    //return changeSlides;
     return {
         ...Appl,
-        //undo: [...Appl.undo, {...Appl.presentation}],
         redo: [],
         presentation: {
             ...Appl.presentation,
@@ -627,20 +559,6 @@ function addText(Appl: Application): Array<Slide> {
     })]
 
     return changeSlides;
-
-    /*return {
-        ...Appl,
-        undo: [...Appl.undo, {...Appl.presentation}],
-        redo: [],
-        presentation: {
-            ...Appl.presentation,
-            slides: [...changeSlides]
-        },
-        viewing: {
-            ...Appl.viewing,
-            currentSlide: changeSlides[0]
-        }
-    }*/
 };
 
 function changeTextContent(Appl: Application, newText: string): Array<Slide> {
@@ -666,19 +584,6 @@ function changeTextContent(Appl: Application, newText: string): Array<Slide> {
     })];
     
     return changeSlides;
-    /*return {
-        ...Appl,
-        undo: [...Appl.undo, {...Appl.presentation}],
-        redo: [],
-        presentation: {
-            ...Appl.presentation,
-            slides: [...changeSlides]
-        },
-        viewing: {
-            ...Appl.viewing,
-            currentSlide: changeSlides[0]
-        }
-    }*/
 }
 
 function changeFont(Appl: Application, newFont: string = '', newFontSize: number = 14): Application {
@@ -819,19 +724,6 @@ function setBackgroundImg(Appl: Application, img: string): Array<Slide> {
     });
 
     return slides;
-    /*return {
-        ...Appl,
-        undo: [...Appl.undo, {...Appl.presentation}],
-        redo: [],
-        presentation: {
-            ...Appl.presentation,
-            slides: slides
-        },
-        viewing: {
-            ...Appl.viewing,
-            currentSlide: slides[0]
-        }
-    }*/
 }
 
 export {

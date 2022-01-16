@@ -36,10 +36,10 @@ export function uploadBackImg() {
     }
 }
 
-export function moveSlides(prevIndex: number, nextIndex: number) {
+export function moveSlides(prev: number, next: number) {
     return {
         type: moveSlide,
-        prevIndex: prevIndex,
-        nextIndex: nextIndex
+        prevIndex: prev,
+        newIndex: next
     }
 }

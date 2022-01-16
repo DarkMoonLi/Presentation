@@ -1,63 +1,55 @@
-import { Application, clearSelectedElements, clearSelectedElementsOnSlide, moveElements, putSelectedElement, setTitle, deleteSelectedElement, changeTextContent, savePresentation, openPresentation, addSlide, loadPresentation, deleteSlide, redo, undo, addText, addImageFromFile, startViewing, stopViewing, viewingNextSlide, viewingPrevSlide, addImage, addPrimitives, createNewPresentation, loadBackground, setBackgroundImg, changeWindowSize, changeBackground, move, deleteElements } from "../../scripts/structure";
-import { putElem, clearAllElems, clearSlideElems, deleteElem } from "../actions/selectedElements"
-import { moving, resize } from "../actions/moveElements"
-import { changePresentationTitle } from "../actions/title";
-import { changeText } from "../actions/text";
-import { download, upload } from "../actions/download";
-import { addNewSlide, delSlide, moveSlide, setBackground, uploadImg } from "../actions/slides";
+import { Application, changeBackground, changeTextContent, changeWindowSize, createNewPresentation, deleteSlide, move, moveElements, openPresentation, Presentation, redo, setBackgroundImg, startViewing, stopViewing, undo, viewingNextSlide, viewingPrevSlide } from "../../scripts/structure";
+import { selectedElements } from "./selectedElemsReducer";
+import { presentationReducer } from "./presentationReducer";
+import { viewingReducer } from "./viewingReducer";
+import { undoReducer } from "./undoReducer";
+import { redoReducer } from "./redoReducer";
 import { NewPresentation, presentationFromFile } from "../actions/presentationActions";
 import { redoAction } from "../actions/redo";
 import { undoAction } from "../actions/undoActions";
-import { deleteElems, newImage, newImageFromFile, newPrimitive, newText } from "../actions/slideElementActions";
-import { nextSlide, offViewingMode, onViewingMode, prevSlide } from "../actions/viewing";
+import { delSlide, moveSlide, setBackground } from "../actions/slides";
+import { AnyAction } from "redux";
 import { changeBack } from "../actions/changeBackground";
-import { selectedElements } from "./selectedElemsReducer";
+import { moving, resize } from "../actions/moveElements";
+import { changeText } from "../actions/text";
+import { nextSlide, offViewingMode, onViewingMode, prevSlide } from "../actions/viewing";
 
-function reducer(state: Application = {} as Application, action: any) {
-    /*return {
-        selectedElements: selectedElements(state.selectedElements, action),
-        undo: undo(state.undo, action),
-        redo: redo(state.redo, action),
-        presentation: presentation(state.presentation, action),
-        viewing: viewing(state.viewing, action),
-    }*/
-    switch(action.type) {
-        // Работа с выбраными элементами
-        case putElem: return putSelectedElement(state, action.selectedElement);
-        case clearAllElems: return clearSelectedElements(state);
-        case clearSlideElems: return clearSelectedElementsOnSlide(state);
-        case deleteElem: return deleteSelectedElement(state, action.value);
-        // Работа с элементами на слайде
-        case moving: return moveElements(state, action.newPos.x, action.newPos.y);
-        case resize: return changeWindowSize(state, action.width, action.height, action.x, action.y);
-        case changeText: return changeTextContent(state, action.value);
-        case newText: return addText(state);
-        case newImageFromFile: return addImageFromFile(state);
-        case newImage: return addImage(state, action.value);
-        case newPrimitive: return addPrimitives(state, action.value);
-        case deleteElems: return deleteElements(state)
-        // Работа с презентацией
-        case changePresentationTitle: return setTitle(state, action.value);
-        case download: return savePresentation(state, action.value);
-        case upload: return loadPresentation(state, action.value);
-        case presentationFromFile: return openPresentation(state, action.value);
+export type ActionType = {
+    type: string,
+    value: string,
+    newPrimitive: 'circle' | 'triangle' | 'rectangle'
+    newPresentation: Presentation,
+    newPos: {
+        x: number,
+        y: number
+    },
+    size: {
+        width: number,
+        height: number
+    },
+    prevIndex: number,
+    nextIndex: number
+}
+
+function reducer(state: Application = {} as Application, action: AnyAction /* = {} as ActionType*/): Application {
+    switch (action.type) {
         case NewPresentation: return createNewPresentation(state);
-        // Работа со слайдами
-        case addNewSlide: return addSlide(state);
         case delSlide: return deleteSlide(state);
-        case uploadImg: return loadBackground(state);
-        case setBackground: return setBackgroundImg(state, action.value);
-        case changeBack: return changeBackground(state, action.newBackground);
-        case moveSlide: return move(state, action.prevIndex, action.nextIndex);
-        // undo и redo
         case redoAction: return redo(state);
         case undoAction: return undo(state);
-        // viewing
+        case moving: return moveElements(state, action.newPos.x, action.newPos.y);
+        case resize: return changeWindowSize(state, action.size.width, action.size.height, action.newPos.x, action.newPos.y);
         case onViewingMode: return startViewing(state);
         case offViewingMode: return stopViewing(state);
         case nextSlide: return viewingNextSlide(state);
-        case prevSlide: return viewingPrevSlide(state); 
-        default: return state
+        case prevSlide: return viewingPrevSlide(state);
+        default: return {
+            selectedElements: selectedElements(state, action),
+            presentation: presentationReducer(state, action),
+            viewing: state.viewing, //viewingReducer(state, action),
+            undo: undoReducer(state, action),
+            redo: [] //redoReducer(state, action)
+        }
     }
 }
 

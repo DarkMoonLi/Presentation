@@ -2,20 +2,31 @@ import { addNewSlide, delSlide, moveSlide, setBackground, uploadImg } from "../a
 
 export function newSlide() {
     return {
-        type: addNewSlide
+        type: addNewSlide,
+        value: '',
+        newPresentation: {},
+        newPos: {},
+        size: {}
     }
 }
 
 export function deleteSlide() {
     return {
-        type: delSlide
+        type: delSlide,
+        value: '',
+        newPresentation: {},
+        newPos: {},
+        size: {}
     }
 }
 
 export function setBackImage(img: string) {
     return {
         type: setBackground,
-        value: img
+        value: img,
+        newPresentation: {},
+        newPos: {},
+        size: {}
     }
 }
 

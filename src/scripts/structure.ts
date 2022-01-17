@@ -711,16 +711,9 @@ function loadPresentation(Appl: Application): Presentation {
     return Appl.presentation
 }
 
-function openPresentation(Appl: Application, newPresentation: Presentation): Application {
-    return {
-        ...Appl,
-        presentation: newPresentation,
-        redo: [],
-        viewing: {
-            ...Appl.viewing,
-            currentSlide: newPresentation.slides[0]
-        }
-    }
+function openPresentation(newPresentation: Presentation): Presentation {
+    console.log(newPresentation);
+    return  newPresentation
 }
 
 function loadBackground(Appl: Application): Array<Slide> {

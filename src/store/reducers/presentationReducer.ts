@@ -12,7 +12,7 @@ export function presentationReducer(state: Application = {} as Application, acti
     switch (action.type) {
         case download: return savePresentation(state, action.value);
         case upload: return loadPresentation(state);
-        case presentationFromFile: return action.value //openPresentation(state, action.value);
+        case presentationFromFile: return action.newPresentation;
         default: return {
             title: title(state, action),
             type: 'presentation',

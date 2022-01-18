@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { downloadFile, uploadFile } from '../../store/actionCreators/downloadFile';
 import { reDo } from '../../store/actionCreators/redo';
-import { addNewImageFromFile, addNewText, deleteElements } from '../../store/actionCreators/slideElementActionCreators';
+import { addNewImageFromFile, addNewText, changeLayer, deleteElements } from '../../store/actionCreators/slideElementActionCreators';
 import { deleteSlide, newSlide, uploadBackImg } from '../../store/actionCreators/slidesActions';
 import { unDo } from '../../store/actionCreators/undoActionCreators';
 import store from '../../store/store';
@@ -29,6 +29,8 @@ function Menu () {
       <button className={styles.iconBackground} onClick={() => setModal(true)}>{'Покрасить фон слайда'}</button>
       {isModal ? (<ColorPicker setModal={setModal}/>) : null}
       <button onClick={() => store.dispatch(deleteElements())}>{"Удалить элементы слайда"}</button>
+      <button onClick={() => store.dispatch(changeLayer('up'))}>{"На передний план"}</button>
+      <button onClick={() => store.dispatch(changeLayer('down'))}>{"На задний план"}</button>
     </div>
   )}
 

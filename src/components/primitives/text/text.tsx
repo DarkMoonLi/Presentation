@@ -6,6 +6,7 @@ import { useRef, useState } from "react";
 import { useDragAndDrop } from "../../DragAndDrop/dragAndDrop";
 import { changeSize, moveElements } from "../../../store/actionCreators/moveElements";
 import { useResizeElement1, useResizeElement2, useResizeElement3, useResizeElement4 } from "../../DragAndDrop/resizeElement";
+import { ResizeBlock } from "../../DragAndDrop/resizeBlocks";
 
 function SomebodyText(text: TextType) {
 
@@ -33,6 +34,64 @@ function SomebodyText(text: TextType) {
   useResizeElement3(resizeRef3, size, position, setSize, setPosition, setResize, setEdit);
   useResizeElement4(resizeRef4, size, position, setSize, setPosition, setResize, setEdit);
 
+  if (!state.selectedElements.includes(text.id)) {
+    return (
+      <foreignObject
+        width={text.size.width}
+        height={text.size.height}
+        x={text.position.x}
+        y={text.position.y}
+        onMouseDown={(event) => {
+          if (!event.ctrlKey) {
+            store.dispatch(clearSelectedElementsOnSlide());
+            store.dispatch(putSelectedElement(text.id));
+          } 
+          if (event.ctrlKey) { 
+            if (!state.selectedElements.includes(text.id)) 
+              store.dispatch(putSelectedElement(text.id));
+            else
+              store.dispatch(deleteSelectedElement(text.id)) 
+          };
+        }}
+        /*onMouseMove={() => {
+          moving && store.dispatch(moveElements(position))
+          resizing && store.dispatch(changeSize(size, position))
+          resizing && console.log(size);
+        }}*/
+        onClick={() => setEdit(false)}
+        onDoubleClick={() => setEdit(true)}
+      >
+        <p
+          ref={elemRef}
+          id={text.id}
+          //readOnly={edit ? true : false}
+          style={{
+            margin: 0,
+            width: text.size.width,
+            height: text.size.height,
+            fontFamily: text.font,
+            fontSize: text.fontSize,
+            color: text.color,
+            fontWeight: text.weight,
+            border: border,
+            backgroundColor: 'transparent',
+            textAlign: 'center',
+            position: 'absolute',
+            scale: '1',
+            resize: 'none'
+          }}
+          color={text.color}
+          //wrap="soft"
+          //value={text.content}
+          /*onChange={(event) => {
+            let newText = event.target.value;
+            store.dispatch(changeTextValue(newText))
+          }}*/ 
+        >{text.content}</p>
+      </foreignObject>
+    )
+  }
+
   return (
     <foreignObject
       width={text.size.width}
@@ -52,8 +111,9 @@ function SomebodyText(text: TextType) {
         };
       }}
       onMouseMove={() => {
-        moving && (store.dispatch(moveElements(position)))
+        moving && store.dispatch(moveElements(position))
         resizing && store.dispatch(changeSize(size, position))
+        resizing && console.log(size);
       }}
       onClick={() => setEdit(false)}
       onDoubleClick={() => setEdit(true)}
@@ -84,6 +144,26 @@ function SomebodyText(text: TextType) {
           store.dispatch(changeTextValue(newText))
         }}
       />
+      {/*<ResizeBlock 
+        ref = {resizeRef1}
+        width = {0}
+        height = {0}
+      />
+      <ResizeBlock
+        ref = {resizeRef2}
+        width = {text.size.width - 9}
+        height = {0}
+      />
+      <ResizeBlock 
+        ref = {resizeRef3}
+        width = {text.size.width - 9}
+        height = {text.size.height - 9}
+      />
+      <ResizeBlock 
+        ref = {resizeRef4}
+        width = {0}
+        height = {text.size.height - 9}
+      />*/}
       <div ref={resizeRef1} style={{
         position: 'absolute',
         display: 'block',
@@ -107,7 +187,7 @@ function SomebodyText(text: TextType) {
         cursor: 'se-resize'
         }}
       ></div>
-        <div ref={resizeRef3} style={{
+      <div ref={resizeRef3} style={{
         position: 'absolute',
         left: text.size.width - 9,
         top: text.size.height - 9,

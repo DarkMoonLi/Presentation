@@ -1,4 +1,3 @@
-
 import { changeText } from "../actions/text";
 
 export function changeTextValue(newText: string) {

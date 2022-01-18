@@ -9,6 +9,6 @@ export function downloadFile(presentationTitle: string) {
 
 export function uploadFile() {
     return {
-        type: upload
+        type: upload,
     }
 }

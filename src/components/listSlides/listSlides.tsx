@@ -1,6 +1,7 @@
 import SlideView from "../slide/slide";
 import styles from "./listSlides.module.css"
 import store from "../../store/store";
+import { useRef } from "react";
 
 function ListSlides() {
 
@@ -12,6 +13,7 @@ function ListSlides() {
         {listSlides.map((item, index) => <SlideView slide={item} index={index + 1}/>)}
       </ul>
     </div>
-  )}
+  )
+}
 
 export default ListSlides;

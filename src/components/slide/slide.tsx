@@ -3,9 +3,8 @@ import { Slide } from "../../scripts/structure";
 import getContent from '../content/content';
 import store from '../../store/store';
 import { putSelectedElement, clearSelectedElement } from '../../store/actionCreators/selectedElement';
-import { useEffect, useRef, useState } from "react";
+import { SyntheticEvent, useRef, useState } from "react";
 import { useDragAndDrop } from "../DragAndDrop/dragAndDrop";
-import { nextSlide, prevSlide } from '../../store/actions/viewing';
 import { moveSlides } from '../../store/actionCreators/slidesActions';
 
 type MiniSlide = {
@@ -20,6 +19,7 @@ export default function SlideView({slide, index}: MiniSlide) {
     let nextSlidePos = 0;
     if (state.presentation.slides[index-2] != null) {
         let prevSlide = document.getElementById(state.presentation.slides[index-2].id);
+        console.log();
         prevSlidePos = (prevSlide != null) ? prevSlide.getBoundingClientRect().top : 0;
     };
     if (state.presentation.slides[index] != null) {
@@ -32,12 +32,8 @@ export default function SlideView({slide, index}: MiniSlide) {
         y: (nowSlide != null) ? nowSlide.getBoundingClientRect().top : 0
     };
 
-    console.log(prevSlidePos);
-    console.log(slidePos);
-    console.log(nextSlidePos);
-
     const elemRef = useRef(null);
-    const [position, setPosition] = useState({x: slidePos.x, y: slidePos.y});
+    const [position, setPosition] = useState({x: 0, y: prevSlidePos + 210});
     const [moving, setMoving] = useState(false);
     const [edit, setEdit] = useState(false);
   
@@ -55,21 +51,20 @@ export default function SlideView({slide, index}: MiniSlide) {
         <foreignObject
             ref={elemRef}
             onMouseMove={() => {
+                moving && console.log(position.y, prevSlidePos);
                 if (position.y < prevSlidePos) {
-                    moving && store.dispatch(moveSlides(index-1, (index-2 >= 0) ? index-2 : 0))
+                    moving && store.dispatch(moveSlides(index - 1, index - 2))
                 }
-                if ((position.y > nextSlidePos) && (nextSlidePos !== 0)) {
-                    moving && store.dispatch(moveSlides(index-1, index))
+                if (position.y > prevSlidePos + 220) {
+                    moving && store.dispatch(moveSlides(index - 1, index))
                 }
             }}
             onClick={(event) => {
-                setEdit(false)
                 if (!event.ctrlKey) {
                     store.dispatch(clearSelectedElement())
                 }
                 store.dispatch(putSelectedElement(slide.id))
             }}
-            onDoubleClick={() => setEdit(true)}
             onContextMenu={(event) => {
                 event.preventDefault()
             }}

@@ -31,6 +31,54 @@ function Rectangle(rectangle: PrimitiveType) {
   useResizeElement3(resizeRef3, size, position, setSize, setPosition, setResize, setEdit);
   useResizeElement4(resizeRef4, size, position, setSize, setPosition, setResize, setEdit);
 
+  if (!state.selectedElements.includes(rectangle.id)) {
+    return (
+      <foreignObject
+        width={rectangle.size.width}
+        height={rectangle.size.height}
+        x={rectangle.position.x}
+        y={rectangle.position.y}
+        onMouseDown={(event) => {
+          if (!event.ctrlKey) {
+            store.dispatch(clearSelectedElementsOnSlide());
+            store.dispatch(putSelectedElement(rectangle.id));
+          } 
+          if (event.ctrlKey) { 
+            if (!state.selectedElements.includes(rectangle.id)) 
+              store.dispatch(putSelectedElement(rectangle.id));
+            else
+              store.dispatch(deleteSelectedElement(rectangle.id)) 
+          };
+          console.log(state.selectedElements);
+        }}
+        /*onMouseMove={() => {
+          moving && store.dispatch(moveElements(position))
+          resizing && store.dispatch(changeSize(size, position))
+        }}*/
+        onClick={() => setEdit(false)}
+        onDoubleClick={() => setEdit(true)}
+      >
+        <svg
+          ref={elemRef}
+          style={{
+            width: rectangle.size.width,
+            height: rectangle.size.height,
+            left: rectangle.position.x,
+            top: rectangle.position.y
+          }}
+        >
+          <rect 
+            id={rectangle.id} 
+            width={rectangle.size.width} 
+            height={rectangle.size.height} 
+            fill={rectangle.color}
+            style={{border: border}}
+          />
+        </svg>
+      </foreignObject>
+    )
+  };
+  
   return(
     <foreignObject
       width={rectangle.size.width}

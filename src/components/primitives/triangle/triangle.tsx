@@ -40,6 +40,52 @@ function Triangle(triangle: PrimitiveType) {
   useResizeElement3(resizeRef3, size, position, setSize, setPosition, setResize, setEdit);
   useResizeElement4(resizeRef4, size, position, setSize, setPosition, setResize, setEdit);
 
+  if (!state.selectedElements.includes(triangle.id)) {
+    return (
+      <foreignObject
+        width={triangle.size.width}
+        height={triangle.size.height}
+        x={triangle.position.x}
+        y={triangle.position.y}
+        onMouseDown={(event) => {
+          if (!event.ctrlKey) {
+            store.dispatch(clearSelectedElementsOnSlide());
+            store.dispatch(putSelectedElement(triangle.id));
+          } 
+          if (event.ctrlKey) { 
+            if (!state.selectedElements.includes(triangle.id)) 
+              store.dispatch(putSelectedElement(triangle.id));
+            else
+              store.dispatch(deleteSelectedElement(triangle.id)) 
+          };
+          console.log(state.selectedElements);
+        }}
+        /*onMouseMove={() => {
+          moving && store.dispatch(moveElements(position))
+          resizing && store.dispatch(changeSize(size, position))
+        }}*/ 
+        onClick={() => setEdit(false)} 
+        onDoubleClick={() => setEdit(true)}
+      >
+        <svg
+          ref={elemRef}
+          style={{
+            width: triangle.size.width,
+            height: triangle.size.height,
+            left: triangle.position.x,
+            top: triangle.position.y
+          }}
+        >
+          <polygon 
+            id={triangle.id} 
+            points= {str} 
+            fill={triangle.color}
+          />
+        </svg>
+      </foreignObject>
+    )
+  };
+
   return(
     <foreignObject
       width={triangle.size.width}

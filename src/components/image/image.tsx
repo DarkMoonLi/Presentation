@@ -32,6 +32,52 @@ export default function SomeImage(image: ImageType) {
   useResizeElement3(resizeRef3, size, position, setSize, setPosition, setResize, setEdit);
   useResizeElement4(resizeRef4, size, position, setSize, setPosition, setResize, setEdit);
 
+  if (!state.selectedElements.includes(image.id)) {
+    return (
+      <foreignObject
+        width={image.size.width}
+        height={image.size.height}
+        x={image.position.x}
+        y={image.position.y}
+        onMouseDown={(event) => {
+          if (!event.ctrlKey) {
+            store.dispatch(clearSelectedElementsOnSlide());
+            store.dispatch(putSelectedElement(image.id));
+          } 
+          if (event.ctrlKey) { 
+            if (!state.selectedElements.includes(image.id)) 
+              store.dispatch(putSelectedElement(image.id));
+            else
+              store.dispatch(deleteSelectedElement(image.id)) 
+          };
+          console.log(state.selectedElements);
+        }}
+        /*onMouseMove={() => {
+          moving && store.dispatch(moveElements(position));
+          resizing && store.dispatch(changeSize(size, position))
+        }}*/ 
+        onClick={() => setEdit(false)} 
+        onDoubleClick={() => setEdit(true)}
+      >
+        <svg
+          ref={elemRef}
+          style={{
+            width: image.size.width,
+            height: image.size.height,
+            left: image.position.x,
+            top: image.position.y
+          }}
+        >
+          <image 
+            href={image.content} 
+            height={image.size.height}
+            width={image.size.width}
+          />
+        </svg>
+      </foreignObject>
+    )  
+  };
+
   return(
     <foreignObject
       width={image.size.width}

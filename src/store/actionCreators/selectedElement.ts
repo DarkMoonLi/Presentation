@@ -3,7 +3,10 @@ import { putElem, clearAllElems, clearSlideElems, deleteElem } from "../actions/
 export function putSelectedElement(value: string) {
     return {
         type: putElem,
-        selectedElement: value
+        value: value,
+        newPresentation: {},
+        newPos: {},
+        size: {}
     }
 };
 

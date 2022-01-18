@@ -3,7 +3,7 @@ import { Slide } from "../../scripts/structure";
 import getContent from '../content/content';
 import store from '../../store/store';
 import { putSelectedElement, clearSelectedElement } from '../../store/actionCreators/selectedElement';
-import { SyntheticEvent, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useDragAndDrop } from "../DragAndDrop/dragAndDrop";
 import { moveSlides } from '../../store/actionCreators/slidesActions';
 
@@ -43,7 +43,7 @@ export default function SlideView({slide, index}: MiniSlide) {
         backgroundImage: `url(${slide.backgroundImg})`,
         backgroundColor: slide.background,
         backgroundRepeat: 'no-repeat',
-        backgroundSize: 'contain',
+        backgroundSize: '100% 100%',
         backgroundPosition: 'center'
     };
 

@@ -2,8 +2,6 @@ import store from "../store/store";
 import { openPresentationFromFile } from "../store/actionCreators/presentationActionCreators";
 import { addNewImage } from "../store/actionCreators/slideElementActionCreators";
 import { setBackImage } from "../store/actionCreators/slidesActions";
-import { slides } from "../store/reducers/slidesReducer";
-
 export type Application = {
     readonly selectedElements: Array<string>,
     readonly undo: Array<Presentation>,
@@ -99,7 +97,7 @@ function getDefaultText(): TextType {
         font: '',
         fontSize: 48,
         weight: 'normal',
-        layer: 3,
+        layer: 1,
         color: 'FFFFFF',
         content: 'Текст слайда'
     }
@@ -120,7 +118,7 @@ function getDefaultSlideTitle(): TextType {
         font: '',
         fontSize: 64,
         weight: 'normal',
-        layer: 3,
+        layer: 1,
         color: 'FFFFFF',
         content: 'Заголовок слайда'
     }
@@ -335,15 +333,11 @@ function deleteSlide(Appl: Application): Application {
 // Исправить
 function move(Appl: Application, prevIndex: number, newIndex: number): Array<Slide> {
     let newSlides: Array<Slide> = [...Appl.presentation.slides];
-    
-    console.log(newSlides);
 
     if (prevIndex < newIndex) {
         for (let i = newSlides.length - 2; i >= 0; i--) {
             if (Appl.selectedElements.includes(newSlides[i].id)) {
-                console.log(i);
                 let slide = newSlides[i + 1];
-                console.log(slide, 'first');
                 newSlides[i+1] = newSlides[i];
                 newSlides[i] = slide
             }
@@ -353,12 +347,9 @@ function move(Appl: Application, prevIndex: number, newIndex: number): Array<Sli
     if (prevIndex > newIndex) {
         for (let i = 1; i < newSlides.length; i++) {
             if (Appl.selectedElements.includes(newSlides[i].id)) {
-                console.log(i);
                 let slide = newSlides[i-1];
-                console.log(slide, 'second');
                 newSlides[i-1] = newSlides[i];
                 newSlides[i] = slide;
-                console.log(i)
             }
         }
     }
@@ -398,7 +389,7 @@ function addImage(Appl: Application, adress: string): Array<Slide> {
             height: 100
         },
         link: '',
-        layer: 3,
+        layer: 1,
         content: adress
     };
 
@@ -422,7 +413,7 @@ function addPrimitives(Appl: Application, primitivesType: 'circle' | 'rectangle'
         type: primitivesType,
         position: { x: 100, y: 100 },
         size: { width: 100, height: 100 },
-        layer: 3,
+        layer: 1,
         color: '#FF0000'
     };
 
@@ -508,29 +499,32 @@ function moveElements(Appl: Application, newX: number, newY: number): Applicatio
 
 // newLayer: number
 // Доработка
-function changeLayer(Appl: Application, newLayer: string): Array<Slide> {
+function changeLayer(Appl: Application, newLayer: number): Array<Slide> {
     let changeSlides = [...Appl.presentation.slides];
+
     changeSlides = changeSlides.map((slide) => {
         if (Appl.selectedElements.includes(slide.id)) {
             let newContent = [...slide.content];
-            if (newLayer === 'down') {
-                for (let i = 0; i < newContent.length; i++) {
-                    if (Appl.selectedElements.includes(newContent[i].id)) {
-                        let content = newContent[i];
-                        newContent.splice(i, 1);
-                        newContent.unshift(content);
+            newContent = newContent.map((content) => {
+                if (Appl.selectedElements.includes(content.id)) {
+                    return {
+                        ...content,
+                        layer: newLayer
                     }
                 }
-            };
-            if (newLayer === 'up') {
-                for (let i = 0; i < newContent.length; i++) {
-                    if (Appl.selectedElements.includes(newContent[i].id)) {
-                        let content = newContent[i];
-                        newContent.splice(i, 1);
-                        newContent.push(content);
+                return content
+            })
+
+            let i = 0;
+            while (i < 5) {
+                i++;
+                for (let c = 0; c < newContent.length; c++) {
+                    if (newContent[c].layer === i) {
+                        let content = newContent.splice(c, 1);
+                        newContent.unshift(...content);;
                     }
                 }
-            };
+            }
 
             return {
                 ...slide,
@@ -539,8 +533,6 @@ function changeLayer(Appl: Application, newLayer: string): Array<Slide> {
         };
         return slide
     });
-
-    console.log(changeSlides);
 
     return changeSlides;
 };

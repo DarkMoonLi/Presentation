@@ -11,7 +11,7 @@ import styles from './menu.module.css'
 function Menu () {
   
   const [isModal, setModal] = useState(false)
-  const onClose = () => setModal(false)
+  //const onClose = () => setModal(false)
   
   return (
     <div className={styles.menu}>
@@ -29,8 +29,8 @@ function Menu () {
       <button className={styles.iconBackground} onClick={() => setModal(true)}>{'Покрасить фон слайда'}</button>
       {isModal ? (<ColorPicker setModal={setModal}/>) : null}
       <button onClick={() => store.dispatch(deleteElements())}>{"Удалить элементы слайда"}</button>
-      <button onClick={() => store.dispatch(changeLayer('up'))}>{"На передний план"}</button>
-      <button onClick={() => store.dispatch(changeLayer('down'))}>{"На задний план"}</button>
+      <button onClick={() => store.dispatch(changeLayer('1'))}>{"На передний план"}</button>
+      <button onClick={() => store.dispatch(changeLayer('5'))}>{"На задний план"}</button>
     </div>
   )}
 

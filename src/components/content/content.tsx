@@ -19,5 +19,6 @@ export default function getContent(slide: Slide) {
         } else if (content.type === 'image') {
             return <SomeImage {...content}/>
         }
+        return null
     })
 }

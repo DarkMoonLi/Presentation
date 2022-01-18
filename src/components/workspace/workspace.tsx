@@ -11,7 +11,7 @@ function Workspace() {
       const slideStyle = {
         backgroundImage: `url(${slide.backgroundImg})`,
         backgroundRepeat: "no-repeat",
-        backgroundSize: 'contain',
+        backgroundSize: '100% 100%',
         backgroundColor: slide.background,
         backgroundPosition: 'center'
       };

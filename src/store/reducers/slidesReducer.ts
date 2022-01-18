@@ -19,7 +19,7 @@ export function slides(state: Application = {} as Application, action: ActionTyp
         case newImage: return addImage(state, action.value);
         case newPrimitive: return addPrimitives(state, action.newPrimitive);
         case deleteElems: return deleteElements(state);
-        case chLayer: return changeLayer(state, action.value)
+        case chLayer: return changeLayer(state, Number(action.value))
         default: return state.presentation.slides
     }
 }

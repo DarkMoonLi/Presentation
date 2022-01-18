@@ -6,7 +6,6 @@ import { useRef, useState } from "react";
 import { useDragAndDrop } from "../../DragAndDrop/dragAndDrop";
 import { changeSize, moveElements } from "../../../store/actionCreators/moveElements";
 import { useResizeElement1, useResizeElement2, useResizeElement3, useResizeElement4 } from "../../DragAndDrop/resizeElement";
-import { ResizeBlock } from "../../DragAndDrop/resizeBlocks";
 
 function SomebodyText(text: TextType) {
 

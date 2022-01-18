@@ -1,7 +1,6 @@
 import SlideView from "../slide/slide";
 import styles from "./listSlides.module.css"
 import store from "../../store/store";
-import { useRef } from "react";
 
 function ListSlides() {
 

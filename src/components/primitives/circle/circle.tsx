@@ -67,11 +67,12 @@ function Circle(circle: PrimitiveType) {
             top: circle.position.y
           }}
         >
-          <circle 
+          <ellipse 
             id={circle.id}
-            cx={circle.size.width/2}
-            cy={circle.size.height/2}
-            r={circle.size.width / 2} 
+            cx={circle.size.width / 2}
+            cy={circle.size.height / 2}
+            rx={circle.size.width / 2} 
+            ry={circle.size.height / 2}
             fill={circle.color}
             style={{border: border}}
           />
@@ -115,11 +116,12 @@ function Circle(circle: PrimitiveType) {
           top: circle.position.y
         }}
       >
-        <circle 
+        <ellipse
           id={circle.id}
-          cx={circle.size.width/2}
-          cy={circle.size.height/2}
-          r={circle.size.width / 2} 
+          cx={circle.size.width / 2}
+          cy={circle.size.height / 2}
+          rx={circle.size.width / 2}
+          ry={circle.size.height / 2}
           fill={circle.color}
           style={{border: border}}
         />

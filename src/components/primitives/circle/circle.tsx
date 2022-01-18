@@ -31,6 +31,55 @@ function Circle(circle: PrimitiveType) {
   useResizeElement3(resizeRef3, size, position, setSize, setPosition, setResize, setEdit);
   useResizeElement4(resizeRef4, size, position, setSize, setPosition, setResize, setEdit);
 
+  if (!state.selectedElements.includes(circle.id)) {
+    return (
+      <foreignObject
+        width={circle.size.width}
+        height={circle.size.height}
+        x={circle.position.x}
+        y={circle.position.y}
+        onMouseDown={(event) => {
+          if (!event.ctrlKey) {
+            store.dispatch(clearSelectedElementsOnSlide());
+            store.dispatch(putSelectedElement(circle.id));
+          } 
+          if (event.ctrlKey) { 
+            if (!state.selectedElements.includes(circle.id)) 
+              store.dispatch(putSelectedElement(circle.id));
+            else
+              store.dispatch(deleteSelectedElement(circle.id)) 
+          };
+          console.log(state.selectedElements);
+        }}
+        /*onMouseMove={() => {
+          moving && store.dispatch(moveElements(position));
+          resizing && store.dispatch(changeSize(size, position))
+        }}*/ 
+        onClick={() => setEdit(false)} 
+        onDoubleClick={() => setEdit(true)}
+      >
+        <svg
+          ref={elemRef}
+          style={{
+            width: circle.size.width,
+            height: circle.size.height,
+            left: circle.position.x,
+            top: circle.position.y
+          }}
+        >
+          <circle 
+            id={circle.id}
+            cx={circle.size.width/2}
+            cy={circle.size.height/2}
+            r={circle.size.width / 2} 
+            fill={circle.color}
+            style={{border: border}}
+          />
+        </svg>
+      </foreignObject>  
+    )
+  };
+  
   return(
     <foreignObject
       width={circle.size.width}

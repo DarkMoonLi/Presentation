@@ -1,4 +1,4 @@
-import { Application, changeBackground, changeTextContent, changeWindowSize, createNewPresentation, deleteSlide, move, moveElements, openPresentation, Presentation, redo, setBackgroundImg, startViewing, stopViewing, undo, viewingNextSlide, viewingPrevSlide } from "../../scripts/structure";
+import { Application, changeWindowSize, createNewPresentation, deleteSlide, moveElements, openPresentation, Presentation, redo, startViewing, stopViewing, undo, viewingNextSlide, viewingPrevSlide } from "../../scripts/structure";
 import { selectedElements } from "./selectedElemsReducer";
 import { presentationReducer } from "./presentationReducer";
 import { viewingReducer } from "./viewingReducer";
@@ -7,11 +7,8 @@ import { redoReducer } from "./redoReducer";
 import { NewPresentation, presentationFromFile } from "../actions/presentationActions";
 import { redoAction } from "../actions/redo";
 import { undoAction } from "../actions/undoActions";
-import { delSlide, moveSlide, setBackground } from "../actions/slides";
-import { AnyAction } from "redux";
-import { changeBack } from "../actions/changeBackground";
+import { delSlide } from "../actions/slides";
 import { moving, resize } from "../actions/moveElements";
-import { changeText } from "../actions/text";
 import { nextSlide, offViewingMode, onViewingMode, prevSlide } from "../actions/viewing";
 
 export type ActionType = {
@@ -31,9 +28,10 @@ export type ActionType = {
     newIndex: number
 }
 
-function reducer(state: Application = {} as Application, action: AnyAction /* = {} as ActionType*/): Application {
+function reducer(state: Application = {} as Application, action: ActionType): Application {
     switch (action.type) {
         case NewPresentation: return createNewPresentation(state);
+        case presentationFromFile: return openPresentation(state, action.newPresentation);
         case delSlide: return deleteSlide(state);
         case redoAction: return redo(state);
         case undoAction: return undo(state);

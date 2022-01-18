@@ -2,6 +2,7 @@ import store from "../store/store";
 import { openPresentationFromFile } from "../store/actionCreators/presentationActionCreators";
 import { addNewImage } from "../store/actionCreators/slideElementActionCreators";
 import { setBackImage } from "../store/actionCreators/slidesActions";
+import { slides } from "../store/reducers/slidesReducer";
 
 export type Application = {
     readonly selectedElements: Array<string>,
@@ -40,6 +41,7 @@ export type PrimitiveType = {
         readonly width: number,
         readonly height: number,
     },
+    readonly layer: number,
     readonly color: string
 };
 
@@ -57,6 +59,7 @@ export type TextType = {
     readonly font: string,
     readonly fontSize: number,
     readonly weight: string,
+    readonly layer: number,
     readonly color: string,
     readonly content: string
 };
@@ -73,6 +76,7 @@ export type ImageType = {
         readonly height: number,
     };
     readonly link: string,
+    readonly layer: number,
     readonly content: string
 };
 
@@ -95,6 +99,7 @@ function getDefaultText(): TextType {
         font: '',
         fontSize: 48,
         weight: 'normal',
+        layer: 3,
         color: 'FFFFFF',
         content: 'Текст слайда'
     }
@@ -115,6 +120,7 @@ function getDefaultSlideTitle(): TextType {
         font: '',
         fontSize: 64,
         weight: 'normal',
+        layer: 3,
         color: 'FFFFFF',
         content: 'Заголовок слайда'
     }
@@ -368,8 +374,11 @@ function addImageFromFile(Appl: Application): Array<Slide> {
         let files = inp.files;
         if (files != null) {
             let file = files[0];
-            let image = URL.createObjectURL(file);
-            return store.dispatch(addNewImage(image));
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onloadend = () => {
+                return store.dispatch(addNewImage(String(reader.result)));                
+            };
         }
     });
     inp.remove();
@@ -389,6 +398,7 @@ function addImage(Appl: Application, adress: string): Array<Slide> {
             height: 100
         },
         link: '',
+        layer: 3,
         content: adress
     };
 
@@ -412,6 +422,7 @@ function addPrimitives(Appl: Application, primitivesType: 'circle' | 'rectangle'
         type: primitivesType,
         position: { x: 100, y: 100 },
         size: { width: 100, height: 100 },
+        layer: 3,
         color: '#FF0000'
     };
 
@@ -495,10 +506,9 @@ function moveElements(Appl: Application, newX: number, newY: number): Applicatio
     }
 };
 
+// newLayer: number
+// Доработка
 function changeLayer(Appl: Application, newLayer: string): Array<Slide> {
-    // Добавить в объект слои
-    // Для определения элемента возможно использовать функцию, которая следит за выбранными элементами
-    // и обработать их в цикле
     let changeSlides = [...Appl.presentation.slides];
     changeSlides = changeSlides.map((slide) => {
         if (Appl.selectedElements.includes(slide.id)) {
@@ -711,9 +721,12 @@ function loadPresentation(Appl: Application): Presentation {
     return Appl.presentation
 }
 
-function openPresentation(newPresentation: Presentation): Presentation {
-    console.log(newPresentation);
-    return  newPresentation
+function openPresentation(Appl: Application, newPresentation: Presentation): Application {
+    return {
+        ...Appl,
+        selectedElements: [newPresentation.slides[0].id],
+        presentation: newPresentation
+    }
 }
 
 function loadBackground(Appl: Application): Array<Slide> {
@@ -723,8 +736,11 @@ function loadBackground(Appl: Application): Array<Slide> {
     inp.addEventListener('change', () => {
         let files = inp.files;
         if (files !== null) {
-            let img = URL.createObjectURL(files[0]);
-            return store.dispatch(setBackImage(img));
+            const reader = new FileReader();
+            reader.readAsDataURL(files[0]);
+            reader.onloadend = () => {
+                return store.dispatch(setBackImage(String(reader.result)));
+            }
         }
     });
     return Appl.presentation.slides

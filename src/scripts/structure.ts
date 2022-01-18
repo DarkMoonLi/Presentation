@@ -40,7 +40,8 @@ export type PrimitiveType = {
         readonly height: number,
     },
     readonly layer: number,
-    readonly color: string
+    readonly color: string,
+    readonly contourColor: string
 };
 
 export type TextType = {
@@ -56,7 +57,7 @@ export type TextType = {
     }
     readonly font: string,
     readonly fontSize: number,
-    readonly weight: string,
+    readonly weight: number,
     readonly layer: number,
     readonly color: string,
     readonly content: string
@@ -94,9 +95,9 @@ function getDefaultText(): TextType {
             width: 1220,
             height: 400
         },
-        font: '',
+        font: 'Times New Roman',
         fontSize: 48,
-        weight: 'normal',
+        weight: 400,
         layer: 1,
         color: 'FFFFFF',
         content: 'Текст слайда'
@@ -115,9 +116,9 @@ function getDefaultSlideTitle(): TextType {
             width: 1220,
             height: 100
         },
-        font: '',
+        font: 'Times New Roman',
         fontSize: 64,
-        weight: 'normal',
+        weight: 400,
         layer: 1,
         color: 'FFFFFF',
         content: 'Заголовок слайда'
@@ -414,7 +415,8 @@ function addPrimitives(Appl: Application, primitivesType: 'circle' | 'rectangle'
         position: { x: 100, y: 100 },
         size: { width: 100, height: 100 },
         layer: 1,
-        color: '#FF0000'
+        color: '#FF0000',
+        contourColor: '#FFFFFF'
     };
 
     let changeSlides: Array<Slide> = [...Appl.presentation.slides.map(function(slide) {
@@ -614,7 +616,7 @@ function changeTextContent(Appl: Application, newText: string): Array<Slide> {
     return changeSlides;
 }
 
-function changeFont(Appl: Application, newFont: string = '', newFontSize: number = 14): Application {
+function changeFont(Appl: Application, newFont: string = 'Times New Roman', newFontSize: number = 14, newWeight: number = 400): Array<Slide> {
     // Изменение шрифта, нам нужен шрифт по умолчанию
     let changeSlides: Array<Slide> = [...Appl.presentation.slides];
     
@@ -623,11 +625,12 @@ function changeFont(Appl: Application, newFont: string = '', newFontSize: number
             slide = {
                 ...slide,
                 content: [...slide.content.map(function(content) {
-                    if ((Appl.selectedElements.indexOf(content.id) !== -1) && (content.type === 'text')) {
+                    if (Appl.selectedElements.includes(content.id) && (content.type === 'text')) {
                         return {
                             ...content,
                             font: newFont,
-                            fontSize: newFontSize
+                            fontSize: newFontSize,
+                            weight: newWeight
                         }
                     } else {
                         return content
@@ -637,22 +640,10 @@ function changeFont(Appl: Application, newFont: string = '', newFontSize: number
         }
     }
 
-    return {
-        ...Appl,
-        undo: [...Appl.undo, {...Appl.presentation}],
-        redo: [],
-        presentation: {
-            ...Appl.presentation,
-            slides: [...changeSlides]
-        },
-        viewing: {
-            ...Appl.viewing,
-            currentSlide: changeSlides[0]
-        }
-    }
+    return changeSlides;
 };
 
-function changeColor(Appl: Application, newColor: string): Application {
+function changeColor(Appl: Application, newColor: string): Array<Slide> {
     let changeSlides: Array<Slide> = [...Appl.presentation.slides];
     
     for (let slide of changeSlides) {
@@ -660,7 +651,7 @@ function changeColor(Appl: Application, newColor: string): Application {
             slide = {
                 ...slide,
                 content: [...slide.content.map(function(content) {
-                    if ((Appl.selectedElements.indexOf(content.id) !== -1) && (content.type !== 'image')) {
+                    if (Appl.selectedElements.includes(content.id) && (content.type !== 'image')) {
                         return {
                             ...content,
                             color: newColor
@@ -673,19 +664,33 @@ function changeColor(Appl: Application, newColor: string): Application {
         }
     }
 
-    return {
-        ...Appl,
-        undo: [...Appl.undo, {...Appl.presentation}],
-        redo: [],
-        presentation: {
-            ...Appl.presentation,
-            slides: [...changeSlides]
-        },
-        viewing: {
-            ...Appl.viewing,
-            currentSlide: changeSlides[0]
+    return changeSlides;
+};
+
+function changeContourColor(Appl: Application, newColor: string): Array<Slide> {
+    let changeSlides: Array<Slide> = [...Appl.presentation.slides];
+
+    changeSlides = changeSlides.map((slide) => {
+        if (Appl.selectedElements.includes(slide.id)) {
+            return {
+                ...slide,
+                content: slide.content.map((content) => {
+                    if (Appl.selectedElements.includes(slide.id) 
+                        && (content.type === 'circle' || content.type === 'rectangle' || content.type === 'triangle')) {
+                        
+                        return {
+                            ...content,
+                            contourColor: newColor
+                        }
+                    }
+                    return content
+                })
+            }
         }
-    }
+        return slide
+    });
+
+    return changeSlides
 };
 
 function savePresentation(Appl: Application, fileName: string): Presentation {
@@ -779,6 +784,7 @@ export {
     changeWindowSize,
     changeFont,
     changeColor,
+    changeContourColor,
     undo,
     redo,
     savePresentation,
@@ -789,5 +795,5 @@ export {
     viewingNextSlide,
     viewingPrevSlide,
     loadBackground,
-    setBackgroundImg
+    setBackgroundImg,
 }

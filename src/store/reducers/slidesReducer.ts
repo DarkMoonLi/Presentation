@@ -1,6 +1,6 @@
-import { addImage, addImageFromFile, addPrimitives, addSlide, addText, Application, changeBackground, changeLayer, changeTextContent, deleteElements, deleteSlide, getDefaultSlide, loadBackground, move, setBackgroundImg, Slide } from "../../scripts/structure";
+import { addImage, addImageFromFile, addPrimitives, addSlide, addText, Application, changeBackground, changeColor, changeContourColor, changeFont, changeLayer, changeTextContent, deleteElements, deleteSlide, getDefaultSlide, loadBackground, move, setBackgroundImg, Slide } from "../../scripts/structure";
 import { changeBack } from "../actions/changeBackground";
-import { chLayer, deleteElems, newImage, newImageFromFile, newPrimitive, newText } from "../actions/slideElementActions";
+import { chColor, chContourColor, chFont, chLayer, deleteElems, newImage, newImageFromFile, newPrimitive, newText } from "../actions/slideElementActions";
 import { addNewSlide, delSlide, moveSlide, setBackground, uploadImg } from "../actions/slides";
 import { changeText } from "../actions/text";
 import { ActionType } from "./mainReducer";
@@ -20,6 +20,9 @@ export function slides(state: Application = {} as Application, action: ActionTyp
         case newPrimitive: return addPrimitives(state, action.newPrimitive);
         case deleteElems: return deleteElements(state);
         case chLayer: return changeLayer(state, Number(action.value))
+        case chColor: return changeColor(state, action.value)
+        case chFont: return changeFont(state, action.value, action.newFontSize, action.newWeight)
+        case chContourColor: return changeContourColor(state, action.value)
         default: return state.presentation.slides
     }
 }

@@ -26,10 +26,10 @@ function Circle(circle: PrimitiveType) {
   const [edit, setEdit] = useState(false);
 
   useDragAndDrop(elemRef, position, setPosition, setMoving, setEdit);
-  useResizeElement1(resizeRef1, size, position, setSize, setPosition, setResize, setEdit);
-  useResizeElement2(resizeRef2, size, position, setSize, setPosition, setResize, setEdit);
-  useResizeElement3(resizeRef3, size, position, setSize, setPosition, setResize, setEdit);
-  useResizeElement4(resizeRef4, size, position, setSize, setPosition, setResize, setEdit);
+  useResizeElement1(elemRef, resizeRef1, size, position, setSize, setPosition, setResize, setEdit);
+  useResizeElement2(elemRef, resizeRef2, size, position, setSize, setPosition, setResize, setEdit);
+  useResizeElement3(elemRef, resizeRef3, size, position, setSize, setPosition, setResize, setEdit);
+  useResizeElement4(elemRef, resizeRef4, size, position, setSize, setPosition, setResize, setEdit);
 
   if (!state.selectedElements.includes(circle.id)) {
     return (

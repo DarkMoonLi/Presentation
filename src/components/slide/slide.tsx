@@ -3,7 +3,7 @@ import { Slide } from "../../scripts/structure";
 import getContent from '../content/content';
 import store from '../../store/store';
 import { putSelectedElement, clearSelectedElement } from '../../store/actionCreators/selectedElement';
-import { useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useDragAndDrop } from "../DragAndDrop/dragAndDrop";
 import { moveSlides } from '../../store/actionCreators/slidesActions';
 
@@ -14,26 +14,8 @@ type MiniSlide = {
 
 export default function SlideView({slide, index}: MiniSlide) {
 
-    const state = store.getState();
-    let prevSlidePos = 0;
-    let nextSlidePos = 0;
-    if (state.presentation.slides[index-2] != null) {
-        let prevSlide = document.getElementById(state.presentation.slides[index-2].id);
-        console.log();
-        prevSlidePos = (prevSlide != null) ? prevSlide.getBoundingClientRect().top : 0;
-    };
-    if (state.presentation.slides[index] != null) {
-        let nextSlide = document.getElementById(state.presentation.slides[index].id);
-        nextSlidePos = (nextSlide != null) ? nextSlide.getBoundingClientRect().top : 0;
-    }
-    let nowSlide = document.getElementById(slide.id);
-    let slidePos = {
-        x: (nowSlide != null) ? nowSlide.getBoundingClientRect().left : 0,
-        y: (nowSlide != null) ? nowSlide.getBoundingClientRect().top : 0
-    };
-
     const elemRef = useRef(null);
-    const [position, setPosition] = useState({x: 0, y: prevSlidePos + 210});
+    const [position, setPosition] = useState({x: 0, y: 210*(index-1)});
     const [moving, setMoving] = useState(false);
     const [edit, setEdit] = useState(false);
   
@@ -50,13 +32,19 @@ export default function SlideView({slide, index}: MiniSlide) {
     return (
         <foreignObject
             ref={elemRef}
+            style={{
+                position: 'relative',
+                top: position.y - 210*(index-1)
+            }}
             onMouseMove={() => {
-                moving && console.log(position.y, prevSlidePos);
-                if (position.y < prevSlidePos) {
+                moving && console.log(position.y, 210*(index-2));
+                if (position.y < 210*(index-2)) {
                     moving && store.dispatch(moveSlides(index - 1, index - 2))
+                    setMoving(false);
                 }
-                if (position.y > prevSlidePos + 220) {
+                if (position.y > 210*index) {
                     moving && store.dispatch(moveSlides(index - 1, index))
+                    setMoving(false);
                 }
             }}
             onClick={(event) => {
@@ -69,20 +57,20 @@ export default function SlideView({slide, index}: MiniSlide) {
                 event.preventDefault()
             }}
         >
-        <li 
+            <li 
             key={slide.id} 
             className={styles.slideContainer} 
-        >
-            <span className={styles.numberSlide}>{index}</span>
-            <svg 
-                viewBox='0 0 1400 800'
-                preserveAspectRatio='xMinYMax meet'
-                id={slide.id} 
-                className={styles.slide} 
-                style={slideStyle}
             >
-                {getContent(slide)}
-            </svg>
-        </li>
+                <span className={styles.numberSlide}>{index}</span>
+                <svg 
+                    viewBox='0 0 1400 800'
+                    preserveAspectRatio='xMinYMax meet'
+                    id={slide.id} 
+                    className={styles.slide} 
+                    style={slideStyle}
+                >
+                    {getContent(slide)}
+                </svg>
+            </li>
         </foreignObject>
 )}

@@ -1,4 +1,4 @@
-import { addNewSlide, delSlide, moveSlide, setBackground, uploadImg } from "../actions/slides";
+import { addNewSlide, delSlide, moveSlide, setBackground, setPos, uploadImg } from "../actions/slides";
 
 export function newSlide() {
     return {
@@ -36,10 +36,20 @@ export function uploadBackImg() {
     }
 }
 
-export function moveSlides(prev: number, next: number) {
+export function moveSlides(pos: {x: number, y: number}/*prev: number, next: number*/) {
     return {
         type: moveSlide,
-        prevIndex: prev,
-        newIndex: next
+        newPos: {
+            x: pos.x,
+            y: pos.y
+        }
+        /*prevIndex: prev,
+        newIndex: next*/
     }
+}
+
+export function constPosition() {
+    return {
+        type: setPos
+    }    
 }

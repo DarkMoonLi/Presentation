@@ -5,7 +5,7 @@ import store from '../../store/store';
 import { putSelectedElement, clearSelectedElement } from '../../store/actionCreators/selectedElement';
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useDragAndDrop } from "../DragAndDrop/dragAndDrop";
-import { moveSlides } from '../../store/actionCreators/slidesActions';
+import { constPosition, moveSlides } from '../../store/actionCreators/slidesActions';
 
 type MiniSlide = {
     slide: Slide,
@@ -15,7 +15,7 @@ type MiniSlide = {
 export default function SlideView({slide, index}: MiniSlide) {
 
     const elemRef = useRef(null);
-    const [position, setPosition] = useState({x: 0, y: 210*(index-1)});
+    const [position, setPosition] = useState({x: 0, y: slide.y/*210*(index-1)*/});
     const [moving, setMoving] = useState(false);
     const [edit, setEdit] = useState(false);
   
@@ -34,18 +34,21 @@ export default function SlideView({slide, index}: MiniSlide) {
             ref={elemRef}
             style={{
                 position: 'relative',
-                top: position.y - 210*(index-1)
+                top: slide.y - 100*(index-1) //position.y - 210*(index-1)
             }}
             onMouseMove={() => {
-                moving && console.log(position.y, 210*(index-2));
-                if (position.y < 210*(index-2)) {
+                moving && store.dispatch(moveSlides({x: 0, y: position.y}))
+                /*if (slide.y < 210*(index-2)) {
                     moving && store.dispatch(moveSlides(index - 1, index - 2))
                     setMoving(false);
                 }
-                if (position.y > 210*index) {
+                if (slide.y > 210*index) {
                     moving && store.dispatch(moveSlides(index - 1, index))
                     setMoving(false);
-                }
+                }*/
+            }}
+            onMouseUp={() => {
+                store.dispatch(constPosition())
             }}
             onClick={(event) => {
                 if (!event.ctrlKey) {

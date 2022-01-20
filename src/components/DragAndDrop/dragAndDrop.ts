@@ -20,6 +20,7 @@ export const useDragAndDrop = (elementRef: any, initPosition: { x: number; y: nu
 
     const onMove = (e: MouseEvent) => {
         let pos = elementRef.current.getBoundingClientRect();
+        console.log(pos);
         if (e.clientX > pos.x && e.clientX < (pos.x + pos.width) && e.clientY > pos.y && e.clientY < (pos.y + pos.height)) {
             const delta = { x: e.clientX - startPosition.x, y: e.clientY - startPosition.y }
             const newPos = { x: initPosition.x + delta.x, y: initPosition.y + delta.y }

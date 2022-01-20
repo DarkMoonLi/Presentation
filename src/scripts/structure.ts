@@ -23,6 +23,7 @@ export type Presentation = {
 
 export type Slide = {
     readonly id: string,
+    readonly y: number,
     readonly background: string,
     readonly backgroundImg: string,
     readonly content: Array<TextType|PrimitiveType|ImageType>
@@ -125,9 +126,10 @@ function getDefaultSlideTitle(): TextType {
     }
 };
 
-function getDefaultSlide(): Slide {
+function getDefaultSlide(index: number): Slide {
     return {
         id: getId(),
+        y: 100 * index,
         background: 'FFFFFF',
         backgroundImg: '',
         content: [getDefaultSlideTitle(), getDefaultText()]
@@ -262,7 +264,7 @@ function stopViewing(Appl: Application): Application {
 }
 
 function getApplication(): Application {
-    let slide = getDefaultSlide();
+    let slide = getDefaultSlide(0);
     return {
         selectedElements: [slide.id],
         undo: [],
@@ -280,7 +282,7 @@ function getApplication(): Application {
 };
 
 function createNewPresentation(Appl: Application): Application {
-    let slide = getDefaultSlide();
+    let slide = getDefaultSlide(0);
     return {
         ...Appl,
         selectedElements: [slide.id],
@@ -303,7 +305,7 @@ function addSlide(Appl: Application): Application {
         ...Appl,
         presentation: {
             ...Appl.presentation,
-            slides: [...Appl.presentation.slides, getDefaultSlide()]
+            slides: [...Appl.presentation.slides, getDefaultSlide(Appl.presentation.slides.length)]
         }
     }
 };
@@ -316,7 +318,7 @@ function deleteSlide(Appl: Application): Application {
             return (!Appl.selectedElements.includes(slide.id))
         })]
     } else {
-        newSlides = [getDefaultSlide()]
+        newSlides = [getDefaultSlide(0)]
     }
 
     return {
@@ -332,10 +334,35 @@ function deleteSlide(Appl: Application): Application {
 };
 
 // Исправить
-function move(Appl: Application, prevIndex: number, newIndex: number): Array<Slide> {
-    let newSlides: Array<Slide> = [...Appl.presentation.slides];
+function move(Appl: Application, newY: number /*, prevIndex: number, newIndex: number*/): Array<Slide> {
+    let newSlides: Array<Slide> = Appl.presentation.slides;
 
-    if (prevIndex < newIndex) {
+    newSlides = newSlides.map((slide) => {
+        if (Appl.selectedElements.includes(slide.id)) {
+            return {
+                ...slide,
+                y: newY
+            }
+        }
+        return slide
+    });
+
+    for (let i = 1; i < newSlides.length; i++) {
+        if (newSlides[i].y < newSlides[i-1].y) {
+            let slide = newSlides[i];
+            newSlides[i] = newSlides[i-1];
+            newSlides[i-1] = slide
+        }
+        if ((newSlides[newSlides.length - i] != null && newSlides[newSlides.length - i - 1].y > newSlides[newSlides.length - i].y)) {
+            let slide = newSlides[newSlides.length - i];
+            newSlides[newSlides.length - i] = newSlides[newSlides.length - i - 1];
+            newSlides[newSlides.length - i - 1] = slide;
+        }
+    };
+
+    console.log(newSlides);
+
+    /*if (prevIndex < newIndex) {
         for (let i = newSlides.length - 2; i >= 0; i--) {
             if (Appl.selectedElements.includes(newSlides[i].id)) {
                 let slide = newSlides[i + 1];
@@ -353,10 +380,23 @@ function move(Appl: Application, prevIndex: number, newIndex: number): Array<Sli
                 newSlides[i] = slide;
             }
         }
-    }
+    }*/
 
     return newSlides;
 };
+
+function setPosition(Appl: Application): Array<Slide> {
+    let changeSlides: Array<Slide> = Appl.presentation.slides;
+
+    for (let i=0; i<changeSlides.length; i++) {
+        changeSlides[i] = {
+            ...Appl.presentation.slides[i],
+            y: i*100
+        }
+    }
+
+    return changeSlides;
+}
 
 function addImageFromFile(Appl: Application): Array<Slide> {
     const inp = document.createElement("input");
@@ -772,6 +812,7 @@ export {
     addSlide,
     deleteSlide,
     move,
+    setPosition,
     addImage,
     addImageFromFile,
     addPrimitives,

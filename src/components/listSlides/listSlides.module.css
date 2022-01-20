@@ -7,6 +7,14 @@
   border-radius: 5px;
 }
 
+/* .slides:focus,
+.slides:focus-visible,
+.slides:active
+{
+  border: 2px solid black;
+  outline: black;
+} */
+
 .slides {
   display: inline-block;
   overflow-y: scroll;

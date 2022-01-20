@@ -154,3 +154,9 @@
     height: 60px;
     border-radius: 3px;
 }
+
+.button
+{
+    margin-right: 15px;
+    margin-top: 5px;
+}

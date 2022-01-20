@@ -6,3 +6,9 @@ export function changeBackgroundFunc(newBackground: string) {
         value: '#' + newBackground
     }
 }
+export function defaultBackgroundColor() {
+    return {
+        type: changeBack,
+        value: '#fff'
+    }
+}

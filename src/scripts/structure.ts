@@ -771,7 +771,7 @@ export {
     getDefaultSlide,
     getDefaultText,
     getId,
-    //setTitle,
+    // setTitle,
     addSlide,
     deleteSlide,
     move,

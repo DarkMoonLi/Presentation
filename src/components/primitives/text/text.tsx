@@ -7,6 +7,7 @@ import { useDragAndDrop } from "../../DragAndDrop/dragAndDrop";
 import { changeSize, moveElements } from "../../../store/actionCreators/moveElements";
 import { useResizeElement1, useResizeElement2, useResizeElement3, useResizeElement4 } from "../../DragAndDrop/resizeElement";
 import { ResizeBlock } from "../../DragAndDrop/resizeBlocks";
+import style from './text.module.css';
 
 function SomebodyText(text: TextType) {
 
@@ -119,6 +120,7 @@ function SomebodyText(text: TextType) {
       onDoubleClick={() => setEdit(true)}
     >
       <textarea
+        className={style.textarea}
         ref={elemRef}
         id={text.id}
         readOnly={edit ? true : false}
@@ -129,12 +131,12 @@ function SomebodyText(text: TextType) {
           fontSize: text.fontSize,
           color: text.color,
           fontWeight: text.weight,
-          border: border,
+          // border: border,
           backgroundColor: 'transparent',
           textAlign: 'center',
           position: 'absolute',
           scale: '1',
-          resize: 'none'
+          // resize: 'none'
         }}
         color={text.color}
         wrap="soft"

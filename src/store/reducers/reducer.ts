@@ -1,4 +1,4 @@
-import { Application, clearSelectedElements, clearSelectedElementsOnSlide, moveElements, putSelectedElement, setTitle, deleteSelectedElement, changeTextContent, savePresentation, openPresentation, addSlide, loadPresentation, deleteSlide, redo, undo, addText, addImageFromFile, startViewing, stopViewing, viewingNextSlide, viewingPrevSlide, addImage, addPrimitives, createNewPresentation, loadBackground, setBackgroundImg, changeWindowSize, changeBackground, move, deleteElements } from "../../scripts/structure";
+import { Application, clearSelectedElements, clearSelectedElementsOnSlide, moveElements, putSelectedElement, deleteSelectedElement, changeTextContent, savePresentation, openPresentation, addSlide, loadPresentation, deleteSlide, redo, undo, addText, addImageFromFile, startViewing, stopViewing, viewingNextSlide, viewingPrevSlide, addImage, addPrimitives, createNewPresentation, loadBackground, setBackgroundImg, changeWindowSize, changeBackground, move, deleteElements } from "../../scripts/structure";
 import { putElem, clearAllElems, clearSlideElems, deleteElem } from "../actions/selectedElements"
 import { moving, resize } from "../actions/moveElements"
 import { changePresentationTitle } from "../actions/title";
@@ -30,9 +30,9 @@ function reducer(state: Application = {} as Application, action: any) {
         case newPrimitive: return addPrimitives(state, action.value);
         case deleteElems: return deleteElements(state)
         // Работа с презентацией
-        case changePresentationTitle: return setTitle(state, action.value);
+        // case changePresentationTitle: return setTitle(state, action.value);
         case download: return savePresentation(state, action.value);
-        case upload: return loadPresentation(state, action.value);
+        // case upload: return loadPresentation(state, action.value);
         case presentationFromFile: return openPresentation(state, action.value);
         case NewPresentation: return createNewPresentation(state);
         // Работа со слайдами

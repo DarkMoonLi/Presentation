@@ -20,17 +20,12 @@ export default function SomeImage(image: ImageType) {
   const resizeRef2 = useRef(null);
   const resizeRef3 = useRef(null);
   const resizeRef4 = useRef(null);
-  const [position, setPosition] = useState({ x: image.position.x, y: image.position.y });
-  const [moving, setMoving] = useState(false);
-  const [size, setSize] = useState({width: image.size.width, height: image.size.height});
-  const [resizing, setResize] = useState(false);
-  const [edit, setEdit] = useState(false);
 
-  useDragAndDrop(elemRef, position, setPosition, setMoving, setEdit);
-  useResizeElement1(elemRef, resizeRef1, size, position, setSize, setPosition, setResize, setEdit);
-  useResizeElement2(elemRef, resizeRef2, size, position, setSize, setPosition, setResize, setEdit);
-  useResizeElement3(elemRef, resizeRef3, size, position, setSize, setPosition, setResize, setEdit);
-  useResizeElement4(elemRef, resizeRef4, size, position, setSize, setPosition, setResize, setEdit);
+  useDragAndDrop(elemRef, image.position);
+  useResizeElement1(resizeRef1, image.size, image.position);
+  useResizeElement2(resizeRef2, image.size, image.position);
+  useResizeElement3(resizeRef3, image.size, image.position);
+  useResizeElement4(resizeRef4, image.size, image.position);
 
   if (!state.selectedElements.includes(image.id)) {
     return (
@@ -50,14 +45,7 @@ export default function SomeImage(image: ImageType) {
             else
               store.dispatch(deleteSelectedElement(image.id)) 
           };
-          console.log(state.selectedElements);
         }}
-        /*onMouseMove={() => {
-          moving && store.dispatch(moveElements(position));
-          resizing && store.dispatch(changeSize(size, position))
-        }}*/ 
-        onClick={() => setEdit(false)} 
-        onDoubleClick={() => setEdit(true)}
       >
         <svg
           ref={elemRef}
@@ -95,14 +83,7 @@ export default function SomeImage(image: ImageType) {
           else
             store.dispatch(deleteSelectedElement(image.id)) 
         };
-        console.log(state.selectedElements);
       }}
-      onMouseMove={() => {
-        moving && store.dispatch(moveElements(position));
-        resizing && store.dispatch(changeSize(size, position))
-      }} 
-      onClick={() => setEdit(false)} 
-      onDoubleClick={() => setEdit(true)}
     >
       <svg
         ref={elemRef}
@@ -130,7 +111,6 @@ export default function SomeImage(image: ImageType) {
         borderRadius: '4px',
         cursor: 'se-resize'
         }}
-        onMouseMove={() => resizing && store.dispatch(changeSize(size, position))}
       ></div>
       <div ref={resizeRef2} style={{
         position: 'absolute',
@@ -144,7 +124,6 @@ export default function SomeImage(image: ImageType) {
         borderRadius: '4px',
         cursor: 'se-resize'
         }}
-        onMouseMove={() => resizing && store.dispatch(changeSize(size, position))}
       ></div>
       <div ref={resizeRef3} style={{
         position: 'absolute',
@@ -158,7 +137,6 @@ export default function SomeImage(image: ImageType) {
         borderRadius: '4px',
         cursor: 'se-resize'
         }}
-        onMouseMove={() => resizing && store.dispatch(changeSize(size, position))}
       ></div>
       <div ref={resizeRef4} style={{
         position: 'absolute',
@@ -171,7 +149,6 @@ export default function SomeImage(image: ImageType) {
         borderRadius: '4px',
         cursor: 'se-resize'
         }}
-        onMouseMove={() => resizing && store.dispatch(changeSize(size, position))}
       ></div>
     </foreignObject>
     )

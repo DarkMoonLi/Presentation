@@ -3,7 +3,7 @@ import { Slide } from "../../scripts/structure";
 import getContent from '../content/content';
 import store from '../../store/store';
 import { putSelectedElement, clearSelectedElement } from '../../store/actionCreators/selectedElement';
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useDragAndDrop } from "../DragAndDrop/dragAndDrop";
 import { constPosition, moveSlides } from '../../store/actionCreators/slidesActions';
 
@@ -15,11 +15,9 @@ type MiniSlide = {
 export default function SlideView({slide, index}: MiniSlide) {
 
     const elemRef = useRef(null);
-    const [position, setPosition] = useState({x: 0, y: slide.y/*210*(index-1)*/});
-    const [moving, setMoving] = useState(false);
-    const [edit, setEdit] = useState(false);
   
-    useDragAndDrop(elemRef, position, setPosition, setMoving, setEdit);
+    useDragAndDrop(elemRef, {x:0, y: slide.y});
+    let [moving, setMoving] = useState(false);
 
     const slideStyle = {
         backgroundImage: `url(${slide.backgroundImg})`,
@@ -36,18 +34,10 @@ export default function SlideView({slide, index}: MiniSlide) {
                 position: 'relative',
                 top: slide.y - 100*(index-1) //position.y - 210*(index-1)
             }}
-            onMouseMove={() => {
-                moving && store.dispatch(moveSlides({x: 0, y: position.y}))
-                /*if (slide.y < 210*(index-2)) {
-                    moving && store.dispatch(moveSlides(index - 1, index - 2))
-                    setMoving(false);
-                }
-                if (slide.y > 210*index) {
-                    moving && store.dispatch(moveSlides(index - 1, index))
-                    setMoving(false);
-                }*/
-            }}
+            onMouseDown={() => setMoving(true)}
+            onMouseMove={() => moving && store.dispatch(moveSlides({x: 0, y: slide.y}))}
             onMouseUp={() => {
+                setMoving(false)
                 store.dispatch(constPosition())
             }}
             onClick={(event) => {

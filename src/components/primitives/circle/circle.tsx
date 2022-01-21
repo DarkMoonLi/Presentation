@@ -1,6 +1,5 @@
 import { useRef, useState } from "react";
 import { PrimitiveType } from "../../../scripts/structure"
-import { moveElements, changeSize } from "../../../store/actionCreators/moveElements";
 import { clearSelectedElementsOnSlide, deleteSelectedElement, putSelectedElement } from "../../../store/actionCreators/selectedElement";
 import store from "../../../store/store";
 import { useDragAndDrop } from "../../DragAndDrop/dragAndDrop";
@@ -19,17 +18,13 @@ function Circle(circle: PrimitiveType) {
   const resizeRef2 = useRef(null);
   const resizeRef3 = useRef(null);
   const resizeRef4 = useRef(null);
-  const [position, setPosition] = useState({ x: circle.position.x, y: circle.position.y });
-  const [moving, setMoving] = useState(false);
-  const [size, setSize] = useState({width: circle.size.width, height: circle.size.height});
-  const [resizing, setResize] = useState(false);
   const [edit, setEdit] = useState(false);
 
-  useDragAndDrop(elemRef, position, setPosition, setMoving, setEdit);
-  useResizeElement1(elemRef, resizeRef1, size, position, setSize, setPosition, setResize, setEdit);
-  useResizeElement2(elemRef, resizeRef2, size, position, setSize, setPosition, setResize, setEdit);
-  useResizeElement3(elemRef, resizeRef3, size, position, setSize, setPosition, setResize, setEdit);
-  useResizeElement4(elemRef, resizeRef4, size, position, setSize, setPosition, setResize, setEdit);
+  useDragAndDrop(elemRef, circle.position);
+  useResizeElement1(resizeRef1, circle.size, circle.position);
+  useResizeElement2(resizeRef2, circle.size, circle.position);
+  useResizeElement3(resizeRef3, circle.size, circle.position);
+  useResizeElement4(resizeRef4, circle.size, circle.position);
 
   if (!state.selectedElements.includes(circle.id)) {
     return (
@@ -51,10 +46,6 @@ function Circle(circle: PrimitiveType) {
           };
           console.log(state.selectedElements);
         }}
-        /*onMouseMove={() => {
-          moving && store.dispatch(moveElements(position));
-          resizing && store.dispatch(changeSize(size, position))
-        }}*/ 
         onClick={() => setEdit(false)} 
         onDoubleClick={() => setEdit(true)}
       >
@@ -99,10 +90,6 @@ function Circle(circle: PrimitiveType) {
             store.dispatch(deleteSelectedElement(circle.id)) 
         };
         console.log(state.selectedElements);
-      }}
-      onMouseMove={() => {
-        moving && store.dispatch(moveElements(position));
-        resizing && store.dispatch(changeSize(size, position))
       }} 
       onClick={() => setEdit(false)} 
       onDoubleClick={() => setEdit(true)}

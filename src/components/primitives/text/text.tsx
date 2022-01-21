@@ -4,7 +4,6 @@ import { putSelectedElement, clearSelectedElementsOnSlide, deleteSelectedElement
 import { changeTextValue } from '../../../store/actionCreators/text';
 import { useRef, useState } from "react";
 import { useDragAndDrop } from "../../DragAndDrop/dragAndDrop";
-import { changeSize, moveElements } from "../../../store/actionCreators/moveElements";
 import { useResizeElement1, useResizeElement2, useResizeElement3, useResizeElement4 } from "../../DragAndDrop/resizeElement";
 
 function SomebodyText(text: TextType) {
@@ -21,17 +20,13 @@ function SomebodyText(text: TextType) {
   const resizeRef2 = useRef(null);
   const resizeRef3 = useRef(null);
   const resizeRef4 = useRef(null);
-  const [position, setPosition] = useState({ x: text.position.x, y: text.position.y });
-  const [moving, setMoving] = useState(false);
-  const [size, setSize] = useState({width: text.size.width, height: text.size.height});
-  const [resizing, setResize] = useState(false);
   const [edit, setEdit] = useState(false);
 
-  useDragAndDrop(elemRef, position, setPosition, setMoving, setEdit);
-  useResizeElement1(elemRef, resizeRef1, size, position, setSize, setPosition, setResize, setEdit);
-  useResizeElement2(elemRef, resizeRef2, size, position, setSize, setPosition, setResize, setEdit);
-  useResizeElement3(elemRef, resizeRef3, size, position, setSize, setPosition, setResize, setEdit);
-  useResizeElement4(elemRef, resizeRef4, size, position, setSize, setPosition, setResize, setEdit);
+  useDragAndDrop(elemRef, text.position);
+  useResizeElement1(resizeRef1, text.size, text.position);
+  useResizeElement2(resizeRef2, text.size, text.position);
+  useResizeElement3(resizeRef3, text.size, text.position);
+  useResizeElement4(resizeRef4, text.size, text.position);
 
   if (!state.selectedElements.includes(text.id)) {
     return (
@@ -52,11 +47,6 @@ function SomebodyText(text: TextType) {
               store.dispatch(deleteSelectedElement(text.id)) 
           };
         }}
-        /*onMouseMove={() => {
-          moving && store.dispatch(moveElements(position))
-          resizing && store.dispatch(changeSize(size, position))
-          resizing && console.log(size);
-        }}*/
         onClick={() => setEdit(false)}
         onDoubleClick={() => setEdit(true)}
       >
@@ -108,11 +98,6 @@ function SomebodyText(text: TextType) {
           else
             store.dispatch(deleteSelectedElement(text.id)) 
         };
-      }}
-      onMouseMove={() => {
-        moving && store.dispatch(moveElements(position))
-        resizing && store.dispatch(changeSize(size, position))
-        resizing && console.log(size);
       }}
       onClick={() => setEdit(false)}
       onDoubleClick={() => setEdit(true)}

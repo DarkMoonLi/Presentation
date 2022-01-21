@@ -4,7 +4,6 @@ import { clearSelectedElementsOnSlide, deleteSelectedElement, putSelectedElement
 import store from "../../../store/store";
 import { useDragAndDrop } from "../../DragAndDrop/dragAndDrop";
 import { useResizeElement1, useResizeElement2, useResizeElement3, useResizeElement4 } from "../../DragAndDrop/resizeElement";
-import { moveElements, changeSize } from '../../../store/actionCreators/moveElements';
 
 function Rectangle(rectangle: PrimitiveType) {
   let border = '';
@@ -19,17 +18,13 @@ function Rectangle(rectangle: PrimitiveType) {
   const resizeRef2 = useRef(null);
   const resizeRef3 = useRef(null);
   const resizeRef4 = useRef(null);
-  const [position, setPosition] = useState({ x: rectangle.position.x, y: rectangle.position.y });
-  const [moving, setMoving] = useState(false);
-  const [size, setSize] = useState({width: rectangle.size.width, height: rectangle.size.height});
-  const [resizing, setResize] = useState(false);
   const [edit, setEdit] = useState(false);
 
-  useDragAndDrop(elemRef, position, setPosition, setMoving, setEdit);
-  useResizeElement1(elemRef, resizeRef1, size, position, setSize, setPosition, setResize, setEdit);
-  useResizeElement2(elemRef, resizeRef2, size, position, setSize, setPosition, setResize, setEdit);
-  useResizeElement3(elemRef, resizeRef3, size, position, setSize, setPosition, setResize, setEdit);
-  useResizeElement4(elemRef, resizeRef4, size, position, setSize, setPosition, setResize, setEdit);
+  useDragAndDrop(elemRef, rectangle.position);
+  useResizeElement1(resizeRef1, rectangle.size, rectangle.position);
+  useResizeElement2(resizeRef2, rectangle.size, rectangle.position);
+  useResizeElement3(resizeRef3, rectangle.size, rectangle.position);
+  useResizeElement4(resizeRef4, rectangle.size, rectangle.position);
 
   if (!state.selectedElements.includes(rectangle.id)) {
     return (
@@ -49,12 +44,7 @@ function Rectangle(rectangle: PrimitiveType) {
             else
               store.dispatch(deleteSelectedElement(rectangle.id)) 
           };
-          console.log(state.selectedElements);
         }}
-        /*onMouseMove={() => {
-          moving && store.dispatch(moveElements(position))
-          resizing && store.dispatch(changeSize(size, position))
-        }}*/
         onClick={() => setEdit(false)}
         onDoubleClick={() => setEdit(true)}
       >
@@ -96,11 +86,6 @@ function Rectangle(rectangle: PrimitiveType) {
           else
             store.dispatch(deleteSelectedElement(rectangle.id)) 
         };
-        console.log(state.selectedElements);
-      }}
-      onMouseMove={() => {
-        moving && store.dispatch(moveElements(position))
-        resizing && store.dispatch(changeSize(size, position))
       }}
       onClick={() => setEdit(false)}
       onDoubleClick={() => setEdit(true)}

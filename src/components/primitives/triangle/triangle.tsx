@@ -28,17 +28,13 @@ function Triangle(triangle: PrimitiveType) {
   const resizeRef2 = useRef(null);
   const resizeRef3 = useRef(null);
   const resizeRef4 = useRef(null);
-  const [position, setPosition] = useState({ x: triangle.position.x, y: triangle.position.y });
-  const [moving, setMoving] = useState(false);
-  const [size, setSize] = useState({width: triangle.size.width, height: triangle.size.height});
-  const [resizing, setResize] = useState(false);
   const [edit, setEdit] = useState(false);
 
-  useDragAndDrop(elemRef, position, setPosition, setMoving, setEdit);
-  useResizeElement1(elemRef, resizeRef1, size, position, setSize, setPosition, setResize, setEdit);
-  useResizeElement2(elemRef, resizeRef2, size, position, setSize, setPosition, setResize, setEdit);
-  useResizeElement3(elemRef, resizeRef3, size, position, setSize, setPosition, setResize, setEdit);
-  useResizeElement4(elemRef, resizeRef4, size, position, setSize, setPosition, setResize, setEdit);
+  useDragAndDrop(elemRef, triangle.position);
+  useResizeElement1(resizeRef1, triangle.size, triangle.position);
+  useResizeElement2(resizeRef2, triangle.size, triangle.position);
+  useResizeElement3(resizeRef3, triangle.size, triangle.position);
+  useResizeElement4(resizeRef4, triangle.size, triangle.position);
 
   if (!state.selectedElements.includes(triangle.id)) {
     return (
@@ -58,12 +54,7 @@ function Triangle(triangle: PrimitiveType) {
             else
               store.dispatch(deleteSelectedElement(triangle.id)) 
           };
-          console.log(state.selectedElements);
         }}
-        /*onMouseMove={() => {
-          moving && store.dispatch(moveElements(position))
-          resizing && store.dispatch(changeSize(size, position))
-        }}*/ 
         onClick={() => setEdit(false)} 
         onDoubleClick={() => setEdit(true)}
       >
@@ -103,12 +94,7 @@ function Triangle(triangle: PrimitiveType) {
           else
             store.dispatch(deleteSelectedElement(triangle.id)) 
         };
-        console.log(state.selectedElements);
       }}
-      onMouseMove={() => {
-        moving && store.dispatch(moveElements(position))
-        resizing && store.dispatch(changeSize(size, position))
-      }} 
       onClick={() => setEdit(false)} 
       onDoubleClick={() => setEdit(true)}
     >

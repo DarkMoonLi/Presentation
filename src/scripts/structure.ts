@@ -333,7 +333,6 @@ function deleteSlide(Appl: Application): Application {
     }
 };
 
-// Исправить
 function move(Appl: Application, newY: number /*, prevIndex: number, newIndex: number*/): Array<Slide> {
     let newSlides: Array<Slide> = Appl.presentation.slides;
 
@@ -359,28 +358,6 @@ function move(Appl: Application, newY: number /*, prevIndex: number, newIndex: n
             newSlides[newSlides.length - i - 1] = slide;
         }
     };
-
-    console.log(newSlides);
-
-    /*if (prevIndex < newIndex) {
-        for (let i = newSlides.length - 2; i >= 0; i--) {
-            if (Appl.selectedElements.includes(newSlides[i].id)) {
-                let slide = newSlides[i + 1];
-                newSlides[i+1] = newSlides[i];
-                newSlides[i] = slide
-            }
-        }
-    };
-
-    if (prevIndex > newIndex) {
-        for (let i = 1; i < newSlides.length; i++) {
-            if (Appl.selectedElements.includes(newSlides[i].id)) {
-                let slide = newSlides[i-1];
-                newSlides[i-1] = newSlides[i];
-                newSlides[i] = slide;
-            }
-        }
-    }*/
 
     return newSlides;
 };

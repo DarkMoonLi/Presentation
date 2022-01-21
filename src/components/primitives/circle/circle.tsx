@@ -62,10 +62,12 @@ function Circle(circle: PrimitiveType) {
             id={circle.id}
             cx={circle.size.width / 2}
             cy={circle.size.height / 2}
-            rx={circle.size.width / 2} 
-            ry={circle.size.height / 2}
+            rx={circle.size.width / 2 - 2} 
+            ry={circle.size.height / 2 - 2}
             fill={circle.color}
             style={{border: border}}
+            stroke={circle.contourColor}
+            strokeWidth={2}
           />
         </svg>
       </foreignObject>  
@@ -107,10 +109,12 @@ function Circle(circle: PrimitiveType) {
           id={circle.id}
           cx={circle.size.width / 2}
           cy={circle.size.height / 2}
-          rx={circle.size.width / 2}
-          ry={circle.size.height / 2}
+          rx={circle.size.width / 2 - 2}
+          ry={circle.size.height / 2 - 2}
           fill={circle.color}
           style={{border: border}}
+          stroke={circle.contourColor}
+          strokeWidth={2}
         />
       </svg>
       <div ref={resizeRef1} style={{

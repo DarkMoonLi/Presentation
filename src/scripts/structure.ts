@@ -433,7 +433,7 @@ function addPrimitives(Appl: Application, primitivesType: 'circle' | 'rectangle'
         size: { width: 100, height: 100 },
         layer: 1,
         color: '#FF0000',
-        contourColor: '#FFFFFF'
+        contourColor: '#00FF00'
     };
 
     let changeSlides: Array<Slide> = [...Appl.presentation.slides.map(function(slide) {

@@ -36,15 +36,13 @@ export function uploadBackImg() {
     }
 }
 
-export function moveSlides(pos: {x: number, y: number}/*prev: number, next: number*/) {
+export function moveSlides(pos: {x: number, y: number}) {
     return {
         type: moveSlide,
         newPos: {
             x: pos.x,
             y: pos.y
         }
-        /*prevIndex: prev,
-        newIndex: next*/
     }
 }
 

@@ -2,8 +2,8 @@ import styles from './slide.module.css'
 import { Slide } from "../../scripts/structure";
 import getContent from '../content/content';
 import store from '../../store/store';
-import { putSelectedElement, clearSelectedElement } from '../../store/actionCreators/selectedElement';
-import { useRef, useState } from "react";
+import { putSelectedElement, clearSelectedElement, clearSelectedElementsOnSlide } from '../../store/actionCreators/selectedElement';
+import { useRef } from "react";
 import { useDragAndDrop } from "../DragAndDrop/dragAndDrop";
 import { constPosition, moveSlides } from '../../store/actionCreators/slidesActions';
 
@@ -16,8 +16,7 @@ export default function SlideView({slide, index}: MiniSlide) {
 
     const elemRef = useRef(null);
   
-    useDragAndDrop(elemRef, {x:0, y: slide.y});
-    let [moving, setMoving] = useState(false);
+    useDragAndDrop(elemRef, {x:0, y: slide.y}, true);
 
     const slideStyle = {
         backgroundImage: `url(${slide.backgroundImg})`,
@@ -32,14 +31,10 @@ export default function SlideView({slide, index}: MiniSlide) {
             ref={elemRef}
             style={{
                 position: 'relative',
-                top: slide.y - 100*(index-1) //position.y - 210*(index-1)
+                top: slide.y - 100*(index-1)
             }}
-            onMouseDown={() => setMoving(true)}
-            onMouseMove={() => moving && store.dispatch(moveSlides({x: 0, y: slide.y}))}
-            onMouseUp={() => {
-                setMoving(false)
-                store.dispatch(constPosition())
-            }}
+            onMouseDown={() => store.dispatch(clearSelectedElementsOnSlide())}
+            onMouseUp={() => store.dispatch(constPosition())}
             onClick={(event) => {
                 if (!event.ctrlKey) {
                     store.dispatch(clearSelectedElement())

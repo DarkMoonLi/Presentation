@@ -1,6 +1,5 @@
 import { ImageType } from "../../scripts/structure";
-import { useRef, useState } from "react";
-import { moveElements, changeSize } from "../../store/actionCreators/moveElements";
+import { useRef } from "react";
 import { clearSelectedElementsOnSlide, deleteSelectedElement, putSelectedElement } from "../../store/actionCreators/selectedElement";
 import store from "../../store/store";
 import { useDragAndDrop } from "../DragAndDrop/dragAndDrop";

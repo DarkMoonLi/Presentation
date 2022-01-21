@@ -59,10 +59,14 @@ function Rectangle(rectangle: PrimitiveType) {
         >
           <rect 
             id={rectangle.id} 
-            width={rectangle.size.width} 
-            height={rectangle.size.height} 
+            x={1}
+            y={1}
+            width={rectangle.size.width - 2} 
+            height={rectangle.size.height - 2} 
             fill={rectangle.color}
             style={{border: border}}
+            stroke={rectangle.contourColor}
+            strokeWidth={2}
           />
         </svg>
       </foreignObject>
@@ -100,11 +104,15 @@ function Rectangle(rectangle: PrimitiveType) {
         }}
       >
         <rect 
-          id={rectangle.id} 
-          width={rectangle.size.width} 
-          height={rectangle.size.height} 
+          id={rectangle.id}
+          x={1}
+          y={1} 
+          width={rectangle.size.width - 2} 
+          height={rectangle.size.height - 2} 
           fill={rectangle.color}
           style={{border: border}}
+          stroke={rectangle.contourColor}
+          strokeWidth={2}
         />
       </svg>
       <div ref={resizeRef1} style={{

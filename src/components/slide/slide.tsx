@@ -16,9 +16,16 @@ export default function SlideView({slide, index}: MiniSlide) {
 
     const elemRef = useRef(null);
   
+    const state = store.getState();
     useDragAndDrop(elemRef, {x:0, y: slide.y}, true);
 
+    let border: string = '';
+    if (state.selectedElements.includes(slide.id)) {
+        border = '2px solid green';
+    };
+
     const slideStyle = {
+        border: border,
         backgroundImage: `url(${slide.backgroundImg})`,
         backgroundColor: slide.background,
         backgroundRepeat: 'no-repeat',
@@ -34,7 +41,6 @@ export default function SlideView({slide, index}: MiniSlide) {
                 top: slide.y - 100*(index-1)
             }}
             onMouseDown={() => store.dispatch(clearSelectedElementsOnSlide())}
-            onMouseUp={() => store.dispatch(constPosition())}
             onClick={(event) => {
                 if (!event.ctrlKey) {
                     store.dispatch(clearSelectedElement())

@@ -333,7 +333,7 @@ function deleteSlide(Appl: Application): Application {
     }
 };
 
-function move(Appl: Application, newY: number /*, prevIndex: number, newIndex: number*/): Array<Slide> {
+function move(Appl: Application, newY: number): Array<Slide> {
     let newSlides: Array<Slide> = Appl.presentation.slides;
 
     newSlides = newSlides.map((slide) => {

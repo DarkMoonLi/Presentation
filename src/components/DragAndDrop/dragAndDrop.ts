@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { moveElements } from "../../store/actionCreators/moveElements";
-import { moveSlides } from "../../store/actionCreators/slidesActions";
+import { constPosition, moveSlides } from "../../store/actionCreators/slidesActions";
 import store from "../../store/store";
 
 export const useDragAndDrop = (elementRef: any, initPosition: { x: number; y: number }, isSlide: boolean = false) => {
@@ -33,6 +33,7 @@ export const useDragAndDrop = (elementRef: any, initPosition: { x: number; y: nu
     const onStopMove = () => {
         document.removeEventListener("mousemove", onMove);
         document.removeEventListener("mouseup", onStopMove);
+        if (isSlide) store.dispatch(constPosition())
     };
 
     useEffect(() => {

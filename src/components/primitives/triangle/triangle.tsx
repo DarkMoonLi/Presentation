@@ -29,11 +29,11 @@ function Triangle(triangle: PrimitiveType) {
   const resizeRef4 = useRef(null);
   const [edit, setEdit] = useState(false);
 
-  useDragAndDrop(elemRef, triangle.position);
-  useResizeElement1(resizeRef1, triangle.size, triangle.position);
-  useResizeElement2(resizeRef2, triangle.size, triangle.position);
-  useResizeElement3(resizeRef3, triangle.size, triangle.position);
-  useResizeElement4(resizeRef4, triangle.size, triangle.position);
+  useDragAndDrop(elemRef);
+  useResizeElement1(resizeRef1);
+  useResizeElement2(resizeRef2);
+  useResizeElement3(resizeRef3);
+  useResizeElement4(resizeRef4);
 
   if (!state.selectedElements.includes(triangle.id)) {
     return (
@@ -42,18 +42,6 @@ function Triangle(triangle: PrimitiveType) {
         height={triangle.size.height}
         x={triangle.position.x}
         y={triangle.position.y}
-        onMouseDown={(event) => {
-          if (!event.ctrlKey) {
-            store.dispatch(clearSelectedElementsOnSlide());
-            store.dispatch(putSelectedElement(triangle.id));
-          } 
-          if (event.ctrlKey) { 
-            if (!state.selectedElements.includes(triangle.id)) 
-              store.dispatch(putSelectedElement(triangle.id));
-            else
-              store.dispatch(deleteSelectedElement(triangle.id)) 
-          };
-        }}
         onClick={() => setEdit(false)} 
         onDoubleClick={() => setEdit(true)}
       >
@@ -64,6 +52,18 @@ function Triangle(triangle: PrimitiveType) {
             height: triangle.size.height,
             left: triangle.position.x,
             top: triangle.position.y
+          }}
+          onMouseDown={(event) => {
+            if (!event.ctrlKey) {
+              store.dispatch(clearSelectedElementsOnSlide());
+              store.dispatch(putSelectedElement(triangle.id));
+            } 
+            if (event.ctrlKey) { 
+              if (!state.selectedElements.includes(triangle.id)) 
+                store.dispatch(putSelectedElement(triangle.id));
+              else
+                store.dispatch(deleteSelectedElement(triangle.id)) 
+            };
           }}
         >
           <polygon 
@@ -84,18 +84,6 @@ function Triangle(triangle: PrimitiveType) {
       height={triangle.size.height}
       x={triangle.position.x}
       y={triangle.position.y}
-      onMouseDown={(event) => {
-        if (!event.ctrlKey) {
-          store.dispatch(clearSelectedElementsOnSlide());
-          store.dispatch(putSelectedElement(triangle.id));
-        } 
-        if (event.ctrlKey) { 
-          if (!state.selectedElements.includes(triangle.id)) 
-            store.dispatch(putSelectedElement(triangle.id));
-          else
-            store.dispatch(deleteSelectedElement(triangle.id)) 
-        };
-      }}
       onClick={() => setEdit(false)} 
       onDoubleClick={() => setEdit(true)}
     >
@@ -106,6 +94,18 @@ function Triangle(triangle: PrimitiveType) {
           height: triangle.size.height,
           left: triangle.position.x,
           top: triangle.position.y
+        }}
+        onMouseDown={(event) => {
+          if (!event.ctrlKey) {
+            store.dispatch(clearSelectedElementsOnSlide());
+            store.dispatch(putSelectedElement(triangle.id));
+          } 
+          if (event.ctrlKey) { 
+            if (!state.selectedElements.includes(triangle.id)) 
+              store.dispatch(putSelectedElement(triangle.id));
+            else
+              store.dispatch(deleteSelectedElement(triangle.id)) 
+          };
         }}
       >
         <polygon 

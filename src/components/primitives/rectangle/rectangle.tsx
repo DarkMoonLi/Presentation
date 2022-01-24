@@ -20,11 +20,11 @@ function Rectangle(rectangle: PrimitiveType) {
   const resizeRef4 = useRef(null);
   const [edit, setEdit] = useState(false);
 
-  useDragAndDrop(elemRef, rectangle.position);
-  useResizeElement1(resizeRef1, rectangle.size, rectangle.position);
-  useResizeElement2(resizeRef2, rectangle.size, rectangle.position);
-  useResizeElement3(resizeRef3, rectangle.size, rectangle.position);
-  useResizeElement4(resizeRef4, rectangle.size, rectangle.position);
+  useDragAndDrop(elemRef);
+  useResizeElement1(resizeRef1);
+  useResizeElement2(resizeRef2);
+  useResizeElement3(resizeRef3);
+  useResizeElement4(resizeRef4);
 
   if (!state.selectedElements.includes(rectangle.id)) {
     return (
@@ -33,18 +33,6 @@ function Rectangle(rectangle: PrimitiveType) {
         height={rectangle.size.height}
         x={rectangle.position.x}
         y={rectangle.position.y}
-        onMouseDown={(event) => {
-          if (!event.ctrlKey) {
-            store.dispatch(clearSelectedElementsOnSlide());
-            store.dispatch(putSelectedElement(rectangle.id));
-          } 
-          if (event.ctrlKey) { 
-            if (!state.selectedElements.includes(rectangle.id)) 
-              store.dispatch(putSelectedElement(rectangle.id));
-            else
-              store.dispatch(deleteSelectedElement(rectangle.id)) 
-          };
-        }}
         onClick={() => setEdit(false)}
         onDoubleClick={() => setEdit(true)}
       >
@@ -55,6 +43,18 @@ function Rectangle(rectangle: PrimitiveType) {
             height: rectangle.size.height,
             left: rectangle.position.x,
             top: rectangle.position.y
+          }}
+          onMouseDown={(event) => {
+            if (!event.ctrlKey) {
+              store.dispatch(clearSelectedElementsOnSlide());
+              store.dispatch(putSelectedElement(rectangle.id));
+            } 
+            if (event.ctrlKey) { 
+              if (!state.selectedElements.includes(rectangle.id)) 
+                store.dispatch(putSelectedElement(rectangle.id));
+              else
+                store.dispatch(deleteSelectedElement(rectangle.id)) 
+            };
           }}
         >
           <rect 
@@ -79,18 +79,6 @@ function Rectangle(rectangle: PrimitiveType) {
       height={rectangle.size.height}
       x={rectangle.position.x}
       y={rectangle.position.y}
-      onMouseDown={(event) => {
-        if (!event.ctrlKey) {
-          store.dispatch(clearSelectedElementsOnSlide());
-          store.dispatch(putSelectedElement(rectangle.id));
-        } 
-        if (event.ctrlKey) { 
-          if (!state.selectedElements.includes(rectangle.id)) 
-            store.dispatch(putSelectedElement(rectangle.id));
-          else
-            store.dispatch(deleteSelectedElement(rectangle.id)) 
-        };
-      }}
       onClick={() => setEdit(false)}
       onDoubleClick={() => setEdit(true)}
     >
@@ -101,6 +89,18 @@ function Rectangle(rectangle: PrimitiveType) {
           height: rectangle.size.height,
           left: rectangle.position.x,
           top: rectangle.position.y
+        }}
+        onMouseDown={(event) => {
+          if (!event.ctrlKey) {
+            store.dispatch(clearSelectedElementsOnSlide());
+            store.dispatch(putSelectedElement(rectangle.id));
+          } 
+          if (event.ctrlKey) { 
+            if (!state.selectedElements.includes(rectangle.id)) 
+              store.dispatch(putSelectedElement(rectangle.id));
+            else
+              store.dispatch(deleteSelectedElement(rectangle.id)) 
+          };
         }}
       >
         <rect 

@@ -2,15 +2,7 @@ import { useEffect } from "react";
 import { changeSize } from "../../store/actionCreators/moveElements";
 import store from "../../store/store";
 
-export const useResizeElement1 = (resizeRef: any,
-                                  initSize: {
-                                    width: number,
-                                    height: number
-                                  }, 
-                                  initPos: {
-                                    x: number,
-                                    y: number
-                                  }) => {
+export const useResizeElement1 = (resizeRef: any) => {
 
   let startPos: {
     x: number,
@@ -19,24 +11,21 @@ export const useResizeElement1 = (resizeRef: any,
 
   const onMouseDown = (e: MouseEvent) => {
     startPos = {
-      x: e.pageX,
-      y: e.pageY
-    }
+      x: e.clientX,
+      y: e.clientY
+    };
     document.addEventListener("mousemove", onMove);
     document.addEventListener("mouseup", onStopMove);
   }
 
   const onMove = (e: MouseEvent) => {
-    const delta = { x: e.pageX - startPos.x, y: e.pageY - startPos.y };
-    const newPos = {
-      x: initPos.x + delta.x,
-      y: initPos.y + delta.y
+    const delta = { x: e.clientX - startPos.x, y: e.clientY - startPos.y };
+    startPos = {
+      x: startPos.x + delta.x,
+      y: startPos.y + delta.y
     };
-    const newSize = {
-      width: initSize.width - delta.x,
-      height: initSize.height - delta.y
-    };
-    store.dispatch(changeSize(newSize, newPos));
+
+    store.dispatch(changeSize({width: -delta.x, height: -delta.y}, delta));
   }
 
   const onStopMove = () => {
@@ -55,15 +44,7 @@ export const useResizeElement1 = (resizeRef: any,
   })
 };
 
-export const useResizeElement2 = (resizeRef: any,
-                                  initSize: {
-                                    width: number,
-                                    height: number
-                                  },
-                                  initPos: {
-                                    x: number,
-                                    y: number
-                                  }) => {
+export const useResizeElement2 = (resizeRef: any) => {
 
   let startPos: {
     x: number,
@@ -72,24 +53,20 @@ export const useResizeElement2 = (resizeRef: any,
 
   const onMouseDown = (e: MouseEvent) => {
     startPos = {
-      x: e.pageX,
-      y: e.pageY
+      x: e.clientX,
+      y: e.clientY
     }
     document.addEventListener("mousemove", onMove);
     document.addEventListener("mouseup", onStopMove);
   }
 
   const onMove = (e: MouseEvent) => {
-    const delta = { x: e.pageX - startPos.x, y: e.pageY - startPos.y }
-    let newPos = {
-      x: initPos.x,
-      y: initPos.y + delta.y
+    const delta = { x: e.clientX - startPos.x, y: e.clientY - startPos.y }
+    startPos = {
+      x: startPos.x + delta.x,
+      y: startPos.y + delta.y
     }
-    let newSize = {
-      width: initSize.width + delta.x,
-      height: initSize.height - delta.y
-    }
-    store.dispatch(changeSize(newSize, newPos));
+    store.dispatch(changeSize({width: delta.x, height: -delta.y}, {x: 0, y: delta.y}));
   }
 
   const onStopMove = () => {
@@ -108,15 +85,7 @@ export const useResizeElement2 = (resizeRef: any,
   })
 };
 
-export const useResizeElement3 = (resizeRef: any,
-                                  initSize: {
-                                    width: number,
-                                    height: number
-                                  },
-                                  initPos: {
-                                    x: number,
-                                    y: number
-                                  }) => {
+export const useResizeElement3 = (resizeRef: any) => {
 
   let startPos: {
     x: number,
@@ -125,24 +94,20 @@ export const useResizeElement3 = (resizeRef: any,
 
   const onMouseDown = (e: MouseEvent) => {
     startPos = {
-      x: e.pageX,
-      y: e.pageY
+      x: e.clientX,
+      y: e.clientY
     };
     document.addEventListener("mousemove", onMove);
     document.addEventListener("mouseup", onStopMove);
   }
 
   const onMove = (e: MouseEvent) => {
-    const delta = { x: e.pageX - startPos.x, y: e.pageY - startPos.y };
-    let newPos = {
-      x: initPos.x,
-      y: initPos.y,
+    const delta = { x: e.clientX - startPos.x, y: e.clientY - startPos.y };
+    startPos = {
+      x: startPos.x + delta.x,
+      y: startPos.y + delta.y
     }
-    let newSize = {
-      width: initSize.width + delta.x,
-      height: initSize.height + delta.y
-    };
-    store.dispatch(changeSize(newSize, newPos))
+    store.dispatch(changeSize({width: delta.x, height: delta.y}, {x: 0, y: 0}))
   }
 
   const onStopMove = () => {
@@ -161,41 +126,29 @@ export const useResizeElement3 = (resizeRef: any,
   })
 };
 
-export const useResizeElement4 = (resizeRef: any,
-                                  initSize: {
-                                    width: number,
-                                    height: number
-                                  }, 
-                                  initPos: {
-                                    x: number,
-                                    y: number
-                                  }) => {
+export const useResizeElement4 = (resizeRef: any) => {
 
-  let startPosition: {
+  let startPos: {
     x: number,
     y: number
   };
 
   const onMouseDown = (e: MouseEvent) => {
-    startPosition = {
-      x: e.pageX,
-      y: e.pageY
+    startPos = {
+      x: e.clientX,
+      y: e.clientY
     };
     document.addEventListener("mousemove", onMove);
     document.addEventListener("mouseup", onStopMove);
   }
 
   const onMove = (e: MouseEvent) => {
-    const delta = { x: e.pageX - startPosition.x, y: e.pageY - startPosition.y }
-    let newPos = {
-      x: initPos.x + delta.x,
-      y: initPos.y
-    };
-    let newSize = {
-      width: initSize.width - delta.x,
-      height: initSize.height + delta.y
-    };
-    store.dispatch(changeSize(newSize, newPos))
+    const delta = { x: e.clientX - startPos.x, y: e.clientY - startPos.y }
+    startPos = {
+      x: startPos.x + delta.x,
+      y: startPos.y + delta.y
+    }
+    store.dispatch(changeSize({width: -delta.x, height: delta.y}, {x: delta.x, y: 0}))
   }
 
   const onStopMove = () => {

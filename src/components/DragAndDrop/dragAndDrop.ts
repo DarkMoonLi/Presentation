@@ -3,15 +3,15 @@ import { moveElements } from "../../store/actionCreators/moveElements";
 import { constPosition, moveSlides } from "../../store/actionCreators/slidesActions";
 import store from "../../store/store";
 
-export const useDragAndDrop = (elementRef: any, initPosition: { x: number; y: number }, isSlide: boolean = false) => {
+export const useDragAndDrop = (elementRef: any, isSlide: boolean = false) => {
 
-    let startPosition: {
+    let startPos: {
         x: number,
         y: number
     }
 
     const onMouseDown = (e: MouseEvent) => {
-        startPosition = {
+        startPos = {
             x: e.clientX,
             y: e.clientY
         }
@@ -20,14 +20,16 @@ export const useDragAndDrop = (elementRef: any, initPosition: { x: number; y: nu
     }
 
     const onMove = (e: MouseEvent) => {
-        console.log(elementRef.current);
-        const delta = { x: e.clientX - startPosition.x, y: e.clientY - startPosition.y }
-        const newPos = { x: initPosition.x + delta.x, y: initPosition.y + delta.y }
+        const delta = { x: e.clientX - startPos.x, y: e.clientY - startPos.y }
+        startPos = {
+            x: startPos.x + delta.x,
+            y: startPos.y + delta.y
+        }
 
         if (isSlide) 
-            store.dispatch(moveSlides({x: 0, y: newPos.y}))
+            store.dispatch(moveSlides({x: 0, y: delta.y}))
         else 
-            store.dispatch(moveElements(newPos))
+            store.dispatch(moveElements(delta))
     }
 
     const onStopMove = () => {
@@ -37,7 +39,7 @@ export const useDragAndDrop = (elementRef: any, initPosition: { x: number; y: nu
     };
 
     useEffect(() => {
-        if (elementRef.current)
+        if (elementRef.current) 
             elementRef.current.addEventListener("mousedown", onMouseDown);
 
         return () => {

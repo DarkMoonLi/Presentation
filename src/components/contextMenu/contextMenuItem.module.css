@@ -1,0 +1,31 @@
+.navbarItem
+{
+  list-style-type: none;
+  background-color: #7073aa;
+  font-size: 14px;
+  font-family: Arial, Helvetica, sans-serif;
+  padding: 5px 10px;
+  width: 200px;
+  border: 2px solid #8589ce;
+  border-bottom: 0;
+  z-index: 100;
+
+}
+.navbarItem:last-child
+{
+  border-bottom: 3px solid #8589ce;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.navbarItem:first-child
+{
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.navbarItemTitle
+{
+  cursor: pointer;
+  z-index: 100;
+}

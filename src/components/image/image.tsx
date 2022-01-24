@@ -20,11 +20,11 @@ export default function SomeImage(image: ImageType) {
   const resizeRef3 = useRef(null);
   const resizeRef4 = useRef(null);
 
-  useDragAndDrop(elemRef, image.position);
-  useResizeElement1(resizeRef1, image.size, image.position);
-  useResizeElement2(resizeRef2, image.size, image.position);
-  useResizeElement3(resizeRef3, image.size, image.position);
-  useResizeElement4(resizeRef4, image.size, image.position);
+  useDragAndDrop(elemRef);
+  useResizeElement1(resizeRef1);
+  useResizeElement2(resizeRef2);
+  useResizeElement3(resizeRef3);
+  useResizeElement4(resizeRef4);
 
   if (!state.selectedElements.includes(image.id)) {
     return (
@@ -33,18 +33,6 @@ export default function SomeImage(image: ImageType) {
         height={image.size.height}
         x={image.position.x}
         y={image.position.y}
-        onMouseDown={(event) => {
-          if (!event.ctrlKey) {
-            store.dispatch(clearSelectedElementsOnSlide());
-            store.dispatch(putSelectedElement(image.id));
-          } 
-          if (event.ctrlKey) { 
-            if (!state.selectedElements.includes(image.id)) 
-              store.dispatch(putSelectedElement(image.id));
-            else
-              store.dispatch(deleteSelectedElement(image.id)) 
-          };
-        }}
       >
         <svg
           ref={elemRef}
@@ -53,6 +41,18 @@ export default function SomeImage(image: ImageType) {
             height: image.size.height,
             left: image.position.x,
             top: image.position.y
+          }}
+          onMouseDown={(event) => {
+            if (!event.ctrlKey) {
+              store.dispatch(clearSelectedElementsOnSlide());
+              store.dispatch(putSelectedElement(image.id));
+            } 
+            if (event.ctrlKey) { 
+              if (!state.selectedElements.includes(image.id)) 
+                store.dispatch(putSelectedElement(image.id));
+              else
+                store.dispatch(deleteSelectedElement(image.id)) 
+            };
           }}
         >
           <image 
@@ -71,18 +71,6 @@ export default function SomeImage(image: ImageType) {
       height={image.size.height}
       x={image.position.x}
       y={image.position.y}
-      onMouseDown={(event) => {
-        if (!event.ctrlKey) {
-          store.dispatch(clearSelectedElementsOnSlide());
-          store.dispatch(putSelectedElement(image.id));
-        } 
-        if (event.ctrlKey) { 
-          if (!state.selectedElements.includes(image.id)) 
-            store.dispatch(putSelectedElement(image.id));
-          else
-            store.dispatch(deleteSelectedElement(image.id)) 
-        };
-      }}
     >
       <svg
         ref={elemRef}
@@ -91,6 +79,18 @@ export default function SomeImage(image: ImageType) {
             height: image.size.height,
             left: image.position.x,
             top: image.position.y
+        }}
+        onMouseDown={(event) => {
+          if (!event.ctrlKey) {
+            store.dispatch(clearSelectedElementsOnSlide());
+            store.dispatch(putSelectedElement(image.id));
+          } 
+          if (event.ctrlKey) { 
+            if (!state.selectedElements.includes(image.id)) 
+              store.dispatch(putSelectedElement(image.id));
+            else
+              store.dispatch(deleteSelectedElement(image.id)) 
+          };
         }}
       >
         <image 

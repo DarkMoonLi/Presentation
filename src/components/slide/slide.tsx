@@ -5,7 +5,6 @@ import store from '../../store/store';
 import { putSelectedElement, clearSelectedElement, clearSelectedElementsOnSlide } from '../../store/actionCreators/selectedElement';
 import { useRef } from "react";
 import { useDragAndDrop } from "../DragAndDrop/dragAndDrop";
-import { constPosition, moveSlides } from '../../store/actionCreators/slidesActions';
 
 type MiniSlide = {
     slide: Slide,
@@ -17,7 +16,7 @@ export default function SlideView({slide, index}: MiniSlide) {
     const elemRef = useRef(null);
   
     const state = store.getState();
-    useDragAndDrop(elemRef, {x:0, y: slide.y}, true);
+    useDragAndDrop(elemRef, true);
 
     let border: string = '';
     if (state.selectedElements.includes(slide.id)) {
@@ -52,8 +51,8 @@ export default function SlideView({slide, index}: MiniSlide) {
             }}
         >
             <li 
-            key={slide.id} 
-            className={styles.slideContainer} 
+                key={slide.id} 
+                className={styles.slideContainer} 
             >
                 <span className={styles.numberSlide}>{index}</span>
                 <svg 

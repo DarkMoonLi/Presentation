@@ -22,11 +22,11 @@ function SomebodyText(text: TextType) {
   const resizeRef4 = useRef(null);
   const [edit, setEdit] = useState(false);
 
-  useDragAndDrop(elemRef, text.position);
-  useResizeElement1(resizeRef1, text.size, text.position);
-  useResizeElement2(resizeRef2, text.size, text.position);
-  useResizeElement3(resizeRef3, text.size, text.position);
-  useResizeElement4(resizeRef4, text.size, text.position);
+  useDragAndDrop(elemRef);
+  useResizeElement1(resizeRef1);
+  useResizeElement2(resizeRef2);
+  useResizeElement3(resizeRef3);
+  useResizeElement4(resizeRef4);
 
   if (!state.selectedElements.includes(text.id)) {
     return (
@@ -35,25 +35,12 @@ function SomebodyText(text: TextType) {
         height={text.size.height}
         x={text.position.x}
         y={text.position.y}
-        onMouseDown={(event) => {
-          if (!event.ctrlKey) {
-            store.dispatch(clearSelectedElementsOnSlide());
-            store.dispatch(putSelectedElement(text.id));
-          } 
-          if (event.ctrlKey) { 
-            if (!state.selectedElements.includes(text.id)) 
-              store.dispatch(putSelectedElement(text.id));
-            else
-              store.dispatch(deleteSelectedElement(text.id)) 
-          };
-        }}
         onClick={() => setEdit(false)}
         onDoubleClick={() => setEdit(true)}
       >
         <p
           ref={elemRef}
           id={text.id}
-          //readOnly={edit ? true : false}
           style={{
             margin: 0,
             width: text.size.width,
@@ -69,13 +56,19 @@ function SomebodyText(text: TextType) {
             scale: '1',
             resize: 'none'
           }}
-          color={text.color}
-          //wrap="soft"
-          //value={text.content}
-          /*onChange={(event) => {
-            let newText = event.target.value;
-            store.dispatch(changeTextValue(newText))
-          }}*/ 
+          color={text.color} 
+          onMouseDown={(event) => {
+            if (!event.ctrlKey) {
+              store.dispatch(clearSelectedElementsOnSlide());
+              store.dispatch(putSelectedElement(text.id));
+            } 
+            if (event.ctrlKey) { 
+              if (!state.selectedElements.includes(text.id)) 
+                store.dispatch(putSelectedElement(text.id));
+              else
+                store.dispatch(deleteSelectedElement(text.id)) 
+            };
+          }}
         >{text.content}</p>
       </foreignObject>
     )
@@ -87,18 +80,6 @@ function SomebodyText(text: TextType) {
       height={text.size.height}
       x={text.position.x}
       y={text.position.y}
-      onMouseDown={(event) => {
-        if (!event.ctrlKey) {
-          store.dispatch(clearSelectedElementsOnSlide());
-          store.dispatch(putSelectedElement(text.id));
-        } 
-        if (event.ctrlKey) { 
-          if (!state.selectedElements.includes(text.id)) 
-            store.dispatch(putSelectedElement(text.id));
-          else
-            store.dispatch(deleteSelectedElement(text.id)) 
-        };
-      }}
       onClick={() => setEdit(false)}
       onDoubleClick={() => setEdit(true)}
     >
@@ -126,6 +107,18 @@ function SomebodyText(text: TextType) {
         onChange={(event) => {
           let newText = event.target.value;
           store.dispatch(changeTextValue(newText))
+        }}
+        onMouseDown={(event) => {
+          if (!event.ctrlKey) {
+            store.dispatch(clearSelectedElementsOnSlide());
+            store.dispatch(putSelectedElement(text.id));
+          } 
+          if (event.ctrlKey) { 
+            if (!state.selectedElements.includes(text.id)) 
+              store.dispatch(putSelectedElement(text.id));
+            else
+              store.dispatch(deleteSelectedElement(text.id)) 
+          };
         }}
       />
       {/*<ResizeBlock 

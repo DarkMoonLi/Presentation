@@ -11,7 +11,6 @@ import styles from './menu.module.css'
 function Menu () {
   
   const [isModal, setModal] = useState(false)
-  //const onClose = () => setModal(false)
   
   return (
     <div className={styles.menu}>

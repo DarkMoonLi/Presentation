@@ -20,11 +20,11 @@ function Circle(circle: PrimitiveType) {
   const resizeRef4 = useRef(null);
   const [edit, setEdit] = useState(false);
 
-  useDragAndDrop(elemRef, circle.position);
-  useResizeElement1(resizeRef1, circle.size, circle.position);
-  useResizeElement2(resizeRef2, circle.size, circle.position);
-  useResizeElement3(resizeRef3, circle.size, circle.position);
-  useResizeElement4(resizeRef4, circle.size, circle.position);
+  useDragAndDrop(elemRef);
+  useResizeElement1(resizeRef1);
+  useResizeElement2(resizeRef2);
+  useResizeElement3(resizeRef3);
+  useResizeElement4(resizeRef4);
 
   if (!state.selectedElements.includes(circle.id)) {
     return (
@@ -33,19 +33,6 @@ function Circle(circle: PrimitiveType) {
         height={circle.size.height}
         x={circle.position.x}
         y={circle.position.y}
-        onMouseDown={(event) => {
-          if (!event.ctrlKey) {
-            store.dispatch(clearSelectedElementsOnSlide());
-            store.dispatch(putSelectedElement(circle.id));
-          } 
-          if (event.ctrlKey) { 
-            if (!state.selectedElements.includes(circle.id)) 
-              store.dispatch(putSelectedElement(circle.id));
-            else
-              store.dispatch(deleteSelectedElement(circle.id)) 
-          };
-          console.log(state.selectedElements);
-        }}
         onClick={() => setEdit(false)} 
         onDoubleClick={() => setEdit(true)}
       >
@@ -56,6 +43,19 @@ function Circle(circle: PrimitiveType) {
             height: circle.size.height,
             left: circle.position.x,
             top: circle.position.y
+          }}
+          onMouseDown={(event) => {
+            if (!event.ctrlKey) {
+              store.dispatch(clearSelectedElementsOnSlide());
+              store.dispatch(putSelectedElement(circle.id));
+            } 
+            if (event.ctrlKey) { 
+              if (!state.selectedElements.includes(circle.id)) 
+                store.dispatch(putSelectedElement(circle.id));
+              else
+                store.dispatch(deleteSelectedElement(circle.id)) 
+            };
+            console.log(state.selectedElements);
           }}
         >
           <ellipse 
@@ -79,20 +79,7 @@ function Circle(circle: PrimitiveType) {
       width={circle.size.width}
       height={circle.size.height}
       x={circle.position.x}
-      y={circle.position.y}
-      onMouseDown={(event) => {
-        if (!event.ctrlKey) {
-          store.dispatch(clearSelectedElementsOnSlide());
-          store.dispatch(putSelectedElement(circle.id));
-        } 
-        if (event.ctrlKey) { 
-          if (!state.selectedElements.includes(circle.id)) 
-            store.dispatch(putSelectedElement(circle.id));
-          else
-            store.dispatch(deleteSelectedElement(circle.id)) 
-        };
-        console.log(state.selectedElements);
-      }} 
+      y={circle.position.y} 
       onClick={() => setEdit(false)} 
       onDoubleClick={() => setEdit(true)}
     >
@@ -103,6 +90,19 @@ function Circle(circle: PrimitiveType) {
           height: circle.size.height,
           left: circle.position.x,
           top: circle.position.y
+        }}
+        onMouseDown={(event) => {
+          if (!event.ctrlKey) {
+            store.dispatch(clearSelectedElementsOnSlide());
+            store.dispatch(putSelectedElement(circle.id));
+          } 
+          if (event.ctrlKey) { 
+            if (!state.selectedElements.includes(circle.id)) 
+              store.dispatch(putSelectedElement(circle.id));
+            else
+              store.dispatch(deleteSelectedElement(circle.id)) 
+          };
+          console.log(state.selectedElements);
         }}
       >
         <ellipse

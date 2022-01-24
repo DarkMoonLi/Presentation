@@ -1,8 +1,9 @@
 import { useState } from 'react';
+import { defaultBackgroundColor } from '../../store/actionCreators/changeBackground';
 import { downloadFile, uploadFile } from '../../store/actionCreators/downloadFile';
 import { reDo } from '../../store/actionCreators/redo';
 import { addNewImageFromFile, addNewText, changeLayer, deleteElements } from '../../store/actionCreators/slideElementActionCreators';
-import { deleteSlide, newSlide, uploadBackImg } from '../../store/actionCreators/slidesActions';
+import { deleteSlide, newSlide, setDefaultBackImage, uploadBackImg } from '../../store/actionCreators/slidesActions';
 import { unDo } from '../../store/actionCreators/undoActionCreators';
 import store from '../../store/store';
 import { ColorPicker } from '../colorPicker/colorPicker';
@@ -31,6 +32,7 @@ function Menu () {
       <button onClick={() => store.dispatch(deleteElements())}>{"Удалить элементы слайда"}</button>
       <button onClick={() => store.dispatch(changeLayer('up'))}>{"На передний план"}</button>
       <button onClick={() => store.dispatch(changeLayer('down'))}>{"На задний план"}</button>
+      <button onClick={() => store.dispatch(setDefaultBackImage())}>Удалить фон</button>
     </div>
   )}
 

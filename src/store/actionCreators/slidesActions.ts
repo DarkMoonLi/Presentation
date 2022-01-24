@@ -30,6 +30,16 @@ export function setBackImage(img: string) {
     }
 }
 
+export function setDefaultBackImage() {
+    return {
+        type: setBackground,
+        value: '',
+        newPresentation: {},
+        newPos: {},
+        size: {}
+    }
+}
+
 export function uploadBackImg() {
     return {
         type: uploadImg

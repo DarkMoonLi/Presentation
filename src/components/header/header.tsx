@@ -42,7 +42,7 @@ function Header() {
                     <Item title="Треугольник" key="3" action={addNewPrimitive('triangle')}/>
                     <Item title="Прямоугольник" key="3" action={addNewPrimitive('rectangle')}/>
                 </Dropdown>
-                <Dropdown title="Картинка">
+                <Dropdown title="Слайд">
                     <Item title="Установить картинку фоном" key="4" action = {uploadBackImg()}/>
                     <Item title="Удалить фоновую картинку" key="4" action={setDefaultBackImage()}/>
                 </Dropdown>

@@ -171,8 +171,8 @@ function SomebodyText(text: TextType) {
         display: 'block',
         width: '9px',
         height: '9px',
-        backgroundColor: '#000',
-        border: '2px solid #000',
+        backgroundColor: '#9393c9',
+        border: '2px solid #9393c9',
         borderRadius: '4px',
         cursor: 'se-resize'
         }}
@@ -183,8 +183,8 @@ function SomebodyText(text: TextType) {
         display: 'block',
         width: '9px',
         height: '9px',
-        backgroundColor: '#000',
-        border: '2px solid #000',
+        backgroundColor: '#9393c9',
+        border: '2px solid #9393c9',
         borderRadius: '4px',
         cursor: 'se-resize'
         }}
@@ -196,8 +196,8 @@ function SomebodyText(text: TextType) {
         display: 'block',
         width: '9px',
         height: '9px',
-        backgroundColor: '#000',
-        border: '2px solid #000',
+        backgroundColor: '#9393c9',
+        border: '2px solid #9393c9',
         borderRadius: '4px',
         cursor: 'se-resize'
         }}
@@ -208,8 +208,8 @@ function SomebodyText(text: TextType) {
         display: 'block',
         width: '9px',
         height: '9px',
-        backgroundColor: '#000',
-        border: '2px solid #000',
+        backgroundColor: '#9393c9',
+        border: '2px solid #9393c9',
         borderRadius: '4px',
         cursor: 'se-resize'
         }}

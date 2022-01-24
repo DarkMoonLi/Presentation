@@ -20,7 +20,6 @@ function Menu () {
       <button className={styles.iconDelete} onClick={() => store.dispatch(deleteSlide())}></button>
       <button className={styles.iconUndo} onClick={() => store.dispatch(unDo())}></button>
       <button className={styles.iconRedo} onClick={() => store.dispatch(reDo())}></button>
-      <button className={styles.iconSelect}></button>
       <button className={styles.iconText} onClick={() => store.dispatch(addNewText())}></button>
       <button className={styles.iconBackground} onClick={() => setModal(true)}></button>
       {isModal ? (<ColorPicker setModal={setModal}/>) : null}

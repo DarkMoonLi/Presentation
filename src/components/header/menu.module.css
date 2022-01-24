@@ -101,7 +101,8 @@
 
 .iconImage,
 .iconSave,
-.iconOpen
+.iconOpen,
+.iconBackground
 {
   background-size: contain;
   background-color: inherit;
@@ -111,9 +112,9 @@
   border: none;
 }
 
-.iconImage
+.iconBackground
 {
-  background-image: url(/src/image/icon/upload-img.png);
+  background-image: url(/src/image/icon/icon-color.png);
 }
 
 .iconImage::after,
@@ -216,7 +217,8 @@
 .iconImage:active, 
 .iconPrimitive:active,
 .iconOpen:active,
-.iconSave:active
+.iconSave:active,
+.iconBackground:active
 {
   opacity: 0.6;
   transition: 100ms;

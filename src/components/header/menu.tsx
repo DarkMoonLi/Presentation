@@ -22,17 +22,8 @@ function Menu () {
       <button className={styles.iconRedo} onClick={() => store.dispatch(reDo())}></button>
       <button className={styles.iconSelect}></button>
       <button className={styles.iconText} onClick={() => store.dispatch(addNewText())}></button>
-      <button data-title="Загрузить изображение" className={styles.iconImage} onClick={() => store.dispatch(addNewImageFromFile())}></button>
-      <button data-title="Сохранить презентацию" className={styles.iconSave} onClick={() => store.dispatch(downloadFile(store.getState().presentation.title))}></button>
-      <button data-title="Открыть презентацию" className={styles.iconOpen} onClick={() => store.dispatch(uploadFile())}></button>      
-      <button onClick={() => store.dispatch(uploadBackImg())}>{"Установить фоновую картинку"}</button>
-      <button className={styles.iconPrimitive}></button>
-      <button className={styles.iconBackground} onClick={() => setModal(true)}>{'Покрасить фон слайда'}</button>
+      <button className={styles.iconBackground} onClick={() => setModal(true)}></button>
       {isModal ? (<ColorPicker setModal={setModal}/>) : null}
-      <button onClick={() => store.dispatch(deleteElements())}>{"Удалить элементы слайда"}</button>
-      <button onClick={() => store.dispatch(changeLayer('up'))}>{"На передний план"}</button>
-      <button onClick={() => store.dispatch(changeLayer('down'))}>{"На задний план"}</button>
-      <button onClick={() => store.dispatch(setDefaultBackImage())}>Удалить фон</button>
     </div>
   )}
 

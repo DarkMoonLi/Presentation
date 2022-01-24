@@ -12,5 +12,4 @@ function Item ({title, action}: ItemTypes) {
       <span className={styles.navbarItemTitle}>{title}</span>
     </li>
   )}
-
 export default Item;

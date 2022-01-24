@@ -340,30 +340,30 @@ function move(Appl: Application, newY: number): Array<Slide> {
         if (Appl.selectedElements.includes(slide.id)) {
             return {
                 ...slide,
-                y: newY
+                y: slide.y + newY
             }
         }
         return slide
     });
-
-    for (let i = 1; i < newSlides.length; i++) {
-        if (newSlides[i].y < newSlides[i-1].y) {
-            let slide = newSlides[i];
-            newSlides[i] = newSlides[i-1];
-            newSlides[i-1] = slide
-        }
-        if ((newSlides[newSlides.length - i] != null && newSlides[newSlides.length - i - 1].y > newSlides[newSlides.length - i].y)) {
-            let slide = newSlides[newSlides.length - i];
-            newSlides[newSlides.length - i] = newSlides[newSlides.length - i - 1];
-            newSlides[newSlides.length - i - 1] = slide;
-        }
-    };
 
     return newSlides;
 };
 
 function setPosition(Appl: Application): Array<Slide> {
     let changeSlides: Array<Slide> = Appl.presentation.slides;
+
+    for (let i = 1; i < changeSlides.length; i++) {
+        if (changeSlides[i].y < changeSlides[i-1].y) {
+            let slide = changeSlides[i];
+            changeSlides[i] = changeSlides[i-1];
+            changeSlides[i-1] = slide
+        }
+        if ((changeSlides[changeSlides.length - i] != null && changeSlides[changeSlides.length - i - 1].y > changeSlides[changeSlides.length - i].y)) {
+            let slide = changeSlides[changeSlides.length - i];
+            changeSlides[changeSlides.length - i] = changeSlides[changeSlides.length - i - 1];
+            changeSlides[changeSlides.length - i - 1] = slide;
+        }
+    };
 
     for (let i=0; i<changeSlides.length; i++) {
         changeSlides[i] = {
@@ -496,8 +496,8 @@ function moveElements(Appl: Application, newX: number, newY: number): Applicatio
                         return {
                             ...content,
                             position: {
-                                x: newX,
-                                y: newY
+                                x: content.position.x + newX,
+                                y: content.position.y + newY
                             }
                         }
                     } else { return content }
@@ -566,12 +566,12 @@ function changeWindowSize(Appl: Application, newWidth: number, newHeight: number
                         return {
                             ...content,
                             position: {
-                                x: newX,
-                                y: newY
+                                x: content.position.x + newX,
+                                y: content.position.y + newY
                             },
                             size: {
-                                width: newWidth,
-                                height: newHeight
+                                width: content.size.width + newWidth,
+                                height: content.size.height + newHeight
                             }
                         }
                     }

@@ -22,29 +22,29 @@ function Header() {
             <div className={styles.dBlock}>
                 <TitlePresentation />
                 <div className={styles.containerDropdown}>
-                <Dropdown title="Файл" >
-                    <Item title="Создать" action = {openNewPresentation()} />
-                    <Item title="Сохранить" action = {downloadFile(store.getState().presentation.title)}/>
-                    <Item title="Открыть" action = {uploadFile()}/>
-                    <Item title="Экспортировать" action = {getApplication}/>
+                <Dropdown title="Файл">
+                    <Item title="Создать" key="1" action = {openNewPresentation()} />
+                    <Item title="Сохранить" key="1" action = {downloadFile(store.getState().presentation.title)}/>
+                    <Item title="Открыть" key="1" action = {uploadFile()}/>
+                    <Item title="Экспортировать" key="1" action = {getApplication}/>
                 </Dropdown>
                 <Dropdown title="Правка">
-                    <Item title="Редактировать" action = {getApplication}/>
-                    <Item title="Режим просмотра" action = {startViewingMode()}/>
-                    <Item title="Удалить элементы слайда" action = {deleteElements()}/>
-                    <Item title="На передний план" action = {changeLayer('up')}/>
-                    <Item title="На задний план" action = {changeLayer('down')}/>
+                    <Item title="Редактировать" key="2" action = {getApplication}/>
+                    <Item title="Режим просмотра" key="2" action = {startViewingMode()}/>
+                    <Item title="Удалить элементы слайда" key="2" action = {deleteElements()}/>
+                    <Item title="На передний план" key="2" action = {changeLayer('up')}/>
+                    <Item title="На задний план" key="2" action = {changeLayer('down')}/>
                 </Dropdown>
                 <Dropdown title="Вставка">
-                    <Item title="Текст" action = {addNewText()}/>
-                    <Item title="Изображение" action = {addNewImageFromFile()}/>
-                    <Item title="Круг" action={addNewPrimitive('circle')}/>
-                    <Item title="Треугольник" action={addNewPrimitive('triangle')}/>
-                    <Item title="Прямоугольник" action={addNewPrimitive('rectangle')}/>
+                    <Item title="Текст" key="3" action = {addNewText()}/>
+                    <Item title="Изображение" key="3" action = {addNewImageFromFile()}/>
+                    <Item title="Круг" key="3" action={addNewPrimitive('circle')}/>
+                    <Item title="Треугольник" key="3" action={addNewPrimitive('triangle')}/>
+                    <Item title="Прямоугольник" key="3" action={addNewPrimitive('rectangle')}/>
                 </Dropdown>
                 <Dropdown title="Картинка">
-                    <Item title="Установить картинку фоном" action = {uploadBackImg()}/>
-                    <Item title="Удалить фоновую картинку" action={setDefaultBackImage()}/>
+                    <Item title="Установить картинку фоном" key="4" action = {uploadBackImg()}/>
+                    <Item title="Удалить фоновую картинку" key="4" action={setDefaultBackImage()}/>
                 </Dropdown>
                 </div>
                 <Menu />

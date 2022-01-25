@@ -10,7 +10,6 @@ type ContextPropsType = {
 };
 
 function ContextMenu( props: ContextPropsType ) { 
-  console.log(props); 
   return (
     <foreignObject 
       style={{

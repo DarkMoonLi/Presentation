@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { addNewImageFromFile, addNewPrimitive, addNewText, deleteElements } from "../../store/actionCreators/slideElementActionCreators";
 import { uploadBackImg } from "../../store/actionCreators/slidesActions";
 import store from "../../store/store";
@@ -14,8 +14,6 @@ function Workspace() {
   let state = store.getState();
 
   const { anchorPoint, show } = useContextMenu(); 
-  /*const [isModal, setModal] = useState(false);
-  const [isElem, setElem] = useState(false);*/
 
   for (let slide of state.presentation.slides) {
     if (state.selectedElements.includes(slide.id)) {
@@ -30,6 +28,7 @@ function Workspace() {
       return (
         <div className={styles.workspaceWrap}>
           <svg
+            id="workspace"
             className={styles.workspace}
             style={slideStyle}
           >
@@ -43,8 +42,6 @@ function Workspace() {
               <Item title="Вставить изображение" action={addNewImageFromFile()}/>
             </ContextMenu>) : null
             }
-
-            {/*isModal ? (<ColorPicker setModal={setModal} setElem={setElem}/>) : null*/}
 
             {getContent(slide)}
 

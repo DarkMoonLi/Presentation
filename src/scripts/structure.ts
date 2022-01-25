@@ -212,54 +212,42 @@ function redo(Appl: Application): Application {
     return {...Appl}
 }
 
-function startViewing(Appl: Application): Application {
+function startViewing(Appl: Application): Viewing {
     return {
-        ...Appl,
-        viewing: {
-            on: true,
-            currentSlide: Appl.presentation.slides[0]    
-        }
+        on: true,
+        currentSlide: Appl.presentation.slides[0]    
     };
 }
 
-function viewingNextSlide(Appl: Application): Application {
+function viewingNextSlide(Appl: Application): Viewing {
     let index = Appl.presentation.slides.indexOf(Appl.viewing.currentSlide);
     index = index + 1;
     if (index < Appl.presentation.slides.length) {
         return {
-            ...Appl,
-            viewing: {
-                ...Appl.viewing,
-                currentSlide: Appl.presentation.slides[index]    
-            }
+            ...Appl.viewing,
+            currentSlide: Appl.presentation.slides[index]    
         }
     }
 
-    return Appl
+    return Appl.viewing
 }
 
-function viewingPrevSlide(Appl: Application): Application {
+function viewingPrevSlide(Appl: Application): Viewing {
     let index = Appl.presentation.slides.indexOf(Appl.viewing.currentSlide);
     index = index - 1;
     if (index > -1) {
         return {
-            ...Appl,
-            viewing: {
-                ...Appl.viewing,
-                currentSlide: Appl.presentation.slides[index]    
-            }
+            ...Appl.viewing,
+            currentSlide: Appl.presentation.slides[index]    
         }
     }
-    return Appl
+    return Appl.viewing
 }
 
-function stopViewing(Appl: Application): Application {
+function stopViewing(Appl: Application): Viewing {
     return {
-        ...Appl,
-        viewing: {
-            ...Appl.viewing,
-            on: false
-        }
+        ...Appl.viewing,
+        on: false
     };
 }
 
@@ -486,7 +474,7 @@ function deleteElements(Appl: Application): Array<Slide> {
     return changeSlides;
 };
 
-function moveElements(Appl: Application, newX: number, newY: number): Application {
+function moveElements(Appl: Application, newX: number, newY: number): Array<Slide> {
     let changeSlides: Array<Slide> = [...Appl.presentation.slides.map(function(slide) {
         if (Appl.selectedElements.includes(slide.id)) {
             return {
@@ -506,14 +494,7 @@ function moveElements(Appl: Application, newX: number, newY: number): Applicatio
         } else { return slide }
     })];
 
-    return {
-        ...Appl,
-        redo: [],
-        presentation: {
-            ...Appl.presentation,
-            slides: [...changeSlides]
-        },
-    }
+    return changeSlides
 };
 
 // newLayer: number
@@ -556,7 +537,7 @@ function changeLayer(Appl: Application, newLayer: number): Array<Slide> {
     return changeSlides;
 };
 
-function changeWindowSize(Appl: Application, newWidth: number, newHeight: number, newX: number, newY: number): Application {
+function changeWindowSize(Appl: Application, newWidth: number, newHeight: number, newX: number, newY: number): Array<Slide> {
     let changeSlides: Array<Slide> = [...Appl.presentation.slides.map(function(slide) {
         if (Appl.selectedElements.includes(slide.id)) {
             return {
@@ -581,14 +562,7 @@ function changeWindowSize(Appl: Application, newWidth: number, newHeight: number
         } else { return slide }
     })];
 
-    return {
-        ...Appl,
-        redo: [],
-        presentation: {
-            ...Appl.presentation,
-            slides: [...changeSlides]
-        }
-    }
+    return changeSlides
 };
 
 function addText(Appl: Application): Array<Slide> {

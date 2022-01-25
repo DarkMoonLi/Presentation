@@ -39,7 +39,8 @@ export const useDragAndDrop = (elementRef: any, isSlide: boolean = false) => {
     };
 
     useEffect(() => {
-        if (elementRef.current) 
+        console.log(typeof(elementRef.current))
+        if (elementRef.current !== null) 
             elementRef.current.addEventListener("mousedown", onMouseDown);
 
         return () => {

@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { addNewImageFromFile, addNewPrimitive, addNewText, deleteElements } from "../../store/actionCreators/slideElementActionCreators";
 import { uploadBackImg } from "../../store/actionCreators/slidesActions";
 import store from "../../store/store";
@@ -13,7 +13,7 @@ function Workspace() {
 
   let state = store.getState();
 
-  const { anchorPoint, show } = useContextMenu();
+  const { anchorPoint, show } = useContextMenu(); 
   const [isModal, setModal] = useState(false)
 
   for (let slide of state.presentation.slides) {

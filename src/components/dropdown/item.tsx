@@ -3,7 +3,9 @@ import store from '../../store/store'
 
 type ItemTypes = {
   title: string,
-  action: any
+  action: {
+    type: string
+  }
 }
 
 function Item ({title, action}: ItemTypes) {

@@ -1,8 +1,26 @@
+import { ReactElement } from 'react'
 import styles from './contextMenu.module.css'
 
-function ContextMenu( props: any ) {  
+type ContextPropsType = {
+  anchorPoint: {
+    x: number,
+    y: number
+  }
+  children: Array<ReactElement>
+};
+
+function ContextMenu( props: ContextPropsType ) { 
+  console.log(props); 
   return (
-    <foreignObject x={props.anchorPoint.x} y={props.anchorPoint.y} width={200} height={'100%'}>
+    <foreignObject 
+      style={{
+        position: 'absolute'
+      }}
+      x={props.anchorPoint.x}
+      y={props.anchorPoint.y}
+      width={200}
+      height={'100%'}
+    >
       <ul className={styles.contextMenu}>
         {props.children}
       </ul>

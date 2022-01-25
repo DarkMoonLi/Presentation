@@ -1,12 +1,13 @@
 import styles from './title.module.css'
 import store from '../../store/store';
 import { changeTitle } from '../../store/actionCreators/title';
+import { BaseSyntheticEvent } from 'react';
 
-function handleSelect(event: any) {
+function handleSelect(event: BaseSyntheticEvent) {
   event.target.select()
 }
 
-function TitlePresentation (this: any) {
+function TitlePresentation() {
 
   return (
     <div className={styles.titleContainer}>

@@ -42,14 +42,14 @@ export function changeLayer(layer: string) {
 export function changeColor(newColor: string) {
     return {
         type: chColor,
-        value: newColor
+        value: '#' + newColor
     }    
 }
 
 export function changeContourColor(newColor: string) {
     return {
         type: chContourColor,
-        value: newColor
+        value: '#' + newColor
     }
 }
 

@@ -10,6 +10,7 @@ function SomebodyText(text: TextType) {
 
   let border = '';
 
+  console.log(text);
   const state = store.getState();
   if (state.selectedElements.includes(text.id)) {
     border = '1px solid #000';

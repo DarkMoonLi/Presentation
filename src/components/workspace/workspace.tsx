@@ -14,7 +14,8 @@ function Workspace() {
   let state = store.getState();
 
   const { anchorPoint, show } = useContextMenu(); 
-  const [isModal, setModal] = useState(false)
+  /*const [isModal, setModal] = useState(false);
+  const [isElem, setElem] = useState(false);*/
 
   for (let slide of state.presentation.slides) {
     if (state.selectedElements.includes(slide.id)) {
@@ -43,7 +44,7 @@ function Workspace() {
             </ContextMenu>) : null
             }
 
-            {isModal ? (<ColorPicker setModal={setModal}/>) : null}
+            {/*isModal ? (<ColorPicker setModal={setModal} setElem={setElem}/>) : null*/}
 
             {getContent(slide)}
 

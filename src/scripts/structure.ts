@@ -438,18 +438,15 @@ function addPrimitives(Appl: Application, primitivesType: 'circle' | 'rectangle'
 
 function changeBackground(Appl: Application, newBackground: string): Array<Slide> {
     let changeSlides: Array<Slide> = [...Appl.presentation.slides];
-    for (const id of Appl.selectedElements) {
-        changeSlides = [...changeSlides.map(function(slide) {
-            if (slide.id === id) {
-                return {
-                    ...slide,
-                    background: newBackground
-                }
-            } else {
-                return slide
+    changeSlides = changeSlides.map((slide) => {
+        if (Appl.selectedElements.includes(slide.id)) {
+            return {
+                ...slide,
+                background: newBackground
             }
-        })]
-    }
+        }
+        return slide
+    })
 
     return changeSlides;
 };
@@ -458,7 +455,7 @@ function deleteElements(Appl: Application): Array<Slide> {
     let changeSlides: Array<Slide> = [...Appl.presentation.slides];
     let selectedElements: Array<string> = [...Appl.selectedElements];
 
-    changeSlides = [...changeSlides.map(function(slide) {
+    changeSlides = changeSlides.map((slide) => {
         if (selectedElements.includes(slide.id)) {
             let newContent: Array<TextType|ImageType|PrimitiveType> = [...slide.content.filter(function(content) {
                 return !selectedElements.includes(content.id)
@@ -468,8 +465,10 @@ function deleteElements(Appl: Application): Array<Slide> {
                 ...slide,
                 content: [...newContent]
             };
-        } else { return slide }
-    })];
+        } 
+
+        return slide
+    });
 
     return changeSlides;
 };
@@ -488,17 +487,19 @@ function moveElements(Appl: Application, newX: number, newY: number): Array<Slid
                                 y: content.position.y + newY
                             }
                         }
-                    } else { return content }
+                    }
+
+                    return content
                 })
             ]}
-        } else { return slide }
+        } 
+
+        return slide
     })];
 
     return changeSlides
 };
 
-// newLayer: number
-// Доработка
 function changeLayer(Appl: Application, newLayer: number): Array<Slide> {
     let changeSlides = [...Appl.presentation.slides];
 
@@ -608,14 +609,14 @@ function changeTextContent(Appl: Application, newText: string): Array<Slide> {
 }
 
 function changeFont(Appl: Application, newFont: string = 'Times New Roman', newFontSize: number = 14, newWeight: number = 400): Array<Slide> {
-    // Изменение шрифта, нам нужен шрифт по умолчанию
+    
     let changeSlides: Array<Slide> = [...Appl.presentation.slides];
     
-    for (let slide of changeSlides) {
-        if (Appl.selectedElements.indexOf(slide.id) !== -1) {
-            slide = {
+    changeSlides = changeSlides.map((slide) => {
+        if (Appl.selectedElements.includes(slide.id)) {
+            return {
                 ...slide,
-                content: [...slide.content.map(function(content) {
+                content: slide.content.map((content) => {
                     if (Appl.selectedElements.includes(content.id) && (content.type === 'text')) {
                         return {
                             ...content,
@@ -623,39 +624,41 @@ function changeFont(Appl: Application, newFont: string = 'Times New Roman', newF
                             fontSize: newFontSize,
                             weight: newWeight
                         }
-                    } else {
-                        return content
                     }
-                })]
+                    return content
+                })
             }
         }
-    }
+        return slide
+    })
 
     return changeSlides;
+
 };
 
 function changeColor(Appl: Application, newColor: string): Array<Slide> {
     let changeSlides: Array<Slide> = [...Appl.presentation.slides];
     
-    for (let slide of changeSlides) {
-        if (Appl.selectedElements.indexOf(slide.id) !== -1) {
-            slide = {
+    changeSlides = changeSlides.map((slide) => {
+        if (Appl.selectedElements.includes(slide.id)) {
+            return {
                 ...slide,
-                content: [...slide.content.map(function(content) {
+                content: slide.content.map((content) => {
                     if (Appl.selectedElements.includes(content.id) && (content.type !== 'image')) {
                         return {
                             ...content,
                             color: newColor
                         }
-                    } else {
-                        return content
                     }
-                })]
+                    return content
+                })
             }
         }
-    }
+        return slide
+    })
 
-    return changeSlides;
+    return changeSlides
+
 };
 
 function changeContourColor(Appl: Application, newColor: string): Array<Slide> {

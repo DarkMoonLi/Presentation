@@ -15,11 +15,16 @@ import {
 import style from "./colorPicker.module.css";
 import store from "../../store/store";
 import { changeBackgroundFunc } from "../../store/actionCreators/changeBackground";
+import { changeColor, changeContourColor } from "../../store/actionCreators/slideElementActionCreators";
 
 type ColorPickerProps = {
 	onChange?: (color: string) => void;
 	startColor?: string;
 	setModal: (isModal: boolean) => void;
+	isElem?: boolean;
+	setElem: (isElem: boolean) => void;
+	isContour: boolean;
+	setContour: (isContour: boolean) => void;
 }
 
 export type Color = {
@@ -32,7 +37,11 @@ export type Color = {
 export const ColorPicker: React.FC<ColorPickerProps> = ({
 	onChange,
 	startColor,
-	setModal
+	setModal,
+	isElem,
+	setElem,
+	isContour,
+	setContour
 }) => {
 
 	const [color, setColor] = React.useState<Color>(() =>
@@ -82,8 +91,15 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
 				<button type="button" 
 				style={{position: 'absolute', right: '13px', bottom: '20px'}}
 				onClick={ () => {
-					store.dispatch(changeBackgroundFunc(hsvToHex(color.hue, color.saturation, color.value, color.alpha)))
+					if (isElem)
+						store.dispatch(changeColor(hsvToHex(color.hue, color.saturation, color.value, color.alpha)))
+					else if (isContour)
+						store.dispatch(changeContourColor(hsvToHex(color.hue, color.saturation, color.value, color.alpha)))
+					else
+						store.dispatch(changeBackgroundFunc(hsvToHex(color.hue, color.saturation, color.value, color.alpha)))
 					setModal(false)
+					setElem(false)
+					setContour(false)
 					console.log(store.getState())
 				}}
 				>OK</button>

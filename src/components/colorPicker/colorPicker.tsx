@@ -94,8 +94,10 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
 				<HSVInput color={color} setColor={setColor} />
 				<HSLInput color={color} setColor={setColor} />
 				<HEXInput color={color} setColor={setColor} />
-				<button type="button" 
-				style={{position: 'absolute', right: '13px', bottom: '20px'}}
+				<button className={style.button} type="button" onClick={() => {store.dispatch(defaultBackgroundColor()); setModal(false)}}>Удалить фон</button>
+				<button className={style.button} type="button" onClick={() => {setModal(false)}}>Отмена</button>
+				<button className={style.button} type="button" 
+				//style={{position: 'absolute', right: '13px', bottom: '20px'}}
 				onClick={ () => {
 					if (isElem)
 						store.dispatch(changeColor(hsvToHex(color.hue, color.saturation, color.value, color.alpha)))
@@ -106,16 +108,6 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
 					setModal(false)
 					setElem(false)
 					setContour(false)
-				}}
-				></button>
-				<button className={style.button} type="button" onClick={() => {store.dispatch(defaultBackgroundColor()); setModal(false)}}>Удалить фон</button>
-				<button className={style.button} type="button" onClick={() => {setModal(false)}}>Отмена</button>
-				<button className={style.button} type="button" 
-				//style={{position: 'absolute', right: '13px', bottom: '20px'}}
-				onClick={ () => {
-					store.dispatch(changeBackgroundFunc(hsvToHex(color.hue, color.saturation, color.value, color.alpha)))
-					setModal(false)
-					console.log(store.getState())
 				}}
 				>OK</button>
 			</div>

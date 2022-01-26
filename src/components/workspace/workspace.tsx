@@ -11,8 +11,9 @@ import styles from "./workspace.module.css";
 function Workspace() {
 
   let state = store.getState();
+  const ref = useRef(null);
 
-  const { anchorPoint, show } = useContextMenu(); 
+  const { anchorPoint, show } = useContextMenu(ref); 
 
   for (let slide of state.presentation.slides) {
     if (state.selectedElements.includes(slide.id)) {
@@ -30,7 +31,11 @@ function Workspace() {
             id="workspace"
             className={styles.workspace}
             style={slideStyle}
+            ref={ref}
           >
+
+            {getContent(slide)}
+
             {show ? (<ContextMenu anchorPoint = {anchorPoint}>
               <Item title="Установить фоновый изображение" action={uploadBackImg()}/>
               <Item title="Удалить элементы слайда" action={deleteElements()}/>
@@ -41,9 +46,6 @@ function Workspace() {
               <Item title="Вставить изображение" action={addNewImageFromFile()}/>
             </ContextMenu>) : null
             }
-
-            {getContent(slide)}
-
           </svg>
         </div>
       )

@@ -20,7 +20,7 @@ export default function SlideView({slide, index}: MiniSlide) {
 
     let border: string = '';
     if (state.selectedElements.includes(slide.id)) {
-        border = '2px solid green';
+        border = '2px solid #7073aa';
     };
 
     const slideStyle = {

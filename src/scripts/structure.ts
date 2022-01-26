@@ -2,6 +2,7 @@ import store from "../store/store";
 import { openPresentationFromFile } from "../store/actionCreators/presentationActionCreators";
 import { addNewImage } from "../store/actionCreators/slideElementActionCreators";
 import { setBackImage } from "../store/actionCreators/slidesActions";
+
 export type Application = {
     readonly selectedElements: Array<string>,
     readonly undo: Array<Presentation>,
@@ -762,7 +763,6 @@ export {
     getDefaultSlide,
     getDefaultText,
     getId,
-    //setTitle,
     addSlide,
     deleteSlide,
     move,
@@ -790,5 +790,5 @@ export {
     viewingNextSlide,
     viewingPrevSlide,
     loadBackground,
-    setBackgroundImg,
+    setBackgroundImg
 }

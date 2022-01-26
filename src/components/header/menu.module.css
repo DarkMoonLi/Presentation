@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Dongle:wght@300;400;700&family=Mochiy+Pop+P+One&family=Roboto:wght@100;300;400;500;700;900&display=swap');@import url('https://fonts.googleapis.com/css2?family=Dongle:wght@300&family=Mochiy+Pop+P+One&family=Roboto:wght@100;300;400;500;700;900&display=swap');
-
 .menu
 {
   display: flex;
@@ -40,7 +38,6 @@
 {
   background-image: url(/src/image/icon/undo1.png);
   background-size: contain;
-  /* border: 1px solid #000; */
   background-color: inherit;
   outline: none;
   border: 0;
@@ -104,7 +101,8 @@
 
 .iconImage,
 .iconSave,
-.iconOpen
+.iconOpen,
+.iconBackground
 {
   background-size: contain;
   background-color: inherit;
@@ -114,9 +112,9 @@
   border: none;
 }
 
-.iconImage
+.iconBackground
 {
-  background-image: url(/src/image/icon/upload-img.png);
+  background-image: url(/src/image/icon/icon-color.png);
 }
 
 .iconImage::after,
@@ -136,6 +134,7 @@
   position: absolute;
   left: -60px;
   top: 27px;
+  z-index: 99;
 }
 
 [data-title]:hover::after {
@@ -303,5 +302,11 @@
   border: 0;
   width: 25px;
   height: 25px;
+  transition: 100ms;
+}
+
+.iconBackground:active
+{
+  opacity: 0.6;
   transition: 100ms;
 }

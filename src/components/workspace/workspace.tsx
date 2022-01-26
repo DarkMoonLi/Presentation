@@ -2,7 +2,6 @@ import { useRef, useState } from "react";
 import { addNewImageFromFile, addNewPrimitive, addNewText, deleteElements } from "../../store/actionCreators/slideElementActionCreators";
 import { uploadBackImg } from "../../store/actionCreators/slidesActions";
 import store from "../../store/store";
-import { ColorPicker } from "../colorPicker/colorPicker";
 import getContent from "../content/content";
 import ContextMenu from "../contextMenu/contextMenu";
 import Item from "../contextMenu/contextMenuItem";

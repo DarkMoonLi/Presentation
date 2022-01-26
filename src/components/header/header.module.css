@@ -66,9 +66,3 @@
   display: flex;
   justify-content: start;
 }
-
-.fontSizeSettings
-{
-  display: flex;
-  flex-direction: row;
-}

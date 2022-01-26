@@ -18,7 +18,27 @@
     position: relative;
     height: 180px;
     width: 321px;
-    /* height: 100vh; */
     box-shadow: 0 0 3px #969ae9;
     border-radius: 7px;
+}
+
+.slideContainer:focus-within
+/* .slideContainer:focus-visible, */
+/* .slideContainer:active, */
+/* .slideContainer:hover */
+{
+  border: 10px solid black;
+  color: red;
+  outline: black;
+}
+
+.numberSlide:active,
+.numberSlide:focus
+.slideContainer:active,
+.slideContainer:focus
+.slideStyle:active,
+.slideStyle:focus
+{
+    color: red!important;
+    background-color: red!important;
 }

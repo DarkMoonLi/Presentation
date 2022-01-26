@@ -14,8 +14,13 @@ import {
 
 import style from "./colorPicker.module.css";
 import store from "../../store/store";
-import { changeBackgroundFunc } from "../../store/actionCreators/changeBackground";
 import { changeColor, changeContourColor } from "../../store/actionCreators/slideElementActionCreators";
+import { changeBackgroundFunc, defaultBackgroundColor} from "../../store/actionCreators/changeBackground";
+import { undo } from "../../scripts/structure";
+import { undoAction } from "../../store/actions/undoActions";
+import { undoReducer } from "../../store/reducers/undoReducer";
+import App from "../../App";
+import { unDo } from "../../store/actionCreators/undoActionCreators";
 
 type ColorPickerProps = {
 	onChange?: (color: string) => void;
@@ -64,6 +69,7 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
 
 	const { r, g, b } = hsvToRgb(color.hue, color.saturation, color.value);
 
+	let state = store.getState();
 	return (
 		<div className={style.color_picker}>
 			<div className={style.range_inputs_container}>
@@ -100,6 +106,15 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
 					setModal(false)
 					setElem(false)
 					setContour(false)
+				}}
+				></button>
+				<button className={style.button} type="button" onClick={() => {store.dispatch(defaultBackgroundColor()); setModal(false)}}>Удалить фон</button>
+				<button className={style.button} type="button" onClick={() => {setModal(false)}}>Отмена</button>
+				<button className={style.button} type="button" 
+				//style={{position: 'absolute', right: '13px', bottom: '20px'}}
+				onClick={ () => {
+					store.dispatch(changeBackgroundFunc(hsvToHex(color.hue, color.saturation, color.value, color.alpha)))
+					setModal(false)
 					console.log(store.getState())
 				}}
 				>OK</button>

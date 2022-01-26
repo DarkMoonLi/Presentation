@@ -51,3 +51,13 @@ export function constPosition() {
         type: setPos
     }    
 }
+
+export function setDefaultBackImage() {
+    return {
+        type: setBackground,
+        value: '',
+        newPresentation: {},
+        newPos: {},
+        size: {}
+    }
+}

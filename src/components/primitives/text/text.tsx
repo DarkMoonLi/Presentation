@@ -5,6 +5,7 @@ import { changeTextValue } from '../../../store/actionCreators/text';
 import { useRef, useState } from "react";
 import { useDragAndDrop } from "../../DragAndDrop/dragAndDrop";
 import { useResizeElement1, useResizeElement2, useResizeElement3, useResizeElement4 } from "../../DragAndDrop/resizeElement";
+import style from './text.module.css';
 
 function SomebodyText(text: TextType) {
 
@@ -84,6 +85,7 @@ function SomebodyText(text: TextType) {
       onDoubleClick={() => setEdit(true)}
     >
       <textarea
+        className={style.textarea}
         ref={elemRef}
         id={text.id}
         readOnly={edit ? true : false}
@@ -94,7 +96,7 @@ function SomebodyText(text: TextType) {
           fontSize: text.fontSize,
           color: text.color,
           fontWeight: text.weight,
-          border: border,
+          // border: border,
           backgroundColor: 'transparent',
           textAlign: 'center',
           position: 'absolute',
@@ -122,33 +124,13 @@ function SomebodyText(text: TextType) {
           };
         }}
       />
-      {/*<ResizeBlock 
-        ref = {resizeRef1}
-        width = {0}
-        height = {0}
-      />
-      <ResizeBlock
-        ref = {resizeRef2}
-        width = {text.size.width - 9}
-        height = {0}
-      />
-      <ResizeBlock 
-        ref = {resizeRef3}
-        width = {text.size.width - 9}
-        height = {text.size.height - 9}
-      />
-      <ResizeBlock 
-        ref = {resizeRef4}
-        width = {0}
-        height = {text.size.height - 9}
-      />*/}
       <div ref={resizeRef1} style={{
         position: 'absolute',
         display: 'block',
         width: '9px',
         height: '9px',
-        backgroundColor: '#000',
-        border: '2px solid #000',
+        backgroundColor: '#9393c9',
+        border: '2px solid #9393c9',
         borderRadius: '4px',
         cursor: 'se-resize'
         }}
@@ -159,8 +141,8 @@ function SomebodyText(text: TextType) {
         display: 'block',
         width: '9px',
         height: '9px',
-        backgroundColor: '#000',
-        border: '2px solid #000',
+        backgroundColor: '#9393c9',
+        border: '2px solid #9393c9',
         borderRadius: '4px',
         cursor: 'se-resize'
         }}
@@ -172,8 +154,8 @@ function SomebodyText(text: TextType) {
         display: 'block',
         width: '9px',
         height: '9px',
-        backgroundColor: '#000',
-        border: '2px solid #000',
+        backgroundColor: '#9393c9',
+        border: '2px solid #9393c9',
         borderRadius: '4px',
         cursor: 'se-resize'
         }}
@@ -184,8 +166,8 @@ function SomebodyText(text: TextType) {
         display: 'block',
         width: '9px',
         height: '9px',
-        backgroundColor: '#000',
-        border: '2px solid #000',
+        backgroundColor: '#9393c9',
+        border: '2px solid #9393c9',
         borderRadius: '4px',
         cursor: 'se-resize'
         }}

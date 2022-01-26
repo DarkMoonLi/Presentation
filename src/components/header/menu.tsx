@@ -12,7 +12,7 @@ import Item from '../dropdown/item';
 import styles from './menu.module.css'
 
 function Menu () {
-  function lol() {
+  function makeBold() {
     if (fontParams.weight > 500) {
       return (store.dispatch(changeFont(fontParams.font, fontParams.fontSize, 400)))
     } else {
@@ -82,7 +82,7 @@ function Menu () {
         <button className={styles.fontSizeSettings_func} onClick={() => store.dispatch(changeFont(fontParams.font, fontParams.fontSize + 1, fontParams.weight))}></button>
       </div>
       <button className={styles.iconFontColor} onClick={() => {setModal(true); setElem(true)}}></button>
-      <button onClick={ lol } className={styles.iconBold}></button>
+      <button onClick={ makeBold } className={styles.iconBold}></button>
 
     </div>
   )}

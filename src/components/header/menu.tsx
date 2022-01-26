@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { downloadFile, uploadFile } from '../../store/actionCreators/downloadFile';
+import { openNewPresentation } from '../../store/actionCreators/presentationActionCreators';
 import { reDo } from '../../store/actionCreators/redo';
 import { addNewImageFromFile, addNewText, changeFont, changeLayer, deleteElements } from '../../store/actionCreators/slideElementActionCreators';
 import { deleteSlide, newSlide, uploadBackImg } from '../../store/actionCreators/slidesActions';
@@ -11,6 +12,13 @@ import Item from '../dropdown/item';
 import styles from './menu.module.css'
 
 function Menu () {
+  function lol() {
+    if (fontParams.weight > 500) {
+      return (store.dispatch(changeFont(fontParams.font, fontParams.fontSize, 400)))
+    } else {
+      return (store.dispatch(changeFont(fontParams.font, fontParams.fontSize, 900)))
+    }
+  }
   
   const [isModal, setModal] = useState(false);
   const [isElem, setElem] = useState(false);
@@ -57,10 +65,25 @@ function Menu () {
       {isModal ? (<ColorPicker setModal={setModal} isElem={isElem} setElem={setElem} isContour={isContour} setContour={setContour}/>) : null}
       
       <button onClick={() => store.dispatch(deleteElements())}>{"Удалить элементы слайда"}</button>
-      <button onClick={() => store.dispatch(changeLayer('1'))}>{"На передний план"}</button>
-      <button onClick={() => store.dispatch(changeLayer('5'))}>{"На задний план"}</button>
-      <button onClick={() => {setModal(true); setElem(true)}}>{'Изменить цвет элемента'}</button>
+      {/* <button onClick={() => store.dispatch(changeLayer('1'))}>{"На передний план"}</button>
+      <button onClick={() => store.dispatch(changeLayer('5'))}>{"На задний план"}</button> */}
+      <button className={styles.iconFontColor} onClick={() => {setModal(true); setElem(true)}}></button>
       <button onClick={() => {setModal(true); setContour(true)}}>{'Изменить цвет контура'}</button>
+        {/* <button onClick={() => store.dispatch(changeFont('Arial', 10, 600))}>Times New Roman</button> */}
+      <Dropdown title={`${fontParams.font}`} >
+        <Item title="Times New Roman" action = {changeFont('Times New Roman', fontParams.fontSize, fontParams.weight)} />
+        <Item title="Arial" action = {changeFont('Arial', fontParams.fontSize, fontParams.weight)}/>
+        <Item title="Roboto" action = {changeFont('Roboto', fontParams.fontSize, fontParams.weight)}/>
+        <Item title="Dongle" action = {changeFont('Dongle', fontParams.fontSize, fontParams.weight)}/>
+      </Dropdown>
+      <div className={styles.fontSizeSettings}>
+        <button className={styles.fontSizeSettings_func} onClick={() => store.dispatch(changeFont(fontParams.font, fontParams.fontSize - 1, fontParams.weight))}></button>
+        <div className={styles.fontSizeSettings_size}>{fontParams.fontSize}</div>
+        <button className={styles.fontSizeSettings_func} onClick={() => store.dispatch(changeFont(fontParams.font, fontParams.fontSize + 1, fontParams.weight))}></button>
+      </div>
+      <button className={styles.iconFontColor} onClick={() => {setModal(true); setElem(true)}}></button>
+      <button onClick={ lol } className={styles.iconBold}></button>
+
     </div>
   )}
 

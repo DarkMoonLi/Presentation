@@ -99,7 +99,8 @@ function SomebodyText(text: TextType) {
           textAlign: 'center',
           position: 'absolute',
           scale: '1',
-          resize: 'none'
+          resize: 'none',
+          overflow: 'hidden'
         }}
         color={text.color}
         wrap="soft"

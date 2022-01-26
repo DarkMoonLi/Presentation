@@ -6,10 +6,34 @@ import TitlePresentation from "./title";
 import store from "../../store/store";
 import { startViewingMode } from "../../store/actionCreators/viewing";
 import { downloadFile, uploadFile } from "../../store/actionCreators/downloadFile";
-import { addNewText, addNewPrimitive, addNewImageFromFile } from "../../store/actionCreators/slideElementActionCreators";
+import { addNewText, addNewPrimitive, addNewImageFromFile, changeFont } from "../../store/actionCreators/slideElementActionCreators";
 import { openNewPresentation } from "../../store/actionCreators/presentationActionCreators";
 
 function Header() {
+    const state = store.getState();
+    let fontParams = {
+      font: 'Times New Roman',
+      fontSize: 14,
+      weight: 400
+    };
+  
+    for (const slide of state.presentation.slides) {
+      if (state.selectedElements.includes(slide.id)) {
+        for (const content of slide.content) {
+          if (state.selectedElements.includes(content.id)) {
+            if (content.type === 'text') {
+              fontParams = {
+                font: content.font,
+                fontSize: content.fontSize,
+                weight: content.weight
+              }
+            }
+          }
+        }
+      }
+    }
+
+
     return (
         <header className={styles.header}>
             <div className={styles.logo}></div>
@@ -33,6 +57,17 @@ function Header() {
                     <Item title="Треугольник" action={addNewPrimitive('triangle')}/>
                     <Item title="Прямоугольник" action={addNewPrimitive('rectangle')}/>
                 </Dropdown>
+                {/* <Dropdown title="Font-Family" >
+                    <Item title="Times New Roman" action = {changeFont('Times New Roman', 90, 300)} />
+                    <Item title="Arial" action = {changeFont('Arial', 90, 300)}/>
+                    <Item title="Roboto" action = {changeFont('Roboto', 90, 300)}/>
+                    <Item title="Dongle" action = {changeFont('Dongle', 90, 300)}/>
+                </Dropdown> */}
+                {/* <div className={styles.fontSizeSettings}>
+                    <Item title="-" action = {changeFont(fontParams.font, fontParams.fontSize - 1, 300)} />
+                    <Item title={`${fontParams.fontSize}`} action = {changeFont(fontParams.font, fontParams.fontSize, 300)} />
+                    <Item title="+" action = {changeFont(fontParams.font, fontParams.fontSize + 1, 300)} />
+                </div> */}
                 </div>
                 <Menu />
             </div>

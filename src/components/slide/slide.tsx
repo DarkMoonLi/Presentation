@@ -40,13 +40,13 @@ export default function SlideView({slide, index}: MiniSlide) {
                 top: slide.y - 100 * (index-1)
             }}
             onMouseDown={() => store.dispatch(clearSelectedElementsOnSlide())}
-            onClick={(event) => {
+            onClick={(event: { ctrlKey: any; }) => {
                 if (!event.ctrlKey) {
                     store.dispatch(clearSelectedElement())
                 }
                 store.dispatch(putSelectedElement(slide.id))
             }}
-            onContextMenu={(event) => {
+            onContextMenu={(event: { preventDefault: () => void; }) => {
                 event.preventDefault()
             }}
         >

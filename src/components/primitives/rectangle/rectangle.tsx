@@ -4,7 +4,6 @@ import { clearSelectedElementsOnSlide, deleteSelectedElement, putSelectedElement
 import store from "../../../store/store";
 import { useDragAndDrop } from "../../DragAndDrop/dragAndDrop";
 import { useResizeElement1, useResizeElement2, useResizeElement3, useResizeElement4 } from "../../DragAndDrop/resizeElement";
-import { moveElements, changeSize } from '../../../store/actionCreators/moveElements';
 
 function Rectangle(rectangle: PrimitiveType) {
   let border = '';
@@ -19,41 +18,67 @@ function Rectangle(rectangle: PrimitiveType) {
   const resizeRef2 = useRef(null);
   const resizeRef3 = useRef(null);
   const resizeRef4 = useRef(null);
-  const [position, setPosition] = useState({ x: rectangle.position.x, y: rectangle.position.y });
-  const [moving, setMoving] = useState(false);
-  const [size, setSize] = useState({width: rectangle.size.width, height: rectangle.size.height});
-  const [resizing, setResize] = useState(false);
   const [edit, setEdit] = useState(false);
 
-  useDragAndDrop(elemRef, position, setPosition, setMoving, setEdit);
-  useResizeElement1(resizeRef1, size, position, setSize, setPosition, setResize, setEdit);
-  useResizeElement2(resizeRef2, size, position, setSize, setPosition, setResize, setEdit);
-  useResizeElement3(resizeRef3, size, position, setSize, setPosition, setResize, setEdit);
-  useResizeElement4(resizeRef4, size, position, setSize, setPosition, setResize, setEdit);
+  useDragAndDrop(elemRef);
+  useResizeElement1(resizeRef1);
+  useResizeElement2(resizeRef2);
+  useResizeElement3(resizeRef3);
+  useResizeElement4(resizeRef4);
 
+  if (!state.selectedElements.includes(rectangle.id)) {
+    return (
+      <foreignObject
+        width={rectangle.size.width}
+        height={rectangle.size.height}
+        x={rectangle.position.x}
+        y={rectangle.position.y}
+        onClick={() => setEdit(false)}
+        onDoubleClick={() => setEdit(true)}
+      >
+        <svg
+          ref={elemRef}
+          style={{
+            width: rectangle.size.width,
+            height: rectangle.size.height,
+            left: rectangle.position.x,
+            top: rectangle.position.y
+          }}
+          onMouseDown={(event) => {
+            if (!event.ctrlKey) {
+              store.dispatch(clearSelectedElementsOnSlide());
+              store.dispatch(putSelectedElement(rectangle.id));
+            } 
+            if (event.ctrlKey) { 
+              if (!state.selectedElements.includes(rectangle.id)) 
+                store.dispatch(putSelectedElement(rectangle.id));
+              else
+                store.dispatch(deleteSelectedElement(rectangle.id)) 
+            };
+          }}
+        >
+          <rect 
+            id={rectangle.id} 
+            x={1}
+            y={1}
+            width={rectangle.size.width - 2} 
+            height={rectangle.size.height - 2} 
+            fill={rectangle.color}
+            style={{border: border}}
+            stroke={rectangle.contourColor}
+            strokeWidth={2}
+          />
+        </svg>
+      </foreignObject>
+    )
+  };
+  
   return(
     <foreignObject
       width={rectangle.size.width}
       height={rectangle.size.height}
       x={rectangle.position.x}
       y={rectangle.position.y}
-      onMouseDown={(event) => {
-        if (!event.ctrlKey) {
-          store.dispatch(clearSelectedElementsOnSlide());
-          store.dispatch(putSelectedElement(rectangle.id));
-        } 
-        if (event.ctrlKey) { 
-          if (!state.selectedElements.includes(rectangle.id)) 
-            store.dispatch(putSelectedElement(rectangle.id));
-          else
-            store.dispatch(deleteSelectedElement(rectangle.id)) 
-        };
-        console.log(state.selectedElements);
-      }}
-      onMouseMove={() => {
-        moving && store.dispatch(moveElements(position))
-        resizing && store.dispatch(changeSize(size, position))
-      }}
       onClick={() => setEdit(false)}
       onDoubleClick={() => setEdit(true)}
     >
@@ -65,13 +90,29 @@ function Rectangle(rectangle: PrimitiveType) {
           left: rectangle.position.x,
           top: rectangle.position.y
         }}
+        onMouseDown={(event) => {
+          if (!event.ctrlKey) {
+            store.dispatch(clearSelectedElementsOnSlide());
+            store.dispatch(putSelectedElement(rectangle.id));
+          } 
+          if (event.ctrlKey) { 
+            if (!state.selectedElements.includes(rectangle.id)) 
+              store.dispatch(putSelectedElement(rectangle.id));
+            else
+              store.dispatch(deleteSelectedElement(rectangle.id)) 
+          };
+        }}
       >
         <rect 
-          id={rectangle.id} 
-          width={rectangle.size.width} 
-          height={rectangle.size.height} 
+          id={rectangle.id}
+          x={1}
+          y={1} 
+          width={rectangle.size.width - 2} 
+          height={rectangle.size.height - 2} 
           fill={rectangle.color}
           style={{border: border}}
+          stroke={rectangle.contourColor}
+          strokeWidth={2}
         />
       </svg>
       <div ref={resizeRef1} style={{

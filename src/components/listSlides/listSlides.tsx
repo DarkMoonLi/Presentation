@@ -12,6 +12,7 @@ function ListSlides() {
         {listSlides.map((item, index) => <SlideView slide={item} index={index + 1}/>)}
       </ul>
     </div>
-  )}
+  )
+}
 
 export default ListSlides;

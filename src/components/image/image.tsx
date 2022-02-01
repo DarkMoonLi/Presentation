@@ -1,6 +1,5 @@
 import { ImageType } from "../../scripts/structure";
-import { useRef, useState } from "react";
-import { moveElements, changeSize } from "../../store/actionCreators/moveElements";
+import { useRef } from "react";
 import { clearSelectedElementsOnSlide, deleteSelectedElement, putSelectedElement } from "../../store/actionCreators/selectedElement";
 import store from "../../store/store";
 import { useDragAndDrop } from "../DragAndDrop/dragAndDrop";
@@ -20,17 +19,51 @@ export default function SomeImage(image: ImageType) {
   const resizeRef2 = useRef(null);
   const resizeRef3 = useRef(null);
   const resizeRef4 = useRef(null);
-  const [position, setPosition] = useState({ x: image.position.x, y: image.position.y });
-  const [moving, setMoving] = useState(false);
-  const [size, setSize] = useState({width: image.size.width, height: image.size.height});
-  const [resizing, setResize] = useState(false);
-  const [edit, setEdit] = useState(false);
 
-  useDragAndDrop(elemRef, position, setPosition, setMoving, setEdit);
-  useResizeElement1(resizeRef1, size, position, setSize, setPosition, setResize, setEdit);
-  useResizeElement2(resizeRef2, size, position, setSize, setPosition, setResize, setEdit);
-  useResizeElement3(resizeRef3, size, position, setSize, setPosition, setResize, setEdit);
-  useResizeElement4(resizeRef4, size, position, setSize, setPosition, setResize, setEdit);
+  useDragAndDrop(elemRef);
+  useResizeElement1(resizeRef1);
+  useResizeElement2(resizeRef2);
+  useResizeElement3(resizeRef3);
+  useResizeElement4(resizeRef4);
+
+  if (!state.selectedElements.includes(image.id)) {
+    return (
+      <foreignObject
+        width={image.size.width}
+        height={image.size.height}
+        x={image.position.x}
+        y={image.position.y}
+      >
+        <svg
+          ref={elemRef}
+          style={{
+            width: image.size.width,
+            height: image.size.height,
+            left: image.position.x,
+            top: image.position.y
+          }}
+          onMouseDown={(event) => {
+            if (!event.ctrlKey) {
+              store.dispatch(clearSelectedElementsOnSlide());
+              store.dispatch(putSelectedElement(image.id));
+            } 
+            if (event.ctrlKey) { 
+              if (!state.selectedElements.includes(image.id)) 
+                store.dispatch(putSelectedElement(image.id));
+              else
+                store.dispatch(deleteSelectedElement(image.id)) 
+            };
+          }}
+        >
+          <image 
+            href={image.content} 
+            height={image.size.height}
+            width={image.size.width}
+          />
+        </svg>
+      </foreignObject>
+    )  
+  };
 
   return(
     <foreignObject
@@ -38,25 +71,6 @@ export default function SomeImage(image: ImageType) {
       height={image.size.height}
       x={image.position.x}
       y={image.position.y}
-      onMouseDown={(event) => {
-        if (!event.ctrlKey) {
-          store.dispatch(clearSelectedElementsOnSlide());
-          store.dispatch(putSelectedElement(image.id));
-        } 
-        if (event.ctrlKey) { 
-          if (!state.selectedElements.includes(image.id)) 
-            store.dispatch(putSelectedElement(image.id));
-          else
-            store.dispatch(deleteSelectedElement(image.id)) 
-        };
-        console.log(state.selectedElements);
-      }}
-      onMouseMove={() => {
-        moving && store.dispatch(moveElements(position));
-        resizing && store.dispatch(changeSize(size, position))
-      }} 
-      onClick={() => setEdit(false)} 
-      onDoubleClick={() => setEdit(true)}
     >
       <svg
         ref={elemRef}
@@ -65,6 +79,18 @@ export default function SomeImage(image: ImageType) {
             height: image.size.height,
             left: image.position.x,
             top: image.position.y
+        }}
+        onMouseDown={(event) => {
+          if (!event.ctrlKey) {
+            store.dispatch(clearSelectedElementsOnSlide());
+            store.dispatch(putSelectedElement(image.id));
+          } 
+          if (event.ctrlKey) { 
+            if (!state.selectedElements.includes(image.id)) 
+              store.dispatch(putSelectedElement(image.id));
+            else
+              store.dispatch(deleteSelectedElement(image.id)) 
+          };
         }}
       >
         <image 
@@ -84,7 +110,6 @@ export default function SomeImage(image: ImageType) {
         borderRadius: '4px',
         cursor: 'se-resize'
         }}
-        onMouseMove={() => resizing && store.dispatch(changeSize(size, position))}
       ></div>
       <div ref={resizeRef2} style={{
         position: 'absolute',
@@ -98,7 +123,6 @@ export default function SomeImage(image: ImageType) {
         borderRadius: '4px',
         cursor: 'se-resize'
         }}
-        onMouseMove={() => resizing && store.dispatch(changeSize(size, position))}
       ></div>
       <div ref={resizeRef3} style={{
         position: 'absolute',
@@ -112,7 +136,6 @@ export default function SomeImage(image: ImageType) {
         borderRadius: '4px',
         cursor: 'se-resize'
         }}
-        onMouseMove={() => resizing && store.dispatch(changeSize(size, position))}
       ></div>
       <div ref={resizeRef4} style={{
         position: 'absolute',
@@ -125,7 +148,6 @@ export default function SomeImage(image: ImageType) {
         borderRadius: '4px',
         cursor: 'se-resize'
         }}
-        onMouseMove={() => resizing && store.dispatch(changeSize(size, position))}
       ></div>
     </foreignObject>
     )

@@ -1,37 +1,45 @@
 import { useEffect } from "react";
+import { moveElements } from "../../store/actionCreators/moveElements";
+import { constPosition, moveSlides } from "../../store/actionCreators/slidesActions";
+import store from "../../store/store";
 
-export const useDragAndDrop = (elementRef: any, initPosition: { x: number; y: number }, setPosition: any, setMoving: any, setEdit: any) => {
+export const useDragAndDrop = (elementRef: any, isSlide: boolean = false) => {
 
-    let startPosition: {
+    let startPos: {
         x: number,
         y: number
     }
 
     const onMouseDown = (e: MouseEvent) => {
-        startPosition = {
+        startPos = {
             x: e.clientX,
             y: e.clientY
         }
-        setMoving(true);
-        setEdit(false);
         document.addEventListener("mousemove", onMove);
         document.addEventListener("mouseup", onStopMove);
     }
 
     const onMove = (e: MouseEvent) => {
-        const delta = { x: e.clientX - startPosition.x, y: e.clientY - startPosition.y }
-        const newPos = { x: initPosition.x + delta.x, y: initPosition.y + delta.y }
-        setPosition(newPos);
+        const delta = { x: e.clientX - startPos.x, y: e.clientY - startPos.y }
+        startPos = {
+            x: startPos.x + delta.x,
+            y: startPos.y + delta.y
+        }
+
+        if (isSlide) 
+            store.dispatch(moveSlides({x: 0, y: delta.y}))
+        else 
+            store.dispatch(moveElements(delta))
     }
 
     const onStopMove = () => {
         document.removeEventListener("mousemove", onMove);
         document.removeEventListener("mouseup", onStopMove);
-        setMoving(false)
+        if (isSlide) store.dispatch(constPosition())
     };
 
     useEffect(() => {
-        if (elementRef.current)
+        if (elementRef.current !== null) 
             elementRef.current.addEventListener("mousedown", onMouseDown);
 
         return () => {

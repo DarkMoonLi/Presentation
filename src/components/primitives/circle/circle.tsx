@@ -1,6 +1,5 @@
 import { useRef, useState } from "react";
 import { PrimitiveType } from "../../../scripts/structure"
-import { moveElements, changeSize } from "../../../store/actionCreators/moveElements";
 import { clearSelectedElementsOnSlide, deleteSelectedElement, putSelectedElement } from "../../../store/actionCreators/selectedElement";
 import store from "../../../store/store";
 import { useDragAndDrop } from "../../DragAndDrop/dragAndDrop";
@@ -19,41 +18,68 @@ function Circle(circle: PrimitiveType) {
   const resizeRef2 = useRef(null);
   const resizeRef3 = useRef(null);
   const resizeRef4 = useRef(null);
-  const [position, setPosition] = useState({ x: circle.position.x, y: circle.position.y });
-  const [moving, setMoving] = useState(false);
-  const [size, setSize] = useState({width: circle.size.width, height: circle.size.height});
-  const [resizing, setResize] = useState(false);
   const [edit, setEdit] = useState(false);
 
-  useDragAndDrop(elemRef, position, setPosition, setMoving, setEdit);
-  useResizeElement1(resizeRef1, size, position, setSize, setPosition, setResize, setEdit);
-  useResizeElement2(resizeRef2, size, position, setSize, setPosition, setResize, setEdit);
-  useResizeElement3(resizeRef3, size, position, setSize, setPosition, setResize, setEdit);
-  useResizeElement4(resizeRef4, size, position, setSize, setPosition, setResize, setEdit);
+  useDragAndDrop(elemRef);
+  useResizeElement1(resizeRef1);
+  useResizeElement2(resizeRef2);
+  useResizeElement3(resizeRef3);
+  useResizeElement4(resizeRef4);
 
+  if (!state.selectedElements.includes(circle.id)) {
+    return (
+      <foreignObject
+        width={circle.size.width}
+        height={circle.size.height}
+        x={circle.position.x}
+        y={circle.position.y}
+        onClick={() => setEdit(false)} 
+        onDoubleClick={() => setEdit(true)}
+      >
+        <svg
+          ref={elemRef}
+          style={{
+            width: circle.size.width,
+            height: circle.size.height,
+            left: circle.position.x,
+            top: circle.position.y
+          }}
+          onMouseDown={(event) => {
+            if (!event.ctrlKey) {
+              store.dispatch(clearSelectedElementsOnSlide());
+              store.dispatch(putSelectedElement(circle.id));
+            } 
+            if (event.ctrlKey) { 
+              if (!state.selectedElements.includes(circle.id)) 
+                store.dispatch(putSelectedElement(circle.id));
+              else
+                store.dispatch(deleteSelectedElement(circle.id)) 
+            };
+            console.log(state.selectedElements);
+          }}
+        >
+          <ellipse 
+            id={circle.id}
+            cx={circle.size.width / 2}
+            cy={circle.size.height / 2}
+            rx={circle.size.width / 2 - 2} 
+            ry={circle.size.height / 2 - 2}
+            fill={circle.color}
+            style={{border: border}}
+            stroke={circle.contourColor}
+            strokeWidth={2}
+          />
+        </svg>
+      </foreignObject>  
+    )
+  };
+  
   return(
     <foreignObject
       width={circle.size.width}
       height={circle.size.height}
       x={circle.position.x}
-      y={circle.position.y}
-      onMouseDown={(event) => {
-        if (!event.ctrlKey) {
-          store.dispatch(clearSelectedElementsOnSlide());
-          store.dispatch(putSelectedElement(circle.id));
-        } 
-        if (event.ctrlKey) { 
-          if (!state.selectedElements.includes(circle.id)) 
-            store.dispatch(putSelectedElement(circle.id));
-          else
-            store.dispatch(deleteSelectedElement(circle.id)) 
-        };
-        console.log(state.selectedElements);
-      }}
-      onMouseMove={() => {
-        moving && store.dispatch(moveElements(position));
-        resizing && store.dispatch(changeSize(size, position))
-      }} 
+      y={circle.position.y} 
       onClick={() => setEdit(false)} 
       onDoubleClick={() => setEdit(true)}
     >
@@ -65,14 +91,30 @@ function Circle(circle: PrimitiveType) {
           left: circle.position.x,
           top: circle.position.y
         }}
+        onMouseDown={(event) => {
+          if (!event.ctrlKey) {
+            store.dispatch(clearSelectedElementsOnSlide());
+            store.dispatch(putSelectedElement(circle.id));
+          } 
+          if (event.ctrlKey) { 
+            if (!state.selectedElements.includes(circle.id)) 
+              store.dispatch(putSelectedElement(circle.id));
+            else
+              store.dispatch(deleteSelectedElement(circle.id)) 
+          };
+          console.log(state.selectedElements);
+        }}
       >
-        <circle 
+        <ellipse
           id={circle.id}
-          cx={circle.size.width/2}
-          cy={circle.size.height/2}
-          r={circle.size.width / 2} 
+          cx={circle.size.width / 2}
+          cy={circle.size.height / 2}
+          rx={circle.size.width / 2 - 2}
+          ry={circle.size.height / 2 - 2}
           fill={circle.color}
           style={{border: border}}
+          stroke={circle.contourColor}
+          strokeWidth={2}
         />
       </svg>
       <div ref={resizeRef1} style={{

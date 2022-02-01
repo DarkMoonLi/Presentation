@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Dongle:wght@300;400;700&family=Mochiy+Pop+P+One&family=Roboto:wght@100;300;400;500;700;900&display=swap');@import url('https://fonts.googleapis.com/css2?family=Dongle:wght@300&family=Mochiy+Pop+P+One&family=Roboto:wght@100;300;400;500;700;900&display=swap');
+
 .menu
 {
   display: flex;
@@ -38,7 +40,6 @@
 {
   background-image: url(/src/image/icon/undo1.png);
   background-size: contain;
-  /* border: 1px solid #000; */
   background-color: inherit;
   outline: none;
   border: 0;
@@ -102,7 +103,8 @@
 
 .iconImage,
 .iconSave,
-.iconOpen
+.iconOpen,
+.iconBackground
 {
   background-size: contain;
   background-color: inherit;
@@ -112,9 +114,9 @@
   border: none;
 }
 
-.iconImage
+.iconBackground
 {
-  background-image: url(/src/image/icon/upload-img.png);
+  background-image: url(/src/image/icon/icon-color.png);
 }
 
 .iconImage::after,
@@ -134,6 +136,7 @@
   position: absolute;
   left: -60px;
   top: 27px;
+  z-index: 99;
 }
 
 [data-title]:hover::after {
@@ -216,7 +219,95 @@
 .iconImage:active, 
 .iconPrimitive:active,
 .iconOpen:active,
-.iconSave:active
+.iconSave:active,
+.iconBold:active,
+.iconFontColor:active
+{
+  opacity: 0.6;
+  transition: 100ms;
+}
+/* Начинаются изменения */
+
+.fontSizeSettings
+{
+  display: flex;
+  justify-content: left;
+  border: 2px solid #8589ce;
+  border-radius: 5px;
+  padding: 0 12px;
+  margin: 0 5px;
+}
+
+.fontSizeSettings_size
+{
+  width: 50px;
+}
+
+.iconBold
+{
+  background:url(/src/image/icon/bold.png) no-repeat;
+  background-size: contain;
+  background-color: inherit;
+  outline: none;
+  border: 0;
+  width: 25px;
+  height: 25px;
+  margin: 0 2px;
+  transition: 100ms;
+
+}
+
+.iconBold:active
+{
+  opacity: 0.6;
+  transition: 100ms;
+}
+
+.fontSizeSettings_size
+{
+  color: #fff;
+  font-size: 16px;
+  width: 16px;
+  margin: 0 20px;
+}
+
+.fontSizeSettings_func:first-child
+{
+  outline: none;
+  background-color: #fff;
+  width: 16px;
+  height: 5px;
+  border-radius: 10px;
+  border: 0;
+  margin-top: 8px;
+
+}
+
+.fontSizeSettings_func:last-child
+{
+  background:url(/src/image/icon/plus-vector.svg) no-repeat;
+  background-size: contain;
+  background-color: inherit;
+  outline: none;
+  border: 0;
+  width: 20px;
+  height: 20px;
+  transition: 100ms;
+}
+
+.iconFontColor
+{
+  background:url(/src/image/icon/font-color.png) no-repeat;
+  background-size: contain;
+  background-color: inherit;
+  outline: none;
+  border: 0;
+  width: 25px;
+  height: 25px;
+  transition: 100ms;
+}
+
+.iconBackground:active
 {
   opacity: 0.6;
   transition: 100ms;

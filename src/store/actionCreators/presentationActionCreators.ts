@@ -4,7 +4,7 @@ import { NewPresentation, presentationFromFile } from "../actions/presentationAc
 export function openPresentationFromFile(presentation: Presentation) {
     return {
         type: presentationFromFile,
-        value: presentation
+        newPresentation: presentation
     }
 }
 

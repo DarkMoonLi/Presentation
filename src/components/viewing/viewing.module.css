@@ -1,7 +1,12 @@
+.viewingWrap {
+    display: block;
+    background-color: #626262;
+    padding: 20px 30px;
+    border: 1px solid #000;
+}
+
 .viewing {
     display: block;
-    background-color: white;
     margin:auto;
-    width: 100%;
-    height: 950px;
+    border-radius: 10px;
 }

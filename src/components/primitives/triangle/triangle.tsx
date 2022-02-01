@@ -1,6 +1,5 @@
 import { useRef, useState } from "react";
 import { PrimitiveType } from "../../../scripts/structure"
-import { moveElements, changeSize } from "../../../store/actionCreators/moveElements";
 import { clearSelectedElementsOnSlide, deleteSelectedElement, putSelectedElement } from "../../../store/actionCreators/selectedElement";
 import store from "../../../store/store";
 import { useDragAndDrop } from "../../DragAndDrop/dragAndDrop";
@@ -8,12 +7,12 @@ import { useResizeElement1, useResizeElement2, useResizeElement3, useResizeEleme
 
 
 function Triangle(triangle: PrimitiveType) {
-  let x1 = 0;
+  let x1 = 1;
   let x2 = triangle.size.width/2;
   let x3 = triangle.size.width;
-  let y1 = triangle.size.height;
-  let y2 = 0;
-  let y3 = triangle.size.height;
+  let y1 = triangle.size.height-1;
+  let y2 = 1;
+  let y3 = triangle.size.height-1;
   let str = ''+x1+','+y1+' '+x2+','+y2+' '+x3+','+y3;
 
   let state = store.getState();
@@ -28,17 +27,56 @@ function Triangle(triangle: PrimitiveType) {
   const resizeRef2 = useRef(null);
   const resizeRef3 = useRef(null);
   const resizeRef4 = useRef(null);
-  const [position, setPosition] = useState({ x: triangle.position.x, y: triangle.position.y });
-  const [moving, setMoving] = useState(false);
-  const [size, setSize] = useState({width: triangle.size.width, height: triangle.size.height});
-  const [resizing, setResize] = useState(false);
   const [edit, setEdit] = useState(false);
 
-  useDragAndDrop(elemRef, position, setPosition, setMoving, setEdit);
-  useResizeElement1(resizeRef1, size, position, setSize, setPosition, setResize, setEdit);
-  useResizeElement2(resizeRef2, size, position, setSize, setPosition, setResize, setEdit);
-  useResizeElement3(resizeRef3, size, position, setSize, setPosition, setResize, setEdit);
-  useResizeElement4(resizeRef4, size, position, setSize, setPosition, setResize, setEdit);
+  useDragAndDrop(elemRef);
+  useResizeElement1(resizeRef1);
+  useResizeElement2(resizeRef2);
+  useResizeElement3(resizeRef3);
+  useResizeElement4(resizeRef4);
+
+  if (!state.selectedElements.includes(triangle.id)) {
+    return (
+      <foreignObject
+        width={triangle.size.width}
+        height={triangle.size.height}
+        x={triangle.position.x}
+        y={triangle.position.y}
+        onClick={() => setEdit(false)} 
+        onDoubleClick={() => setEdit(true)}
+      >
+        <svg
+          ref={elemRef}
+          style={{
+            width: triangle.size.width,
+            height: triangle.size.height,
+            left: triangle.position.x,
+            top: triangle.position.y
+          }}
+          onMouseDown={(event) => {
+            if (!event.ctrlKey) {
+              store.dispatch(clearSelectedElementsOnSlide());
+              store.dispatch(putSelectedElement(triangle.id));
+            } 
+            if (event.ctrlKey) { 
+              if (!state.selectedElements.includes(triangle.id)) 
+                store.dispatch(putSelectedElement(triangle.id));
+              else
+                store.dispatch(deleteSelectedElement(triangle.id)) 
+            };
+          }}
+        >
+          <polygon 
+            id={triangle.id} 
+            points= {str} 
+            fill={triangle.color}
+            stroke={triangle.contourColor}
+            strokeWidth={2}
+          />
+        </svg>
+      </foreignObject>
+    )
+  };
 
   return(
     <foreignObject
@@ -46,23 +84,6 @@ function Triangle(triangle: PrimitiveType) {
       height={triangle.size.height}
       x={triangle.position.x}
       y={triangle.position.y}
-      onMouseDown={(event) => {
-        if (!event.ctrlKey) {
-          store.dispatch(clearSelectedElementsOnSlide());
-          store.dispatch(putSelectedElement(triangle.id));
-        } 
-        if (event.ctrlKey) { 
-          if (!state.selectedElements.includes(triangle.id)) 
-            store.dispatch(putSelectedElement(triangle.id));
-          else
-            store.dispatch(deleteSelectedElement(triangle.id)) 
-        };
-        console.log(state.selectedElements);
-      }}
-      onMouseMove={() => {
-        moving && store.dispatch(moveElements(position))
-        resizing && store.dispatch(changeSize(size, position))
-      }} 
       onClick={() => setEdit(false)} 
       onDoubleClick={() => setEdit(true)}
     >
@@ -74,11 +95,25 @@ function Triangle(triangle: PrimitiveType) {
           left: triangle.position.x,
           top: triangle.position.y
         }}
+        onMouseDown={(event) => {
+          if (!event.ctrlKey) {
+            store.dispatch(clearSelectedElementsOnSlide());
+            store.dispatch(putSelectedElement(triangle.id));
+          } 
+          if (event.ctrlKey) { 
+            if (!state.selectedElements.includes(triangle.id)) 
+              store.dispatch(putSelectedElement(triangle.id));
+            else
+              store.dispatch(deleteSelectedElement(triangle.id)) 
+          };
+        }}
       >
         <polygon 
           id={triangle.id} 
           points= {str} 
           fill={triangle.color}
+          stroke={triangle.contourColor}
+          strokeWidth={2}
         />
       </svg>
       <div ref={resizeRef1} style={{

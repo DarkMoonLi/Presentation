@@ -1,7 +1,12 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, ReactElement } from 'react';
 import styles from './dropdown.module.css';
 
-function Dropdown(props: any) { 
+type DropdownPropsType = {
+  title: string,
+  children: Array<ReactElement>
+};
+
+function Dropdown(props: DropdownPropsType) { 
   const dropdownRef = useRef(null);
 
   const [isActive, setIsActive] = useState(false);

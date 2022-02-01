@@ -14,12 +14,22 @@ import {
 
 import style from "./colorPicker.module.css";
 import store from "../../store/store";
-import { changeBackgroundFunc } from "../../store/actionCreators/changeBackground";
+import { changeColor, changeContourColor } from "../../store/actionCreators/slideElementActionCreators";
+import { changeBackgroundFunc, defaultBackgroundColor} from "../../store/actionCreators/changeBackground";
+import { undo } from "../../scripts/structure";
+import { undoAction } from "../../store/actions/undoActions";
+import { undoReducer } from "../../store/reducers/undoReducer";
+import App from "../../App";
+import { unDo } from "../../store/actionCreators/undoActionCreators";
 
 type ColorPickerProps = {
 	onChange?: (color: string) => void;
 	startColor?: string;
 	setModal: (isModal: boolean) => void;
+	isElem?: boolean;
+	setElem: (isElem: boolean) => void;
+	isContour: boolean;
+	setContour: (isContour: boolean) => void;
 }
 
 export type Color = {
@@ -32,7 +42,11 @@ export type Color = {
 export const ColorPicker: React.FC<ColorPickerProps> = ({
 	onChange,
 	startColor,
-	setModal
+	setModal,
+	isElem,
+	setElem,
+	isContour,
+	setContour
 }) => {
 
 	const [color, setColor] = React.useState<Color>(() =>
@@ -55,6 +69,7 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
 
 	const { r, g, b } = hsvToRgb(color.hue, color.saturation, color.value);
 
+	let state = store.getState();
 	return (
 		<div className={style.color_picker}>
 			<div className={style.range_inputs_container}>
@@ -79,12 +94,20 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
 				<HSVInput color={color} setColor={setColor} />
 				<HSLInput color={color} setColor={setColor} />
 				<HEXInput color={color} setColor={setColor} />
-				<button type="button" 
-				style={{position: 'absolute', right: '13px', bottom: '20px'}}
+				<button className={style.button} type="button" onClick={() => {store.dispatch(defaultBackgroundColor()); setModal(false)}}>Удалить фон</button>
+				<button className={style.button} type="button" onClick={() => {setModal(false)}}>Отмена</button>
+				<button className={style.button} type="button" 
+				//style={{position: 'absolute', right: '13px', bottom: '20px'}}
 				onClick={ () => {
-					store.dispatch(changeBackgroundFunc(hsvToHex(color.hue, color.saturation, color.value, color.alpha)))
+					if (isElem)
+						store.dispatch(changeColor(hsvToHex(color.hue, color.saturation, color.value, color.alpha)))
+					else if (isContour)
+						store.dispatch(changeContourColor(hsvToHex(color.hue, color.saturation, color.value, color.alpha)))
+					else
+						store.dispatch(changeBackgroundFunc(hsvToHex(color.hue, color.saturation, color.value, color.alpha)))
 					setModal(false)
-					console.log(store.getState())
+					setElem(false)
+					setContour(false)
 				}}
 				>OK</button>
 			</div>

@@ -37,7 +37,7 @@ export default function SlideView({slide, index}: MiniSlide) {
             ref={elemRef}
             style={{
                 position: 'relative',
-                top: slide.y - 100*(index-1)
+                top: slide.y - 100 * (index-1)
             }}
             onMouseDown={() => store.dispatch(clearSelectedElementsOnSlide())}
             onClick={(event) => {

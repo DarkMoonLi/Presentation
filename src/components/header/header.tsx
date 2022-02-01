@@ -32,8 +32,8 @@ function Header() {
                         <Item title="Редактировать" action={{ type: '' }} />
                         <Item title="Режим просмотра" action={startViewingMode()} />
                         <Item title="Удалить элементы слайда" action={deleteElements()} />
-                        <Item title="На передний план" action={changeLayer('up')} />
-                        <Item title="На задний план" action={changeLayer('down')} />
+                        <Item title="На передний план" action={changeLayer('1')} />
+                        <Item title="На задний план" action={changeLayer("5")} />
                     </Dropdown>
                     <Dropdown title="Вставка">
                         <Item title="Текст" action={addNewText()} />

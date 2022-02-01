@@ -23,19 +23,19 @@ export function View() {
     const slideStyle = {
         backgroundImage: `url(${state.viewing.currentSlide.backgroundImg})`,
         backgroundRepeat: "no-repeat",
-        backgroundSize: 'contain',
+        backgroundSize: '100% 100%',
         backgroundColor: state.viewing.currentSlide.background,
         backgroundPosition: 'center'
     };
     return (
         <div 
-            className={styles.viewing}
+            className={styles.viewingWrap}
             onClick={() => store.dispatch(getNextSlide())}
         >
             <svg
                 className={styles.viewing}
                 style={slideStyle}
-                viewBox='0 0 1400 800'
+                viewBox='0 0 1400 706'
                 pointerEvents='none'
                 preserveAspectRatio='xMinYMax meet'
             >

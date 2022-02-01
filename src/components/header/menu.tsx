@@ -70,7 +70,7 @@ function Menu () {
       </div>
       <button className={styles.iconFontColor} onClick={() => {setModal(true); setElem(true)}}></button>
       <button onClick={ makeBold } className={styles.iconBold}></button>
-      <button onClick={() => {setModal(true); setContour(true)}}>{'Изменить цвет контура'}</button>
+      <button className={styles.iconPrimitive} onClick={() => {setModal(true); setContour(true)}}></button>
     </div>
   )}
 
